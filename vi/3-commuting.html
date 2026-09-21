@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bài 3 · Khi đi lại rẻ hơn — Kinh tế đô thị</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%230071BC' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23111'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="course" href="index.html">Kinh tế đô thị <span>· Thành phố đơn tâm</span></a>
+  <nav><a href="1-model.html">1<span class="long"> · Mô hình</span></a><a href="2-hcmc.html">2<span class="long"> · TP.HCM</span></a><a href="3-commuting.html" aria-current="page">3<span class="long"> · Chi phí đi lại</span></a><a href="4-neighbours.html">4<span class="long"> · Láng giềng</span></a><a href="5-urbanisation.html">5<span class="long"> · Đô thị hoá</span></a></nav>
+  <div class="lang"><a href="../en/3-commuting.html" hreflang="en">EN</a><span>VI</span></div>
+</div></header>
+
+<div class="page"><div class="layout">
+<aside class="toc"><nav aria-label="Trong bài"></nav></aside>
+<main class="main">
+
+<header class="lesson-head">
+  <p class="lesson-no">Bài 3</p>
+  <h1>Khi đi lại rẻ hơn</h1>
+  <p class="standfirst">Ở Bài 1, chi phí đi lại giảm thì thành phố giãn ra và đường giá thuê đất thoải đi. Bài này hỏi chi phí để tới trung tâm TP.HCM đã thay đổi ra sao: nhờ xe máy trở nên phổ biến, nhờ những cây cầu, đường hầm và đường cao tốc mới, và nhờ vận tải công cộng. Tác động của từng công trình mới lên thời gian đi lại được đo bằng một mô hình mạng lưới đường.</p>
+  <p class="meta">Dữ liệu: mạng lưới đường OpenStreetMap tháng 9/2026; ngày thông xe của các công trình lớn, đối chiếu từng chữ với bài đăng của cơ quan nhà nước và báo chí; số liệu về phương tiện và vận tải công cộng trích từ nguồn của chúng. Thời gian đi lại do <code>kich_ban/l3_thoi_gian_di_lai.py</code> tính; các con số khác do <code>kich_ban/l3_moc_ha_tang.mjs</code> và <code>kich_ban/l3_co_gioi.mjs</code> sinh ra. Bản gốc của bài này viết bằng tiếng Anh; các câu trích từ Ngân hàng Thế giới (2011) dùng bản dịch tiếng Việt chính thức của báo cáo.</p>
+</header>
+
+<section class="objectives">
+  <h2>Mục tiêu học tập</h2>
+  <p>Học xong bài này, bạn có thể:</p>
+  <ol>
+    <li>nói được chi phí đi lại \(t\) của mô hình ứng với những gì trong một thành phố thật, và kể ra các thay đổi có thể làm nó giảm hoặc tăng;</li>
+    <li>giải thích cách một mô hình mạng lưới đường tách riêng tác động của từng công trình lên thời gian đi lại, và chỉ ra những gì mô hình ấy bỏ qua;</li>
+    <li>đọc một bản đồ thời gian đi lại và so sánh bản đồ của các năm khác nhau;</li>
+    <li>giải thích vì sao cùng một công trình có thể làm thay đổi thời gian đi ô tô và đi xe máy ở mức rất khác nhau;</li>
+    <li>liên hệ các thay đổi ấy với phần tĩnh học so sánh của Bài 1, và nói được vì sao đó chỉ là diễn giải chứ chưa phải một phép kiểm.</li>
+  </ol>
+</section>
+
+<h2 id="s1"><span class="sec">3.1</span>Chi phí đi lại trong mô hình và trong thành phố</h2>
+<p>Trong mô hình ở Bài 1, mỗi ki-lô-mét khoảng cách tốn chi phí đi lại \(t\), nên hộ gia đình sống cách trung tâm \(x\) ki-lô-mét chi \(tx\) cho việc đi lại. Phần tĩnh học so sánh của mô hình cho biết điều gì xảy ra khi \(t\) thay đổi:</p>
+<blockquote data-quote="trich_dan.liotta.wheaton" data-who="Liotta, Viguié và Lepetit (2022)"><p class="tr">Wheaton (1974) đã chứng minh rằng, với giả định đơn tâm và chi phí đi làm bằng tiền, dân số đông và thu nhập cao dẫn tới vùng đô thị lớn hơn, còn chi phí đi lại cao và giá đất nông nghiệp cao dẫn tới vùng đô thị nhỏ hơn.</p></blockquote>
+<p>Với Hình 1.2, bạn có thể hạ \(t\) và xem thành phố giãn ra: giá thuê đất ở trung tâm giảm, ở rìa tăng, và ranh thành phố lùi ra xa. Trong một thành phố thật, chi phí một chuyến đi gồm hai phần là tiền và thời gian, và cả hai đều tuỳ vào phương tiện. Vì vậy, chi phí để tới trung tâm có thể giảm vì ba lẽ: một phương tiện rẻ hơn hoặc nhanh hơn trở nên phổ biến, công trình mới rút ngắn đường đi, hoặc vận tải công cộng vươn tới nhiều nơi hơn. Nó cũng có thể tăng lên, khi lượng xe tăng nhanh hơn diện tích đường. Phần còn lại của bài lần lượt xem xét từng lẽ ấy ở TP.HCM.</p>
+
+<h2 id="s2"><span class="sec">3.2</span>Xe máy</h2>
+<p>TP.HCM không công bố một chuỗi số liệu chính thức nào về phương tiện hay chuyến đi. Bảng 3.1 gom những con số mà các nguồn nêu cho một năm cụ thể. Dựa trên các khảo sát đi lại của công ty tư vấn ALMEC, Ngân hàng Thế giới mô tả thành phố đầu những năm 2000 như sau:</p>
+<blockquote data-quote="trich_dan.vur.xeMay" data-who="Ngân hàng Thế giới (2011), Đánh giá Đô thị hóa ở Việt Nam"><p class="tr">Lưu thông ở TPHCM trên thực tế gần như hoàn toàn sử dụng xe gắn máy (75% tổng số hành trình xe cơ giới), trong khi giao thông công cộng chỉ chiếm 2% số hành trình (ALMEC 2004).</p></blockquote>
+<p>So với các thành phố khác trên thế giới, thời gian đi làm khi ấy rất ngắn:</p>
+<blockquote data-quote="trich_dan.vur.diLam" data-who="Ngân hàng Thế giới (2011), Đánh giá Đô thị hóa ở Việt Nam"><p class="tr">Theo một số khảo sát, nghiên cứu chi tiết của ALMEC, thời gian lưu thông trung bình ở các đô thị của Việt Nam đặc biệt ngắn: 18 phút ở Hà Nội, 15 phút ở Đà Nẵng và 20 phút ở TP Hồ Chí Minh.</p></blockquote>
+
+<figure class="fig" id="tab-3-1">
+  <figcaption class="fig-head"><span class="fig-label">Bảng 3.1</span>Xe máy, ô tô và vận tải công cộng ở TP.HCM: các con số nguồn công bố</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Năm</th><th>Chỉ số</th><th class="r">Giá trị</th><th>Nguồn</th></tr></thead>
+    <tbody>
+      <tr><td data-num="l3_co_gioi.bang.0.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.0.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.0.giaTri" data-fmt="M1"></span> triệu</td><td data-str="l3_co_gioi.bang.0.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.1.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.1.chiSo"></td><td class="r" data-num="l3_co_gioi.bang.1.giaTri" data-fmt="0"></td><td data-str="l3_co_gioi.bang.1.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.2.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.2.chiSo"></td><td class="r" data-num="l3_co_gioi.bang.2.giaTri" data-fmt="%0"></td><td data-str="l3_co_gioi.bang.2.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.3.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.3.chiSo"></td><td class="r" data-num="l3_co_gioi.bang.3.giaTri" data-fmt="%0"></td><td data-str="l3_co_gioi.bang.3.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.4.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.4.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.4.giaTri" data-fmt="M1"></span> triệu</td><td data-str="l3_co_gioi.bang.4.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.5.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.5.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.5.giaTri" data-fmt="M1"></span> triệu</td><td data-str="l3_co_gioi.bang.5.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.6.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.6.chiSo"></td><td class="r" data-num="l3_co_gioi.bang.6.giaTri" data-fmt="0"></td><td data-str="l3_co_gioi.bang.6.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.7.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.7.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.7.giaTri" data-fmt="M2"></span> triệu</td><td data-str="l3_co_gioi.bang.7.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.8.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.8.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.8.giaTri" data-fmt="M2"></span> triệu</td><td data-str="l3_co_gioi.bang.8.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.9.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.9.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.9.giaTri" data-fmt="M1"></span> triệu</td><td data-str="l3_co_gioi.bang.9.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.10.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.10.chiSo"></td><td class="r" data-num="l3_co_gioi.bang.10.giaTri" data-fmt="0"></td><td data-str="l3_co_gioi.bang.10.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.11.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.11.chiSo"></td><td class="r" data-num="l3_co_gioi.bang.11.giaTri" data-fmt="%2"></td><td data-str="l3_co_gioi.bang.11.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.12.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.12.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.12.giaTri" data-fmt="M2"></span> triệu</td><td data-str="l3_co_gioi.bang.12.nguon"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> ghi ở từng dòng; tài liệu đầy đủ ở Mục 3.8. Số liệu lấy từ báo chí trong nước được trích nguyên từ bài, kèm cơ quan nhà nước mà bài báo dẫn.</p>
+    <p><b>Ghi chú:</b> các dòng đến từ những nguồn khác nhau, định nghĩa chỉ số không giống nhau, nên không được nối thành một chuỗi. Tỷ lệ vận tải công cộng năm 2024 tính trên nhu cầu đi lại theo báo cáo của UBND TP; tỷ lệ năm 2004 tính trên số chuyến đi. Kịch bản sẽ dừng nếu một con số không còn khớp với câu gốc của nó.</p>
+  </div>
+  <div class="about-data" data-sources="l3_co_gioi" data-script="kich_ban/l3_co_gioi.mjs, kich_ban/trich_dan.mjs" data-note="Gom những con số mà mỗi nguồn nêu cho một năm cụ thể và đối chiếu từng con số với câu gốc của nó."></div>
+</figure>
+
+<p>Số xe máy đăng ký tăng từ <span data-num="l3_co_gioi.bang.0.giaTri" data-fmt="M1"></span> triệu chiếc năm 2001 lên <span data-num="l3_co_gioi.bang.9.giaTri" data-fmt="M1"></span> triệu chiếc năm 2023, tức gấp <span data-num="l3_co_gioi.thongKe.tangXeMay" data-fmt="1"></span> lần. Cũng nguồn cho biết số xe máy tăng ấy ghi lại chuyện gì đã xảy ra trên các trục đường chính:</p>
+<blockquote data-quote="trich_dan.easts.tocDo" data-who="Nguyễn và Nguyễn (2017), dẫn Sở Giao thông vận tải TP.HCM"><p class="tr">Tốc độ lưu thông trung bình vào giờ cao điểm trên các trục đường chính giảm từ 21 km/h xuống 12 km/h, và số điểm ùn tắc cục bộ trên toàn thành phố tăng từ 40 lên hơn 150.</p></blockquote>
+<div class="interp"><span class="label">Diễn giải — bài này chưa kiểm</span>Thêm xe có thể làm mỗi chuyến đi rẻ hơn cho hộ mua xe, nhưng đắt hơn cho mọi người khác cùng đi trên đường. Không thể đọc từ Bảng 3.1 xem \(t\) bình quân của thành phố đã tăng hay giảm trong những năm ấy; muốn biết, cần thời gian đi lại đo trên cùng những tuyến đường vào các năm khác nhau, mà số liệu này không có.</div>
+
+<h2 id="s3"><span class="sec">3.3</span>Cầu, hầm và đường cao tốc mới</h2>
+<p>Từ năm 2008 đến 2026, thành phố và trung ương lần lượt đưa vào sử dụng các công trình trong Bảng 3.2. Trước khi có cầu Thủ Thiêm, phần lớn người qua sông từ Quận 1 sang Thủ Thiêm đi phà: đơn vị khai thác cho biết trước khi có cầu, phà chở khoảng <span data-num="l3_moc.so.phaTruoc" data-fmt="0"></span> người mỗi ngày, sau khi có cầu chỉ còn khoảng <span data-num="l3_moc.so.phaSau" data-fmt="0"></span> người, và bến phà đóng cửa khi đường hầm đã thông.</p>
+
+<figure class="fig" id="tab-3-2">
+  <figcaption class="fig-head"><span class="fig-label">Bảng 3.2</span>Các công trình giao thông lớn và phà Thủ Thiêm, 2008–2026</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Công trình</th><th>Thông xe</th><th>Nguồn</th></tr></thead>
+    <tbody>
+      <tr><td data-str="l3_moc.moc.0.ten"></td><td data-str="l3_moc.moc.0.ngayChu"></td><td data-str="l3_moc.moc.0.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.1.ten"></td><td data-str="l3_moc.moc.1.ngayChu"></td><td data-str="l3_moc.moc.1.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.2.ten"></td><td data-str="l3_moc.moc.2.ngayChu"></td><td data-str="l3_moc.moc.2.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.3.ten"></td><td data-str="l3_moc.moc.3.ngayChu"></td><td data-str="l3_moc.moc.3.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.4.ten"></td><td data-str="l3_moc.moc.4.ngayChu"></td><td data-str="l3_moc.moc.4.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.5.ten"></td><td data-str="l3_moc.moc.5.ngayChu"></td><td data-str="l3_moc.moc.5.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.6.ten"></td><td data-str="l3_moc.moc.6.ngayChu"></td><td data-str="l3_moc.moc.6.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.7.ten"></td><td data-str="l3_moc.moc.7.ngayChu"></td><td data-str="l3_moc.moc.7.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.8.ten"></td><td data-str="l3_moc.moc.8.ngayChu"></td><td data-str="l3_moc.moc.8.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.9.ten"></td><td data-str="l3_moc.moc.9.ngayChu"></td><td data-str="l3_moc.moc.9.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.10.ten"></td><td data-str="l3_moc.moc.10.ngayChu"></td><td data-str="l3_moc.moc.10.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.11.ten"></td><td data-str="l3_moc.moc.11.ngayChu"></td><td data-str="l3_moc.moc.11.nguon"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> cổng thông tin nhà nước và báo chí ghi trong bảng, kèm ngày đăng của từng bài; đường dẫn ở Mục 3.7.</p>
+    <p><b>Ghi chú:</b> mỗi ngày tháng chỉ được nhận khi bài đăng — đã tải về và lưu cùng dữ liệu — có đúng câu nêu ngày ấy và mang ngày đăng như khai ở đây; nếu không, kịch bản dừng. Đại lộ Phạm Văn Đồng được thông xe từng đoạn trong nhiều năm; mô hình coi như nó thông xe năm 2015.</p>
+  </div>
+  <div class="about-data" data-sources="l3_moc" data-script="kich_ban/l3_moc_ha_tang.mjs, kich_ban/l3_tai_trang_nguon.mjs" data-note="Tải từng bài đăng về và kiểm rằng bài có đúng từng chữ của câu nêu ngày thông xe, cùng ngày đăng bài."></div>
+</figure>
+
+<p>Để thấy các công trình ấy đã làm thời gian đi lại thay đổi ra sao, Bản đồ 3.1 dùng một mô hình mạng lưới đường. Mạng lưới là mạng đường được vẽ trên OpenStreetMap vào tháng 9/2026. Với mỗi năm trước đó, các công trình trong Bảng 3.2 chưa thông xe được gỡ ra, còn phà Thủ Thiêm được đặt lại cho tới năm 2012. Thời gian từ mỗi nút giao tới Bến Thành khi ấy là đường nhanh nhất trên mạng lưới, với tốc độ giả định cho từng cấp đường. Xe máy không được đi trên đường cao tốc, và OpenStreetMap ghi một số cầu, như cầu Phú Mỹ, là cấm xe máy; vì vậy mô hình dựng hai mạng lưới riêng cho hai loại phương tiện.</p>
+
+<figure class="fig wide" id="map-3-1">
+  <figcaption class="fig-head"><span class="fig-label">Bản đồ 3.1</span>Thời gian tới Bến Thành trên mạng lưới đường của từng năm</figcaption>
+  <p class="fig-sub">Số phút theo mô hình, từ mỗi ô 500 m, không tính ùn tắc</p>
+  <div class="steps" role="group" aria-label="Năm">
+    <button type="button" data-go="0"><span data-num="l3_thoi_gian.nam.0" data-fmt="y"></span></button>
+    <button type="button" data-go="1"><span data-num="l3_thoi_gian.nam.1" data-fmt="y"></span></button>
+    <button type="button" data-go="2"><span data-num="l3_thoi_gian.nam.2" data-fmt="y"></span></button>
+    <button type="button" data-go="3"><span data-num="l3_thoi_gian.nam.3" data-fmt="y"></span></button>
+    <span class="hint">phím ← →</span>
+  </div>
+  <div class="toggles" role="group" aria-label="Phương tiện và cách xem">
+    <span class="lbl">Phương tiện</span><button type="button" data-pt="xe_may">Xe máy</button><button type="button" data-pt="o_to">Ô tô</button>
+    <span class="lbl">Xem</span><button type="button" data-xem="tg">Thời gian đi</button><button type="button" data-xem="giam">Số phút tiết kiệm so với <span data-num="l3_thoi_gian.nam.0" data-fmt="y"></span></button>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-3-1"></div></div>
+  <div class="step-text">
+    <div data-step="0"><p><b>Mạng lưới năm <span data-num="l3_thoi_gian.nam.0" data-fmt="y"></span>.</b> Từ Quận 1 sang Thủ Thiêm phải đi phà, hoặc đi đường bộ vòng qua cầu Sài Gòn; chưa có đường cao tốc nào. Rê chuột trên bản đồ để đọc thời gian từ một ô trong cả bốn năm.</p></div>
+    <div data-step="1"><p><b>Mạng lưới năm <span data-num="l3_thoi_gian.nam.1" data-fmt="y"></span>.</b> Cầu Thủ Thiêm, cầu Phú Mỹ và cao tốc đi Trung Lương đã thông xe. Hãy đổi qua lại giữa xe máy và ô tô: cầu Phú Mỹ và đường cao tốc chỉ phục vụ ô tô.</p></div>
+    <div data-step="2"><p><b>Mạng lưới năm <span data-num="l3_thoi_gian.nam.2" data-fmt="y"></span>.</b> Hầm Thủ Thiêm và đại lộ Mai Chí Thọ thay cho phà, còn cao tốc đi Long Thành – Dầu Giây vươn tới vùng Bà Rịa – Vũng Tàu cũ. Đi ô tô, phường Vũng Tàu cách Bến Thành <span data-num="l3_thoi_gian.thongKe.vungTau.o_to.1" data-fmt="0"></span> phút trên mạng lưới năm <span data-num="l3_thoi_gian.nam.1" data-fmt="y"></span> và <span data-num="l3_thoi_gian.thongKe.vungTau.o_to.2" data-fmt="0"></span> phút trên mạng lưới này; đi xe máy, cả hai năm đều là <span data-num="l3_thoi_gian.thongKe.vungTau.xe_may.2" data-fmt="0"></span> phút.</p></div>
+    <div data-step="3"><p><b>Mạng lưới năm <span data-num="l3_thoi_gian.nam.3" data-fmt="y"></span>.</b> Cầu Ba Son, các cao tốc Bến Lức – Long Thành và Biên Hòa – Vũng Tàu, và những đoạn Vành đai 3 đã khai thác. Chọn “Số phút tiết kiệm” để xem công trình của cả giai đoạn đã rút ngắn thời gian tới Bến Thành ở những đâu.</p></div>
+  </div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> mạng lưới đường © những người đóng góp OpenStreetMap (ODbL), bản trích ngày 16/9/2026 của Geofabrik; ngày thông xe như Bảng 3.2; mô hình do <code>kich_ban/l3_thoi_gian_di_lai.py</code> tính; nền bản đồ OpenFreeMap.</p>
+    <p><b>Ghi chú:</b> mô hình chỉ gỡ các công trình trong Bảng 3.2; mọi con đường khác giữ như bản đồ năm 2026, kể cả những đường làm sau năm đang xem, nên bản đồ các năm trước cho thời gian ngắn hơn thực tế. Tốc độ là giả định cho từng cấp đường và không đổi theo thời gian; không tính ùn tắc. Ô không có đường được để trống. Sáu xã ở cực đông vùng Bà Rịa – Vũng Tàu cũ, nằm ngoài phạm vi mô hình, và xã đảo Thạnh An không được tính.</p>
+  </div>
+  <div class="about-data" data-sources="osm_geofabrik l3_moc nen_ban_do" data-script="kich_ban/l3_loc_mang_duong.py, kich_ban/l3_thoi_gian_di_lai.py" data-note="Dựng mạng lưới đường từ OpenStreetMap, gỡ những công trình chưa thông xe ở mỗi năm, tìm đường nhanh nhất từ mọi nút giao tới Bến Thành cho xe máy và ô tô, rồi giữ nút giao nhanh nhất trong mỗi ô 500 m."></div>
+</figure>
+
+<p>Thời gian của mô hình sát với thực tế đến đâu? Năm 2026, VnExpress công bố thời gian đi xe máy tới ga Bến Thành cho từng ô lục giác nhỏ, cũng tính khi không có ùn tắc. Trên <span data-num="l3_thoi_gian.thongKe.doiChung.n" data-fmt="0"></span> ô mà cả hai nguồn cùng có, hệ số tương quan giữa hai bộ thời gian là <span data-num="l3_thoi_gian.thongKe.doiChung.r" data-fmt="2"></span>, tức mô hình xếp thứ tự các nơi giống như VnExpress; nhưng thời gian của VnExpress dài hơn, trung vị gấp <span data-num="l3_thoi_gian.thongKe.doiChung.tySo" data-fmt="2"></span> lần, vì hai bên giả định tốc độ khác nhau. Do đó, số phút trên Bản đồ 3.1 nên được đọc để so sánh giữa các năm và giữa các nơi, chứ không phải thời gian thực của một chuyến đi làm.</p>
+
+<h2 id="s4"><span class="sec">3.4</span>Ai được lợi</h2>
+<p>Với xe máy, các công trình của cả giai đoạn chỉ tạo khác biệt ở một phần thành phố. Trên mạng lưới năm <span data-num="l3_thoi_gian.nam.2" data-fmt="y"></span>, có <span data-num="l3_thoi_gian.thongKe.soGiam5.xe_may.2005_2015" data-fmt="0"></span> phường gần Bến Thành hơn ít nhất năm phút so với mạng lưới năm <span data-num="l3_thoi_gian.nam.0" data-fmt="y"></span>, tất cả đều ở bờ đông sông Sài Gòn và tới trung tâm qua ngả Thủ Thiêm. Nhiều nhất là <span data-str="l3_thoi_gian.thongKe.top.xe_may.2005_2015.0.ten"></span>, từ <span data-num="l3_thoi_gian.thongKe.top.xe_may.2005_2015.0.truoc" data-fmt="0"></span> xuống <span data-num="l3_thoi_gian.thongKe.top.xe_may.2005_2015.0.sau" data-fmt="0"></span> phút. Sau năm <span data-num="l3_thoi_gian.nam.2" data-fmt="y"></span>, không phường nào đi xe máy nhanh thêm được năm phút, vì công trình mới đều là đường cao tốc.</p>
+<p>Với ô tô, bức tranh khác hẳn. Có <span data-num="l3_thoi_gian.thongKe.soGiam5.o_to.2005_2015" data-fmt="0"></span> phường, xã gần hơn ít nhất năm phút trong giai đoạn <span data-num="l3_thoi_gian.nam.0" data-fmt="y"></span>–<span data-num="l3_thoi_gian.nam.2" data-fmt="y"></span>, và thêm <span data-num="l3_thoi_gian.thongKe.soGiam5.o_to.2015_2026" data-fmt="0"></span> nơi nữa trong giai đoạn <span data-num="l3_thoi_gian.nam.2" data-fmt="y"></span>–<span data-num="l3_thoi_gian.nam.3" data-fmt="y"></span>. Những nơi được lợi nhiều nhất ở cả hai giai đoạn đều cách Bến Thành hơn 50 km, thuộc vùng Bà Rịa – Vũng Tàu cũ mà các tuyến cao tốc nối vào thành phố. Hình 3.1 tóm tắt sự thay đổi bằng diện tích đất nằm trong phạm vi 30 và 45 phút tính từ Bến Thành.</p>
+
+<figure class="fig" id="fig-3-1">
+  <figcaption class="fig-head"><span class="fig-label">Hình 3.1</span>Đất nằm trong phạm vi 30 và 45 phút tới Bến Thành, theo phương tiện và mạng lưới đường</figcaption>
+  <p class="fig-sub">Diện tích các ô 500 m có đường, km²</p>
+  <div class="fig-body"><div id="c-3-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> như Bản đồ 3.1.</p>
+    <p><b>Ghi chú:</b> đường nét đứt là kết quả mô hình. Nét đậm: trong phạm vi 45 phút; nét mảnh: trong phạm vi 30 phút. Mạng lưới của mỗi năm là mạng lưới năm 2026 bỏ đi những công trình thông xe sau đó, nên phần tăng trong hình chỉ là tác động của riêng các công trình ở Bảng 3.2.</p>
+  </div>
+  <div class="about-data" data-sources="osm_geofabrik l3_moc" data-script="kich_ban/l3_thoi_gian_di_lai.py" data-note="Với mỗi năm và mỗi phương tiện, đếm các ô 500 m có nút giao nhanh nhất nằm trong phạm vi 30 hoặc 45 phút tới Bến Thành."></div>
+</figure>
+
+<p>Trong phạm vi 30 phút tới Bến Thành, mô hình cho <span data-num="l3_thoi_gian.thongKe.dienTich.o_to.2005.30" data-fmt="0"></span> km² nếu đi ô tô trên mạng lưới năm <span data-num="l3_thoi_gian.nam.0" data-fmt="y"></span> và <span data-num="l3_thoi_gian.thongKe.dienTich.o_to.2026.30" data-fmt="0"></span> km² trên mạng lưới năm <span data-num="l3_thoi_gian.nam.3" data-fmt="y"></span>; đi xe máy là <span data-num="l3_thoi_gian.thongKe.dienTich.xe_may.2005.30" data-fmt="0"></span> và <span data-num="l3_thoi_gian.thongKe.dienTich.xe_may.2026.30" data-fmt="0"></span> km². Nói theo ngôn ngữ của Bài 1, các công trình đã hạ \(t\) cho người lái ô tô nhiều hơn hẳn so với người đi xe máy — trong khi xe máy mới là phương tiện của phần lớn chuyến đi.</p>
+<div class="interp"><span class="label">Diễn giải — bài này chưa kiểm</span>Nếu mô hình đúng, \(t\) giảm tập trung ở bờ đông sông và dọc các tuyến cao tốc sẽ làm giá đất và xây dựng ở đó tăng so với phần còn lại của thành phố. Bản đồ 2.3 của Bài 2 cho thấy đất được xây dựng trong từng giai đoạn, có thể đặt cạnh Bản đồ 3.1. Nhưng công trình giao thông và dự án đô thị mới được quy hoạch cùng lúc, nên đặt hai bản đồ cạnh nhau không cho biết cái nào là nguyên nhân của cái nào.</div>
+
+<h2 id="s5"><span class="sec">3.5</span>Vận tải công cộng</h2>
+<p>Lúc cao nhất vào năm 2012, xe buýt chở khoảng <span data-num="l3_co_gioi.bang.4.giaTri" data-fmt="M1"></span> triệu lượt khách mỗi ngày (Bảng 3.1). Năm 2023, cả năm xe buýt chở <span data-num="l3_co_gioi.bang.8.giaTri" data-fmt="M2"></span> triệu lượt, và năm 2024 vận tải công cộng đáp ứng <span data-num="l3_co_gioi.bang.11.giaTri" data-fmt="%2"></span> nhu cầu đi lại. Tuyến metro số 1 Bến Thành – Suối Tiên vận hành từ <span data-str="l3_moc.khac.0.ngayChu"></span>; năm đầu tiên tuyến chở <span data-num="l3_co_gioi.bang.12.giaTri" data-fmt="M2"></span> triệu lượt khách, khoảng <span data-num="l3_moc.so.metroNgay" data-fmt="0"></span> lượt mỗi ngày.</p>
+<p>Bản đồ 3.2 đo xem mạng xe buýt và tuyến metro đem lại gì cho người đi làm. Bản đồ dùng lịch chạy ngày thường do Trung tâm Quản lý giao thông công cộng công bố, trong đó có cả metro số 1: theo lịch tháng 9/2026, tàu chạy hết tuyến trong <span data-num="l3_cong_cong.metro.phutToanTuyen" data-fmt="0"></span> phút và từ 7 đến 8 giờ sáng cứ <span data-num="l3_cong_cong.metro.phutGianCach" data-fmt="0"></span> phút có một chuyến, dày hơn mức 8 đến 12 phút được nêu khi tuyến khai trương. “Chỉ xe buýt” là cùng mạng lưới ấy nhưng bỏ tuyến metro. Với mỗi ki-lô-mét vuông trong bán kính 30 km quanh Bến Thành có trạm ở gần, mô hình tìm hành trình nhanh nhất tới Bến Thành cho các chuyến khởi hành lúc 7:00, 7:15, 7:30 và 7:45 sáng ngày thường — tính cả quãng đi bộ ra trạm, thời gian chờ và các lần chuyển tuyến — rồi lấy trung bình.</p>
+
+<figure class="fig wide" id="map-3-2">
+  <figcaption class="fig-head"><span class="fig-label">Bản đồ 3.2</span>Thời gian tới Bến Thành bằng vận tải công cộng vào buổi sáng ngày thường</figcaption>
+  <p class="fig-sub">Số phút theo mô hình, từ mỗi ô 1 km, trung bình bốn chuyến khởi hành từ 7:00 đến 7:45</p>
+  <div class="toggles" role="group" aria-label="Cách xem">
+    <span class="lbl">Xem</span><button type="button" data-cc="buyt">Chỉ xe buýt</button><button type="button" data-cc="metro">Xe buýt và metro số 1</button><button type="button" data-cc="giam">Số phút metro rút ngắn</button>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-3-2"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> tuyến, trạm và chuyến xe buýt từ dịch vụ công khai của Trung tâm Quản lý giao thông công cộng TP.HCM, dựng cho học phần ngày 5/9/2026; ga và đường ray metro © những người đóng góp OpenStreetMap; lịch chạy lúc khai trương theo VnExpress (22/12/2024); mô hình do <code>kich_ban/l3_cong_cong.mjs</code> tính.</p>
+    <p><b>Ghi chú:</b> dịch vụ chỉ công bố giờ bắt đầu và giờ kết thúc của mỗi chuyến xe buýt, nên giờ tới từng trạm được nội suy dọc tuyến, và không tính chậm trễ do ùn tắc. Đi bộ với tốc độ <span data-num="l3_cong_cong.thamSo.diBo" data-fmt="1"></span> km/h, tối đa <span data-num="l3_cong_cong.thamSo.tiepCan" data-fmt="0"></span> m tới trạm, chuyển tuyến tối đa <span data-num="l3_cong_cong.thamSo.soLanChuyen" data-fmt="0"></span> lần. Ô không có trạm trong tầm đi bộ được để trống.</p>
+  </div>
+  <div class="about-data" data-sources="gtfs_buyt osm_geofabrik l3_moc" data-script="kich_ban/l3_cong_cong.mjs, atlas/06_PHAN_TICH/kich_ban/raptor.mjs" data-note="Giữ các chuyến chạy vào ngày thường, bỏ tuyến metro số 1 cho cách xem chỉ xe buýt, rồi với mỗi ô 1 km tìm hành trình nhanh nhất tới Bến Thành cho bốn chuyến khởi hành từ 7:00 đến 7:45 và lấy trung bình."></div>
+</figure>
+
+<p>Trong phạm vi 45 phút tới Bến Thành, vận tải công cộng phủ <span data-num="l3_cong_cong.thongKe.dienTich.buyt.45" data-fmt="0"></span> km² nếu chỉ đi xe buýt và <span data-num="l3_cong_cong.thongKe.dienTich.metro.45" data-fmt="0"></span> km² khi có metro; trong phạm vi 60 phút là <span data-num="l3_cong_cong.thongKe.dienTich.buyt.60" data-fmt="0"></span> và <span data-num="l3_cong_cong.thongKe.dienTich.metro.60" data-fmt="0"></span> km². Metro rút ngắn hành trình từ mười phút trở lên trên <span data-num="l3_cong_cong.thongKe.oGiam10" data-fmt="0"></span> km², nhiều nhất <span data-num="l3_cong_cong.thongKe.giamMax" data-fmt="0"></span> phút: <span data-num="l3_cong_cong.thongKe.oGiam10Gan" data-fmt="0"></span> km² trong số đó nằm trong vòng 3 km quanh một ga, phần còn lại ở xa hơn, nơi xe buýt đưa khách ra tuyến. So với thời gian đi xe máy ở Bản đồ 3.1, vận tải công cộng vẫn chậm: trong bán kính 10 km quanh Bến Thành, hành trình trung vị lâu gấp <span data-num="l3_cong_cong.thongKe.tySoXeMay.0.tySo" data-fmt="1"></span> lần, còn từ 10 đến 20 km lâu gấp <span data-num="l3_cong_cong.thongKe.tySoXeMay.1.tySo" data-fmt="1"></span> lần. Với phần lớn hộ gia đình trong thành phố, \(t\) vẫn do xe máy quyết định.</p>
+<p>Cũng bài VnExpress nói trên cho thời gian đi xe buýt tới ga Bến Thành với các giờ khởi hành này. Trên <span data-num="l3_cong_cong.thongKe.doiChung.n" data-fmt="0"></span> ô mà hai nguồn cùng có, hệ số tương quan là <span data-num="l3_cong_cong.thongKe.doiChung.r" data-fmt="2"></span> và trung vị tỷ số giữa thời gian của họ và của mô hình là <span data-num="l3_cong_cong.thongKe.doiChung.tySo" data-fmt="2"></span>.</p>
+
+<h2 id="ex"><span class="sec">3.6</span>Bài tập</h2>
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 3.1</span>Đi lại rẻ hơn trong mô hình</p>
+  <p>Dùng Hình 1.2 của Bài 1. Kéo thanh trượt chi phí đi lại sang trái rồi mô tả điều xảy ra với giá thuê đất ở trung tâm, giá thuê đất ở rìa và vị trí của ranh thành phố. Nếu chỉ một hành lang của thành phố trở nên rẻ hơn, bạn dự đoán thay đổi nào sẽ thấy trước tiên, và vì sao?</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 3.2</span>Xe máy và ô tô</p>
+  <p>Trên Bản đồ 3.1, chọn “Số phút tiết kiệm” rồi đổi qua lại giữa xe máy và ô tô. Hãy nêu hai nơi mà hai phương tiện được lợi rất khác nhau, và giải thích sự khác biệt ấy bằng Bảng 3.2 và ghi chú dưới Bản đồ 3.1.</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 3.3</span>Điều mô hình mạng lưới bỏ qua</p>
+  <p>Mô hình giữ mọi con đường ngoài Bảng 3.2 như năm 2026, giả định tốc độ không đổi và bỏ qua ùn tắc. Với từng giả định trong ba giả định ấy, hãy cho biết nó làm phần lợi trong Hình 3.1 lớn hơn hay nhỏ hơn phần lợi thật, và vì sao. Giả định nào quan trọng nhất đối với xe máy?</p>
+</div>
+
+<h2 id="data"><span class="sec">3.7</span>Dữ liệu và mã</h2>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Dữ liệu</th><th>Giấy phép</th><th>Truy cập</th></tr></thead>
+  <tbody id="data-rows"></tbody>
+</table></div>
+<p class="licence">Kịch bản: <code>kich_ban/l3_loc_mang_duong.py</code> (mạng lưới đường từ OpenStreetMap) · <code>kich_ban/l3_thoi_gian_di_lai.py</code> (thời gian đi lại, diện tích, đối chứng với VnExpress) · <code>kich_ban/l3_tai_trang_nguon.mjs</code> và <code>kich_ban/l3_moc_ha_tang.mjs</code> (ngày thông xe) · <code>kich_ban/l3_co_gioi.mjs</code> (Bảng 3.1) · <code>kich_ban/l3_cong_cong.mjs</code> (Bản đồ 3.2, dùng bộ định tuyến RAPTOR của atlas) · <code>kich_ban/trich_dan.mjs</code> (trích dẫn). Mỗi kịch bản dừng mà không ghi kết quả nếu một phép kiểm không đạt.</p>
+
+<h2 id="refs"><span class="sec">3.8</span>Tài liệu tham khảo</h2>
+<ul class="references">
+  <li>Brueckner, J. K. (2011). <i>Lectures on urban economics</i>. MIT Press. Chương 2, The monocentric city model.</li>
+  <li>Liotta, C., Viguié, V., &amp; Lepetit, Q. (2022). Testing the monocentric standard urban model in a global sample of cities. <i>Regional Science and Urban Economics, 97</i>, 103832. <a href="https://arxiv.org/abs/2111.02112">arXiv:2111.02112</a>, CC BY 4.0.</li>
+  <li>Ngân hàng Thế giới (2011). <i>Đánh giá Đô thị hóa ở Việt Nam: Báo cáo hỗ trợ kỹ thuật</i>. Ngân hàng Thế giới. Bản tiếng Anh: <i>Vietnam urbanization review</i>, <a href="https://openknowledge.worldbank.org/entities/publication/a2b30aef-198f-56e3-bfec-aa88c51ef67e">Open Knowledge Repository</a>, CC BY 3.0 IGO.</li>
+  <li>Nguyen, L. X., &amp; Nguyen, T. M. (2017). Analysis of motorcycle ownership: A case study in Ho Chi Minh City. <i>Proceedings of the Eastern Asia Society for Transportation Studies, 11</i>. <a href="https://easts.info/on-line/proceedings/vol.11/pdf/PP1935_H1.pdf">PDF</a>.</li>
+  <li>Những người đóng góp OpenStreetMap (2026). Mạng lưới đường Việt Nam, bản trích ngày 16/9/2026. Geofabrik. <a href="https://download.geofabrik.de/asia/vietnam.html">download.geofabrik.de</a>, ODbL 1.0.</li>
+  <li>VnExpress (2026, 4/8). Xe buýt đến metro chậm hơn xe máy bao nhiêu lần? <a href="https://vnexpress.net/xe-buyt-den-metro-cham-hon-xe-may-bao-nhieu-lan-5100710.html">vnexpress.net</a>.</li>
+  <li>Wheaton, W. C. (1974). A comparative static analysis of urban spatial structure. <i>Journal of Economic Theory, 9</i>(2), 223–237. <a href="https://doi.org/10.1016/0022-0531(74)90068-4">doi:10.1016/0022-0531(74)90068-4</a></li>
+  <li>Các bài đăng nêu ngày thông xe ở Bảng 3.2 và số liệu ở Bảng 3.1: Báo Điện tử Chính phủ; Cổng TTĐT Chính phủ, chuyên trang TP.HCM; Cổng TTĐT tỉnh Đồng Nai; VOV; Thanh Niên; Tuổi Trẻ; Sài Gòn Giải Phóng; VnExpress; Pháp Luật TP.HCM. Từng trang, ngày đăng và địa chỉ được liệt kê ở mục Dữ liệu và mã.</li>
+</ul>
+
+</main>
+</div></div>
+
+<footer class="site-footer"><div class="inner">Kinh tế đô thị · Thành phố đơn tâm. Tài liệu giảng dạy phi thương mại. Chữ và hình sinh từ các kịch bản trong <code>kich_ban/</code>; nguồn, giấy phép và ngày truy cập của từng bộ dữ liệu nằm trong các tệp ở <code>du_lieu/</code>.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.js"></script>
+<script src="../assets/core.js"></script>
+<script src="../assets/chart.js"></script>
+<script src="../assets/map.js"></script>
+<script src="../du_lieu/trich_dan.js"></script>
+<script src="../du_lieu/l2_tphcm.js"></script>
+<script src="../du_lieu/l3_moc.js"></script>
+<script src="../du_lieu/l3_co_gioi.js"></script>
+<script src="../du_lieu/l3_thoi_gian.js"></script>
+<script src="../du_lieu/l3_cong_cong.js"></script>
+<script src="../assets/nguon.js"></script>
+<script src="../assets/lesson3.js"></script>
+</body>
+</html>

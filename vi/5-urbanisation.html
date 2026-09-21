@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bài 5 · Việt Nam đô thị hoá đến đâu? — Kinh tế đô thị</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%230071BC' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23111'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="course" href="index.html">Kinh tế đô thị <span>· Thành phố đơn tâm</span></a>
+  <nav><a href="1-model.html">1<span class="long"> · Mô hình</span></a><a href="2-hcmc.html">2<span class="long"> · TP.HCM</span></a><a href="3-commuting.html">3<span class="long"> · Chi phí đi lại</span></a><a href="4-neighbours.html">4<span class="long"> · Láng giềng</span></a><a href="5-urbanisation.html" aria-current="page">5<span class="long"> · Đô thị hoá</span></a></nav>
+  <div class="lang"><a href="../en/5-urbanisation.html" hreflang="en">EN</a><span>VI</span></div>
+</div></header>
+
+<div class="page"><div class="layout">
+<aside class="toc"><nav aria-label="Trong bài"></nav></aside>
+<main class="main">
+
+<header class="lesson-head">
+  <p class="lesson-no">Bài 5</p>
+  <h1>Việt Nam đô thị hoá đến đâu?</h1>
+  <p class="standfirst">Theo định nghĩa chính thức, năm 2020 có <span data-num="l5_do_thi_hoa.thongKe.ct.2020" data-fmt="%0"></span> dân số Việt Nam sống ở khu vực đô thị. Theo phương pháp Mức độ đô thị hoá dùng để so sánh quốc tế, con số là <span data-num="l5_do_thi_hoa.thongKe.duc2020.doThi" data-fmt="%0"></span> sống ở thành phố, thị trấn hoặc vùng bán dày đặc. Bài này giải thích vì sao hai con số vênh nhau đến vậy, chỉ ra trên bản đồ chỗ chúng bất đồng, rồi theo dấu sự lan rộng của đô thị bằng ánh sáng ban đêm mà vệ tinh ghi lại — cũng là những thước đo Ngân hàng Thế giới dùng trong báo cáo đô thị hoá Việt Nam năm 2020.</p>
+  <p class="meta">Dữ liệu: tỷ lệ dân số đô thị trong Bộ chỉ số Phát triển Thế giới; lưới và bảng Mức độ đô thị hoá (GHS-SMOD và GHS-DUC R2023A) của Trung tâm Nghiên cứu Chung, Uỷ ban châu Âu; chuỗi ánh sáng ban đêm hài hoà 1992–2024; ranh giới từ geoBoundaries. Con số trong lời giảng do <code>kich_ban/l5_do_thi_hoa.py</code> sinh ra. Bản gốc của bài này viết bằng tiếng Anh; đây là bản dịch của học phần.</p>
+</header>
+
+<section class="objectives">
+  <h2>Mục tiêu học tập</h2>
+  <p>Học xong bài này, bạn có thể:</p>
+  <ol>
+    <li>giải thích định nghĩa chính thức về khu vực đô thị ở Việt Nam được vạch ra thế nào, và khác phương pháp Mức độ đô thị hoá ở chỗ nào;</li>
+    <li>đọc bản đồ Mức độ đô thị hoá và giải thích vì sao phần lớn Việt Nam rơi vào lớp thị trấn và vùng bán dày đặc;</li>
+    <li>dùng ánh sáng ban đêm để theo dõi sự lan rộng của đô thị, và nêu hai lý do khiến một chuỗi số liệu ánh sáng có thể đánh lừa người đọc.</li>
+  </ol>
+</section>
+
+<h2 id="s1"><span class="sec">5.1</span>Một câu hỏi, ba câu trả lời</h2>
+<p>Tổng điều tra dân số xếp một người vào đô thị hay nông thôn theo địa vị hành chính của nơi người đó sống:</p>
+<blockquote data-quote="trich_dan.wb20.dinhNghia" data-who="Ngân hàng Thế giới (2020), Đô thị hóa Việt Nam trước ngã rẽ"><p class="tr">Trong tổng điều tra dân số Việt Nam, “khu vực đô thị” được sử dụng để tính toán dân số đô thị được xác định ở cấp xã, bao gồm cả phường và thị trấn.</p></blockquote>
+<p>Theo định nghĩa này, năm 2020 có <span data-num="l5_do_thi_hoa.thongKe.ct.2020" data-fmt="%1"></span> dân số là đô thị (Hình 5.1). Những định nghĩa nhìn vào cách người dân sống, thay vì địa vị hành chính, cho tỷ lệ cao hơn. Dựa trên vùng đi làm quanh các thành phố, OECD đưa ra một con số lớn hơn:</p>
+<blockquote data-quote="trich_dan.wb20.oecd" data-who="Ngân hàng Thế giới (2020), Đô thị hóa Việt Nam trước ngã rẽ"><p class="tr">Do đó, OECD đã sử dụng định nghĩa mang tính chức năng khác về khu vực đô thị dựa trên ước tính tương đối về khu vực dân cư đô thị bao quanh (commuting zones). OECD ước tính có 41% dân số Việt Nam sống ở khu vực đô thị vào năm 2013.</p></blockquote>
+<p>Mức độ đô thị hoá — phương pháp đứng sau khái niệm trung tâm đô thị ở Bài 2 và Bài 4 — xếp lớp từng ô 1 km² của lưới dân số. Các trung tâm đô thị hợp thành <em class="term">thành phố</em>. Lớp kế tiếp dựng từ các cụm đô thị:</p>
+<blockquote data-quote="trich_dan.degurba.cumDoThi" data-who="Uỷ ban châu Âu, FAO, UN-Habitat, ILO, OECD và Ngân hàng Thế giới (2021), Applying the Degree of Urbanisation"><p class="tr">Cụm đô thị (cụm mật độ trung bình) là một cụm các ô lưới 1 km² liền nhau (tính cả tám hướng, tức là kể cả các ô chéo góc) có mật độ dân ít nhất 300 người/km² và tổng dân số tối thiểu 5.000 người.</p></blockquote>
+<p>Những cụm đô thị nằm ngoài thành phố tạo thành một lớp riêng, <em class="term">thị trấn và vùng bán dày đặc</em>, vì các nước không thống nhất nên xếp lớp này vào đâu:</p>
+<blockquote data-quote="trich_dan.degurba.haiCach" data-who="Uỷ ban châu Âu, FAO, UN-Habitat, ILO, OECD và Ngân hàng Thế giới (2021), Applying the Degree of Urbanisation"><p class="tr">Khi so cấp 1 của phân loại Mức độ đô thị hoá với cách chia đôi đô thị – nông thôn truyền thống thì, tuỳ từng nước, định nghĩa quốc gia có thể xếp thị trấn và vùng bán dày đặc vào lớp đô thị hoặc vào lớp nông thôn (xem Hình 3.1).</p></blockquote>
+<p>Ngân hàng Thế giới đã nêu kết quả khi tính lớp này là đô thị ở Việt Nam, kèm lời khuyên thận trọng:</p>
+<blockquote data-quote="trich_dan.wb20.degurba" data-who="Ngân hàng Thế giới (2020), Đô thị hóa Việt Nam trước ngã rẽ"><p class="tr">Tuy nhiên, theo kết quả này, tỷ lệ dân số Việt Nam sống ở khu vực đô thị là 78% vào năm 1975, tăng lên 81% vào năm 2015. Những kết quả như vậy phải được xem xét thận trọng, vì thực tế là theo cách tiếp cận này thì đô thị hóa Việt Nam năm 2015 đã cao hơn Hoa Kỳ.</p></blockquote>
+
+<figure class="fig" id="fig-5-1">
+  <figcaption class="fig-head"><span class="fig-label">Hình 5.1</span>Tỷ lệ dân số Việt Nam là đô thị theo ba định nghĩa, 1975–2024</figcaption>
+  <p class="fig-sub">Định nghĩa chính thức, và hai lớp rộng nhất của Mức độ đô thị hoá</p>
+  <div class="fig-body"><div id="c-5-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> Ngân hàng Thế giới, Bộ chỉ số Phát triển Thế giới (Vụ Dân số Liên Hợp Quốc, theo định nghĩa của từng nước); Uỷ ban châu Âu, Trung tâm Nghiên cứu Chung, GHS-DUC R2023A. Chấm đen là con số năm 2015 mà Ngân hàng Thế giới (2020) dẫn, lấy từ một bản phát hành trước của cùng bộ dữ liệu.</p>
+    <p><b>Ghi chú:</b> chuỗi chính thức được Liên Hợp Quốc làm trơn giữa các kỳ tổng điều tra; chấm to đánh dấu năm tổng điều tra. Mức độ đô thị hoá có năm năm một mốc và dựa trên lưới dân số do Trung tâm Nghiên cứu Chung ước lượng.</p>
+  </div>
+  <div class="about-data" data-sources="wdi_urban ghs_duc" data-script="kich_ban/l5_do_thi_hoa.py" data-note="Đọc tỷ lệ đô thị chính thức của Việt Nam 1975–2024 và tỷ lệ dân sống ở thành phố, ở thị trấn và vùng bán dày đặc, ở nông thôn của cả nước, năm năm một mốc từ 1975 đến 2020."></div>
+</figure>
+
+<p>Bản dữ liệu hiện hành xác nhận lời cảnh báo ấy. Năm 2020, <span data-num="l5_do_thi_hoa.thongKe.duc2020.thanhPho" data-fmt="%0"></span> dân số Việt Nam sống ở thành phố, <span data-num="l5_do_thi_hoa.thongKe.duc2020.thiTran" data-fmt="%0"></span> ở thị trấn và vùng bán dày đặc, và chỉ <span data-num="l5_do_thi_hoa.thongKe.duc2020.nongThon" data-fmt="%0"></span> ở nông thôn. Nếu tính thị trấn và vùng bán dày đặc là đô thị, năm 2015 Việt Nam đạt <span data-num="l5_do_thi_hoa.thongKe.ducMoi.dt2015" data-fmt="%0"></span>, còn Hoa Kỳ là <span data-num="l5_do_thi_hoa.thongKe.ducMoi.usa2015" data-fmt="%0"></span> — còn cao hơn con số Ngân hàng Thế giới đã dẫn, vì lưới dân số đã được sửa từ đó. Hình 5.1 còn cho thấy hai điều. Riêng lớp thành phố đã chiếm tỷ lệ dân số lớn hơn khu vực đô thị chính thức. Và khoảng cách giữa các định nghĩa rộng hơn mức thay đổi của bất kỳ định nghĩa nào kể từ năm 1990.</p>
+
+<h2 id="s2"><span class="sec">5.2</span>Các định nghĩa bất đồng ở đâu</h2>
+<p>Bản đồ 5.1 cho thấy lưới ô đứng sau những tỷ lệ ấy. Ô đỏ thuộc trung tâm đô thị; các sắc nâu và vàng thuộc cụm đô thị, hợp thành lớp thị trấn và vùng bán dày đặc; các sắc xanh lục là nông thôn.</p>
+
+<figure class="fig wide" id="map-5-1">
+  <figcaption class="fig-head"><span class="fig-label">Bản đồ 5.1</span>Mức độ đô thị hoá của Việt Nam, ô lưới khoảng 1 km</figcaption>
+  <p class="fig-sub">Lớp của từng ô năm 2020, và năm 1990 để so sánh</p>
+  <div class="steps" role="group" aria-label="Góc nhìn">
+    <button type="button" data-go="0">Việt Nam, 2020</button>
+    <button type="button" data-go="1">Đồng bằng sông Hồng</button>
+    <button type="button" data-go="2">Đồng bằng sông Cửu Long và TP.HCM</button>
+    <button type="button" data-go="3">Việt Nam, 1990</button>
+    <span class="hint">phím ← →</span>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-5-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> Uỷ ban châu Âu, Trung tâm Nghiên cứu Chung, GHS-SMOD R2023A (30 giây cung); ranh Việt Nam từ geoBoundaries; nền bản đồ OpenFreeMap, © những người đóng góp OpenStreetMap.</p>
+    <p><b>Ghi chú:</b> màu theo quy ước của đơn vị sản xuất. Không tô các ô mặt nước. Các lớp năm 1990 dựa trên lưới dân số ước lượng ngược từ các kỳ tổng điều tra sau và trên diện tích xây dựng quan sát bằng vệ tinh Landsat.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_smod geoboundaries nen_ban_do" data-script="kich_ban/l5_do_thi_hoa.py" data-note="Cắt lưới năm 1990 và năm 2020 theo ranh Việt Nam và tô màu từng ô theo lớp của nó."></div>
+</figure>
+
+<p>Ở các vùng châu thổ, dân cư dày đến mức những ô nằm giữa các thị trấn cũng vượt ngưỡng của cụm đô thị, nên màu vàng của các ô ven đô trải khắp vùng quê. Thành phố và cụm đô thị phủ <span data-num="l5_do_thi_hoa.vung.0.datDoThi" data-fmt="%0"></span> diện tích đất của đồng bằng sông Hồng và <span data-num="l5_do_thi_hoa.vung.2.datDoThi" data-fmt="%0"></span> của đồng bằng sông Cửu Long, so với <span data-num="l5_do_thi_hoa.vung.3.datDoThi" data-fmt="%0"></span> ở phần còn lại của cả nước ngoài Đông Nam Bộ. Bảng 5.1 cộng dân số theo từng lớp. Ở đồng bằng sông Hồng, chỉ <span data-num="l5_do_thi_hoa.vung.0.nongThon" data-fmt="%0"></span> dân sống ở ô được xếp là nông thôn; ngay cả ngoài ba vùng trong bảng, tỷ lệ nông thôn cũng chỉ <span data-num="l5_do_thi_hoa.vung.3.nongThon" data-fmt="%0"></span>. Trong khi đó, theo số liệu chính thức, <span data-num="l5_do_thi_hoa.thongKe.nongThonChinhThuc2020" data-fmt="%0"></span> người Việt Nam sống ở nông thôn năm 2020.</p>
+
+<figure class="fig" id="tab-5-1">
+  <figcaption class="fig-head"><span class="fig-label">Bảng 5.1</span>Dân số theo lớp Mức độ đô thị hoá, theo vùng, 2020</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Vùng</th><th class="r">Dân số (triệu người)</th><th class="r">Thành phố</th><th class="r">Thị trấn và vùng bán dày đặc</th><th class="r">Nông thôn</th></tr></thead>
+    <tbody id="tab-5-1-rows"></tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> tính từ GHS-SMOD R2023A và GHS-POP R2023A (2020) với ranh tỉnh của geoBoundaries.</p>
+    <p><b>Ghi chú:</b> ba trong sáu vùng kinh tế – xã hội của Tổng cục Thống kê, với các tỉnh trước khi sáp nhập năm 2025. Tỷ lệ cả nước tính từ lưới này lệch tối đa ba điểm phần trăm so với bảng quốc gia ở Hình 5.1, vì lưới và ranh giới không phải loại mà đơn vị sản xuất đã dùng.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_smod ghs_pop geoboundaries" data-script="kich_ban/l5_do_thi_hoa.py" data-note="Đặt ranh tỉnh lên lưới ô, rồi cộng dân số của các ô thuộc từng lớp trong từng vùng."></div>
+</figure>
+
+<div class="interp"><span class="label">Diễn giải — định nghĩa nào đúng?</span>Các định nghĩa trả lời những câu hỏi khác nhau. Định nghĩa chính thức ghi nhận địa vị hành chính, thứ quyết định một nơi được quy hoạch và quản lý ra sao. Mức độ đô thị hoá ghi nhận người dân sống dày đến đâu, và ở các châu thổ của Việt Nam nhiều làng xã đông đúc chẳng kém vùng ven đô của nước khác. Với mô hình đơn tâm, điều quan trọng không phải địa vị hay mật độ tự thân, mà là mảnh đất ấy có được những hộ làm việc trong thành phố trả giá để ở hay không: không thước đo nào trong ba thước đo trên quan sát được điều đó trực tiếp.</div>
+
+<h2 id="s3"><span class="sec">5.3</span>Ánh sáng ban đêm</h2>
+<p>Để đo sự tăng trưởng của đất đô thị, Ngân hàng Thế giới dùng ảnh ánh sáng ban đêm, coi là đô thị những ô sáng hơn một ngưỡng:</p>
+<blockquote data-quote="trich_dan.wb20.nguong" data-who="Ngân hàng Thế giới (2020), Đô thị hóa Việt Nam trước ngã rẽ"><p class="tr">Các khu vực đô thị được xác định dựa trên ngưỡng DN = 53.</p></blockquote>
+<p>Bằng cách này, báo cáo thấy đất đô thị đã lan rộng nhanh hơn:</p>
+<blockquote data-quote="trich_dan.wb20.tangToc" data-who="Ngân hàng Thế giới (2020), Đô thị hóa Việt Nam trước ngã rẽ"><p class="tr">Tốc độ đô thị hóa “không gian” hay “vật chất” của Việt Nam – tức là tăng trưởng diện tích đất được phân loại là đất đô thị theo phương pháp ánh sáng ban đêm – đã tăng tốc đáng kể trong thập kỷ qua.</p></blockquote>
+<blockquote data-quote="trich_dan.wb20.soLieu" data-who="Ngân hàng Thế giới (2020), Đô thị hóa Việt Nam trước ngã rẽ"><p class="tr">Dựa trên dữ liệu ánh sáng ban đêm, tỷ lệ tổng diện tích đất Việt Nam được phân loại là đất đô thị (tổng diện tích đô thị) tăng 0,8 điểm phần trăm trong giai đoạn 1996-2012, từ 0,13% lên 0,93%. Đến năm 2017, tổng diện tích đất đô thị của quốc gia đã lên tới 2,2% (hình 2.8), với tốc độ tăng trưởng kép hàng năm là 17,7% trong giai đoạn 2012-17.</p></blockquote>
+<p>Vệ tinh ghi ánh sáng ban đêm từ năm 1992, nhưng không phải bằng một thiết bị. Tới năm 2013, ảnh do các vệ tinh DMSP chụp, và cảm biến của chúng bị bão hoà ở những trung tâm đô thị sáng; thiết bị VIIRS thay thế sau đó nhạy hơn nhiều. Li và cộng sự (2020) quy ảnh VIIRS về thang của DMSP để dựng một chuỗi duy nhất từ năm 1992, nay đã kéo dài tới 2024. Bản đồ 5.2 và Hình 5.2 dùng chuỗi này.</p>
+
+<figure class="fig wide" id="map-5-2">
+  <figcaption class="fig-head"><span class="fig-label">Bản đồ 5.2</span>Ánh sáng ban đêm của Việt Nam, 1992–2024</figcaption>
+  <p class="fig-sub">Độ sáng theo thang của vệ tinh DMSP (0–63), ô khoảng 2 km</p>
+  <div class="steps" role="group" aria-label="Năm">
+    <button type="button" data-go="0"><span data-num="l5_do_thi_hoa.ntl.namAnh.0" data-fmt="y"></span></button>
+    <button type="button" data-go="1"><span data-num="l5_do_thi_hoa.ntl.namAnh.1" data-fmt="y"></span></button>
+    <button type="button" data-go="2"><span data-num="l5_do_thi_hoa.ntl.namAnh.2" data-fmt="y"></span></button>
+    <button type="button" data-go="3"><span data-num="l5_do_thi_hoa.ntl.namAnh.3" data-fmt="y"></span></button>
+    <button type="button" data-go="4"><span data-num="l5_do_thi_hoa.ntl.namAnh.4" data-fmt="y"></span></button>
+    <button type="button" data-go="5"><span data-num="l5_do_thi_hoa.ntl.namAnh.5" data-fmt="y"></span></button>
+    <button type="button" data-go="6"><span data-num="l5_do_thi_hoa.ntl.namAnh.6" data-fmt="y"></span></button>
+    <button type="button" data-go="7"><span data-num="l5_do_thi_hoa.ntl.namAnh.7" data-fmt="y"></span></button>
+    <button type="button" data-go="8"><span data-num="l5_do_thi_hoa.ntl.namAnh.8" data-fmt="y"></span></button>
+    <span class="hint">phím ← →</span>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-5-2"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> Li, Zhou, Zhao và Zhao (2020), ánh sáng ban đêm hài hoà DMSP–VIIRS, bản năm 2025; ranh Việt Nam từ geoBoundaries; nền bản đồ OpenFreeMap, © những người đóng góp OpenStreetMap.</p>
+    <p><b>Ghi chú:</b> các năm tới 2013 là ảnh DMSP; từ 2014 là ảnh VIIRS đã quy về thang DMSP. Không vẽ các ô tối hơn 7; bỏ ánh sáng ngoài lãnh thổ Việt Nam. Mỗi ô trên bản đồ là trung bình của hai nhân hai ô 30 giây cung — không mất chi tiết thật, vì cảm biến DMSP ghi ánh sáng trên những vệt khoảng 3 km.</p>
+  </div>
+  <div class="about-data" data-sources="ntl_harmonized geoboundaries nen_ban_do" data-script="kich_ban/l5_do_thi_hoa.py" data-note="Đưa từng ảnh về đúng lưới của Bản đồ 5.1 (hai lưới lệch nhau khoảng nửa ô), giữ các ô trong lãnh thổ Việt Nam, và lấy trung bình từng khối hai nhân hai ô để vẽ bản đồ."></div>
+</figure>
+
+<figure class="fig wide" id="fig-5-2">
+  <figcaption class="fig-head"><span class="fig-label">Hình 5.2</span>Diện tích sáng, và phần ánh sáng quanh hai thành phố lớn nhất, 1992–2024</figcaption>
+  <p class="fig-sub">Trái: diện tích đất Việt Nam sáng hơn hai ngưỡng, km² (thang logarit). Phải: phần ánh sáng của cả nước trong bán kính 50 km quanh Bến Thành và quanh hồ Hoàn Kiếm</p>
+  <div class="fig-body"><div class="pair-charts"><div id="c-5-2a"></div><div id="c-5-2b"></div></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> như Bản đồ 5.2.</p>
+    <p><b>Ghi chú:</b> vạch xám đánh dấu chỗ chuyển từ DMSP sang VIIRS, giữa năm 2013 và 2014. Trên thang logarit, đường thẳng nghĩa là tốc độ tăng không đổi. Từng năm lẻ dao động rất mạnh; hãy đọc xu hướng, đừng đọc một năm.</p>
+  </div>
+  <div class="about-data" data-sources="ntl_harmonized geoboundaries" data-script="kich_ban/l5_do_thi_hoa.py" data-note="Với mỗi năm, cộng diện tích các ô trong lãnh thổ Việt Nam sáng từ mỗi ngưỡng trở lên, và cộng độ sáng của mọi ô trong bán kính 50 km quanh mỗi trung tâm rồi chia cho độ sáng của cả nước."></div>
+</figure>
+
+<p>Đo trên chuỗi này với cùng ngưỡng, phần đất Việt Nam được chiếu sáng tăng từ <span data-num="l5_do_thi_hoa.thongKe.ntl.tyLe.1996" data-fmt="%2"></span> năm 1996 lên <span data-num="l5_do_thi_hoa.thongKe.ntl.tyLe.2012" data-fmt="%2"></span> năm 2012 và <span data-num="l5_do_thi_hoa.thongKe.ntl.tyLe.2017" data-fmt="%2"></span> năm 2017: thấp hơn số của báo cáo, nhưng cùng cỡ. Tốc độ tăng thì kể một câu chuyện khác. Xét riêng những năm của từng thiết bị, diện tích sáng tăng <span data-num="l5_do_thi_hoa.thongKe.ntl.cagrDmsp" data-fmt="%1"></span> mỗi năm từ 1996 đến 2013 và <span data-num="l5_do_thi_hoa.thongKe.ntl.cagrViirs" data-fmt="%1"></span> mỗi năm từ 2014 đến 2024: tăng chậm lại chứ không nhanh lên. Bước từ 2013 sang 2014, chỗ hai thiết bị nối nhau, là <span data-num="l5_do_thi_hoa.thongKe.ntl.noi1314" data-fmt="%0"></span>, lớn hơn gấp đôi mức thay đổi thường gặp giữa hai năm liền nhau (<span data-num="l5_do_thi_hoa.thongKe.ntl.trungViBuoc" data-fmt="%0"></span>). Nếu đo vắt qua chỗ nối như báo cáo, tốc độ quả có tăng: từ <span data-num="l5_do_thi_hoa.thongKe.ntl.cagr9612" data-fmt="%1"></span> mỗi năm trong 1996–2012 lên <span data-num="l5_do_thi_hoa.thongKe.ntl.cagr1217" data-fmt="%1"></span> trong 2012–2017.</p>
+<div class="interp"><span class="label">Diễn giải — cần kiểm thêm bằng dữ liệu khác</span>Một phần của sự "tăng tốc" mà báo cáo năm 2020 nêu có thể đến từ việc đổi vệ tinh chứ không phải từ đất. Bản thân chuỗi hài hoà cũng là một ước lượng, dựng bằng cách quy thiết bị này về thiết bị kia, nên bài này không thể kết luận dứt khoát. Nó cho thấy câu trả lời phụ thuộc vào cách nối hai thiết bị, và một tốc độ tăng đo vắt qua chỗ nối cần được kiểm bằng một nguồn không thay đổi, chẳng hạn đất xây dựng ở Bài 4.</div>
+<p>Ánh sáng còn đo cả những thứ khác ngoài đất. Trong bán kính 30 km quanh Bến Thành, diện tích sáng vượt ngưỡng tăng <span data-num="l5_do_thi_hoa.thongKe.sangSoXay.hcm.sang" data-fmt="1"></span> lần từ 1992 đến 2015, trong khi đất xây dựng đo bằng Landsat chỉ tăng <span data-num="l5_do_thi_hoa.thongKe.sangSoXay.hcm.xay" data-fmt="1"></span> lần; quanh hồ Hoàn Kiếm, hai con số là <span data-num="l5_do_thi_hoa.thongKe.sangSoXay.hn.sang" data-fmt="1"></span> và <span data-num="l5_do_thi_hoa.thongKe.sangSoXay.hn.xay" data-fmt="1"></span>. Đất đã xây từ trước trở nên sáng hơn, và diện tích sáng tính mọi ô vượt ngưỡng, dù ô ấy phủ kín nhà cửa hay chỉ có một con đường được chiếu sáng.</p>
+<p>Cuối cùng, ánh sáng đã lan ra khỏi hai thành phố lớn nhất (Hình 5.2, bên phải). Phần ánh sáng của cả nước phát ra trong bán kính 50 km quanh Bến Thành hoặc hồ Hoàn Kiếm giảm từ <span data-num="l5_do_thi_hoa.thongKe.haiVung.1992" data-fmt="%0"></span> năm 1992 xuống <span data-num="l5_do_thi_hoa.thongKe.haiVung.2013" data-fmt="%0"></span> năm 2013, và từ <span data-num="l5_do_thi_hoa.thongKe.haiVung.2014" data-fmt="%0"></span> năm 2014 xuống <span data-num="l5_do_thi_hoa.thongKe.haiVung.2024" data-fmt="%0"></span> năm 2024 — giảm trong từng thời kỳ của mỗi thiết bị, không phải do chỗ nối.</p>
+
+<h2 id="s4"><span class="sec">5.4</span>Điều này có ý nghĩa gì với mô hình</h2>
+<p>Mô hình đơn tâm đặt ranh thành phố ở nơi giá mà hộ gia đình thành thị sẵn lòng trả cho đất hạ xuống bằng giá thuê đất nông nghiệp (Bài 1). Không thước đo nào trong bài này quan sát được ranh ấy. Địa vị hành chính, mật độ dân và ánh sáng ban đêm, mỗi thứ vạch ranh ở một chỗ khác nhau, và ở Việt Nam việc chọn thước đo làm thay đổi câu trả lời nhiều hơn cả ba thập kỷ tăng trưởng đã làm thay đổi bất kỳ thước đo nào. Bài 2 so sánh nhiều thước đo cho TP.HCM; bài này cho thấy vì sao cũng cần sự cẩn trọng ấy khi nhìn cả nước.</p>
+
+<h2 id="ex"><span class="sec">5.5</span>Bài tập</h2>
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 5.1</span>Hà Nội kết thúc ở đâu?</p>
+  <p>Mở góc nhìn thứ hai của Bản đồ 5.1. Tìm trung tâm đô thị của Hà Nội và lần theo vùng đất giữa nó với các thành phố tỉnh lân cận. Bạn sẽ gọi vùng đất ấy là đô thị hay nông thôn? Định nghĩa nào trong ba định nghĩa khớp với câu trả lời của bạn, và bạn cần biết thêm gì để quyết định?</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 5.2</span>Hai thiết bị</p>
+  <p>Trên biểu đồ bên trái của Hình 5.2, đọc diện tích sáng theo ngưỡng của Ngân hàng Thế giới vào các năm 1996, 2013, 2014 và 2024, rồi tính tốc độ tăng mỗi năm từ 1996 đến 2013 và từ 2014 đến 2024. Sau đó tính riêng cho giai đoạn 2012–2017. Giải thích vì sao việc chọn năm làm đổi kết luận.</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 5.3</span>Ánh sáng và đất</p>
+  <p>Nêu hai lý do khiến diện tích sáng quanh một thành phố có thể tăng nhanh hơn đất xây dựng, và mô tả cách bạn kiểm một trong hai lý do bằng dữ liệu của học phần.</p>
+</div>
+
+<h2 id="data"><span class="sec">5.6</span>Dữ liệu và mã</h2>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Dữ liệu</th><th>Giấy phép</th><th>Truy cập</th></tr></thead>
+  <tbody id="data-rows"></tbody>
+</table></div>
+<p class="licence">Kịch bản: <code>kich_ban/l5_do_thi_hoa.py</code> (tỷ lệ chính thức, Mức độ đô thị hoá, theo vùng, ánh sáng ban đêm). Kịch bản dừng mà không ghi kết quả nếu một phép kiểm không đạt, kể cả phép kiểm cho từng phép so sánh nêu trong bài; các con số của Ngân hàng Thế giới được đọc từ chính câu trích, không gõ lại.</p>
+
+<h2 id="refs"><span class="sec">5.7</span>Tài liệu tham khảo</h2>
+<ul class="references">
+  <li>European Commission, FAO, UN-Habitat, ILO, OECD &amp; World Bank (2021). <i>Applying the Degree of Urbanisation: A methodological manual to define cities, towns and rural areas for international comparisons</i>. Publications Office of the European Union. <a href="https://doi.org/10.2785/706535">doi:10.2785/706535</a></li>
+  <li>Li, X., Zhou, Y., Zhao, M., &amp; Zhao, X. (2020). A harmonized global nighttime light dataset 1992–2018. <i>Scientific Data, 7</i>, 168. <a href="https://doi.org/10.1038/s41597-020-0510-y">doi:10.1038/s41597-020-0510-y</a>. Dữ liệu: <a href="https://doi.org/10.6084/m9.figshare.9828827">doi:10.6084/m9.figshare.9828827</a>, CC BY 4.0.</li>
+  <li>Runfola, D., et al. (2020). geoBoundaries: A global database of political administrative boundaries. <i>PLoS ONE, 15</i>(4), e0231866. <a href="https://doi.org/10.1371/journal.pone.0231866">doi:10.1371/journal.pone.0231866</a></li>
+  <li>Schiavina, M., Melchiorri, M., &amp; Freire, S. (2023). <i>GHS-DUC R2023A — GHS Degree of Urbanisation Classification, multitemporal (1975–2030)</i>. European Commission, Joint Research Centre. <a href="https://doi.org/10.2905/DC0EB21D-472C-4F5A-8846-823C50836305">doi:10.2905/DC0EB21D-472C-4F5A-8846-823C50836305</a>, CC BY 4.0.</li>
+  <li>Schiavina, M., Melchiorri, M., &amp; Pesaresi, M. (2023). <i>GHS-SMOD R2023A — GHS settlement layers, multitemporal (1975–2030)</i>. European Commission, Joint Research Centre. <a href="https://doi.org/10.2905/A0DF7A6F-49DE-46EA-9BDE-563437A6E2BA">doi:10.2905/A0DF7A6F-49DE-46EA-9BDE-563437A6E2BA</a>, CC BY 4.0.</li>
+  <li>World Bank (2020). <i>Vietnam’s urbanization at a crossroads: Embarking on an efficient, inclusive, and resilient pathway</i>. World Bank. <a href="https://hdl.handle.net/10986/34761">hdl:10986/34761</a>, CC BY 3.0 IGO. Bản tiếng Việt: Ngân hàng Thế giới (2020), <i>Đô thị hóa Việt Nam trước ngã rẽ: Khởi đầu Lộ trình Hiệu quả, Bao trùm, và có Khả năng Thích ứng</i>.</li>
+  <li>World Bank. <i>World Development Indicators</i>: Urban population (% of total population), SP.URB.TOTL.IN.ZS. <a href="https://data.worldbank.org/indicator/SP.URB.TOTL.IN.ZS">data.worldbank.org</a>, CC BY 4.0.</li>
+</ul>
+
+</main>
+</div></div>
+
+<footer class="site-footer"><div class="inner">Kinh tế đô thị · Thành phố đơn tâm. Tài liệu giảng dạy phi thương mại. Chữ và hình sinh từ các kịch bản trong <code>kich_ban/</code>; nguồn, giấy phép và ngày truy cập của từng bộ dữ liệu nằm trong các tệp ở <code>du_lieu/</code>.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.js"></script>
+<script src="../assets/core.js"></script>
+<script src="../assets/chart.js"></script>
+<script src="../assets/map.js"></script>
+<script src="../du_lieu/trich_dan.js"></script>
+<script src="../du_lieu/l5_do_thi_hoa.js"></script>
+<script src="../assets/nguon.js"></script>
+<script src="../assets/lesson5.js"></script>
+</body>
+</html>

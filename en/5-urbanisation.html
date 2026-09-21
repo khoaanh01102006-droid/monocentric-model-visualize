@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 5 · How urban is Vietnam? — Urban Economics</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%230071BC' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23111'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="course" href="index.html">Urban Economics <span>· The monocentric city</span></a>
+  <nav><a href="1-model.html">1<span class="long"> · The model</span></a><a href="2-hcmc.html">2<span class="long"> · Ho Chi Minh City</span></a><a href="3-commuting.html">3<span class="long"> · Commuting cost</span></a><a href="4-neighbours.html">4<span class="long"> · Neighbours</span></a><a href="5-urbanisation.html" aria-current="page">5<span class="long"> · Urbanisation</span></a></nav>
+  <div class="lang"><span>EN</span><a href="../vi/5-urbanisation.html" hreflang="vi">VI</a></div>
+</div></header>
+
+<div class="page"><div class="layout">
+<aside class="toc"><nav aria-label="On this page"></nav></aside>
+<main class="main">
+
+<header class="lesson-head">
+  <p class="lesson-no">Lesson 5</p>
+  <h1>How urban is Vietnam?</h1>
+  <p class="standfirst">By the official definition, <span data-num="l5_do_thi_hoa.thongKe.ct.2020" data-fmt="%0"></span> of the people of Vietnam lived in urban areas in 2020. By the international Degree of Urbanisation, <span data-num="l5_do_thi_hoa.thongKe.duc2020.doThi" data-fmt="%0"></span> lived in cities, towns or semi-dense areas. This lesson explains why the two figures differ, maps where they disagree, and then follows the spread of cities with the lights that satellites record at night — the measures that the World Bank used in its 2020 review of urbanisation in Vietnam.</p>
+  <p class="meta">Data: the urban share of the World Development Indicators; the Degree of Urbanisation grid and tables (GHS-SMOD and GHS-DUC R2023A) of the European Commission’s Joint Research Centre; a harmonised series of night-time lights for 1992–2024; boundaries from geoBoundaries. Numbers in the text are produced by <code>kich_ban/l5_do_thi_hoa.py</code>.</p>
+</header>
+
+<section class="objectives">
+  <h2>Learning objectives</h2>
+  <p>After this lesson you should be able to:</p>
+  <ol>
+    <li>explain how the official definition of urban areas in Vietnam is drawn and how it differs from the Degree of Urbanisation;</li>
+    <li>read a map of the Degree of Urbanisation and explain why so much of Vietnam falls into the class of towns and semi-dense areas;</li>
+    <li>use night-time lights to follow the spread of cities, and give two reasons why a series of lights can mislead.</li>
+  </ol>
+</section>
+
+<h2 id="s1"><span class="sec">5.1</span>Three answers to one question</h2>
+<p>The census of Vietnam classifies people as urban or rural by the administrative status of the place where they live:</p>
+<blockquote data-quote="trich_dan.wb20.dinhNghia" data-who="World Bank (2020), Vietnam’s Urbanization at a Crossroads"></blockquote>
+<p>On this definition, <span data-num="l5_do_thi_hoa.thongKe.ct.2020" data-fmt="%1"></span> of the population was urban in 2020 (Figure 5.1). Definitions that look at how people live rather than at administrative status give larger shares. Using commuting zones around cities, the OECD reached a higher figure:</p>
+<blockquote data-quote="trich_dan.wb20.oecd" data-who="World Bank (2020), Vietnam’s Urbanization at a Crossroads"></blockquote>
+<p>The Degree of Urbanisation, the method behind the urban centres of Lessons 2 and 4, classifies every cell of 1 km² of a population grid. Urban centres form <em class="term">cities</em>. The next class is built from urban clusters:</p>
+<blockquote data-quote="trich_dan.degurba.cumDoThi" data-who="European Commission, FAO, UN-Habitat, ILO, OECD &amp; World Bank (2021), Applying the Degree of Urbanisation"></blockquote>
+<p>Urban clusters outside cities form a class of their own, <em class="term">towns and semi-dense areas</em>, because countries do not agree on where it belongs:</p>
+<blockquote data-quote="trich_dan.degurba.haiCach" data-who="European Commission, FAO, UN-Habitat, ILO, OECD &amp; World Bank (2021), Applying the Degree of Urbanisation"></blockquote>
+<p>The World Bank reported what happens when this class is counted as urban in Vietnam, and advised caution:</p>
+<blockquote data-quote="trich_dan.wb20.degurba" data-who="World Bank (2020), Vietnam’s Urbanization at a Crossroads"></blockquote>
+
+<figure class="fig" id="fig-5-1">
+  <figcaption class="fig-head"><span class="fig-label">Figure 5.1</span>Share of the population of Vietnam that is urban, three definitions, 1975–2024</figcaption>
+  <p class="fig-sub">Official definition, and the two broadest classes of the Degree of Urbanisation</p>
+  <div class="fig-body"><div id="c-5-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> World Bank, World Development Indicators (United Nations Population Division, national definitions); European Commission, Joint Research Centre, GHS-DUC R2023A. The black dot is the figure for 2015 quoted by World Bank (2020), from an earlier release of the same data.</p>
+    <p><b>Note:</b> the official series is smoothed by the United Nations between censuses; the large dots mark the census years. The Degree of Urbanisation is given every fifth year and rests on population grids estimated by the Joint Research Centre.</p>
+  </div>
+  <div class="about-data" data-sources="wdi_urban ghs_duc" data-script="kich_ban/l5_do_thi_hoa.py" data-note="Read the official urban share of Vietnam for 1975–2024 and the national shares of cities, towns and semi-dense areas, and rural areas for every fifth year from 1975 to 2020."></div>
+</figure>
+
+<p>The current release of the data confirms the warning. In 2020, <span data-num="l5_do_thi_hoa.thongKe.duc2020.thanhPho" data-fmt="%0"></span> of the population of Vietnam lived in cities, <span data-num="l5_do_thi_hoa.thongKe.duc2020.thiTran" data-fmt="%0"></span> in towns and semi-dense areas and only <span data-num="l5_do_thi_hoa.thongKe.duc2020.nongThon" data-fmt="%0"></span> in rural areas. Counting towns and semi-dense areas as urban gives <span data-num="l5_do_thi_hoa.thongKe.ducMoi.dt2015" data-fmt="%0"></span> for Vietnam in 2015 against <span data-num="l5_do_thi_hoa.thongKe.ducMoi.usa2015" data-fmt="%0"></span> for the United States — even more than the figure the World Bank quoted, because the population grids have been revised since. Two further points stand out in Figure 5.1. Cities alone hold a larger share of the population than the official urban areas. And the gap between the definitions is wider than the change in any one of them since 1990.</p>
+
+<h2 id="s2"><span class="sec">5.2</span>Where the definitions disagree</h2>
+<p>Map 5.1 shows the grid behind these shares. Red cells belong to urban centres; the shades of brown and yellow belong to urban clusters, which make up the towns and semi-dense areas; the greens are rural.</p>
+
+<figure class="fig wide" id="map-5-1">
+  <figcaption class="fig-head"><span class="fig-label">Map 5.1</span>The Degree of Urbanisation of Vietnam, grid cells of about 1 km</figcaption>
+  <p class="fig-sub">Class of each cell in 2020, and in 1990 for comparison</p>
+  <div class="steps" role="group" aria-label="View">
+    <button type="button" data-go="0">Vietnam, 2020</button>
+    <button type="button" data-go="1">Red River Delta</button>
+    <button type="button" data-go="2">Mekong Delta and Ho Chi Minh City</button>
+    <button type="button" data-go="3">Vietnam, 1990</button>
+    <span class="hint">← → keys</span>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-5-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> European Commission, Joint Research Centre, GHS-SMOD R2023A (30 arc-seconds); boundary of Vietnam from geoBoundaries; base map OpenFreeMap, © OpenStreetMap contributors.</p>
+    <p><b>Note:</b> colours are those of the producer. Water cells are not drawn. The classes of 1990 rest on a population grid estimated back from later censuses and on the built-up area observed by Landsat.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_smod geoboundaries nen_ban_do" data-script="kich_ban/l5_do_thi_hoa.py" data-note="Cut the grid of 1990 and of 2020 to the boundary of Vietnam and coloured each cell by its class."></div>
+</figure>
+
+<p>In the deltas, settlement is dense enough for the cells between towns to reach the threshold of an urban cluster, and the yellow of suburban and peri-urban cells spreads across the countryside. Cities and urban clusters cover <span data-num="l5_do_thi_hoa.vung.0.datDoThi" data-fmt="%0"></span> of the land of the Red River Delta and <span data-num="l5_do_thi_hoa.vung.2.datDoThi" data-fmt="%0"></span> of the Mekong Delta, against <span data-num="l5_do_thi_hoa.vung.3.datDoThi" data-fmt="%0"></span> in the rest of the country outside the South East. Table 5.1 adds up the population by class. In the Red River Delta only <span data-num="l5_do_thi_hoa.vung.0.nongThon" data-fmt="%0"></span> of the people live in cells classified as rural, and even outside the three regions shown the rural share is only <span data-num="l5_do_thi_hoa.vung.3.nongThon" data-fmt="%0"></span>. Officially, <span data-num="l5_do_thi_hoa.thongKe.nongThonChinhThuc2020" data-fmt="%0"></span> of the people of Vietnam were rural in 2020.</p>
+
+<figure class="fig" id="tab-5-1">
+  <figcaption class="fig-head"><span class="fig-label">Table 5.1</span>Population by class of the Degree of Urbanisation, by region, 2020</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Region</th><th class="r">Population (million)</th><th class="r">Cities</th><th class="r">Towns and semi-dense areas</th><th class="r">Rural areas</th></tr></thead>
+    <tbody id="tab-5-1-rows"></tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> computed from GHS-SMOD R2023A and GHS-POP R2023A (2020) with province boundaries from geoBoundaries.</p>
+    <p><b>Note:</b> regions are three of the six socio-economic regions of the General Statistics Office, with the provinces before the mergers of 2025. The shares for the whole country computed from this grid differ from the national table of Figure 5.1 by up to three percentage points, because the grid and the boundaries are not the ones the producer used.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_smod ghs_pop geoboundaries" data-script="kich_ban/l5_do_thi_hoa.py" data-note="Laid the province boundaries over the grid, and added up the population of the cells of each class in each region."></div>
+</figure>
+
+<div class="interp"><span class="label">Interpretation — which definition is right?</span>The definitions answer different questions. The official definition records administrative status, which decides how a place is planned and governed. The Degree of Urbanisation records how densely people live, and in the deltas of Vietnam many villages are as dense as the suburbs of other countries. For the monocentric model, what matters is neither status nor density as such, but whether land is bid for by households who work in a city: none of the three measures observes that directly.</div>
+
+<h2 id="s3"><span class="sec">5.3</span>Lights at night</h2>
+<p>To measure the growth of urban land, the World Bank used images of light at night, counting as urban the cells brighter than a threshold:</p>
+<blockquote data-quote="trich_dan.wb20.nguong" data-who="World Bank (2020), Vietnam’s Urbanization at a Crossroads"></blockquote>
+<p>With this method it found that the spread of urban land had sped up:</p>
+<blockquote data-quote="trich_dan.wb20.tangToc" data-who="World Bank (2020), Vietnam’s Urbanization at a Crossroads"></blockquote>
+<blockquote data-quote="trich_dan.wb20.soLieu" data-who="World Bank (2020), Vietnam’s Urbanization at a Crossroads"></blockquote>
+<p>Satellites have recorded night-time light since 1992, but not with one instrument. Until 2013 the images come from the DMSP satellites, whose sensor saturates in bright city centres; the VIIRS instrument that followed is far more sensitive. Li et al. (2020) converted the VIIRS images to the scale of the DMSP to build a single series from 1992, now extended to 2024. Map 5.2 and Figure 5.2 use it.</p>
+
+<figure class="fig wide" id="map-5-2">
+  <figcaption class="fig-head"><span class="fig-label">Map 5.2</span>Night-time lights of Vietnam, 1992–2024</figcaption>
+  <p class="fig-sub">Brightness on the scale of the DMSP satellites (0–63), cells of about 2 km</p>
+  <div class="steps" role="group" aria-label="Year">
+    <button type="button" data-go="0"><span data-num="l5_do_thi_hoa.ntl.namAnh.0" data-fmt="y"></span></button>
+    <button type="button" data-go="1"><span data-num="l5_do_thi_hoa.ntl.namAnh.1" data-fmt="y"></span></button>
+    <button type="button" data-go="2"><span data-num="l5_do_thi_hoa.ntl.namAnh.2" data-fmt="y"></span></button>
+    <button type="button" data-go="3"><span data-num="l5_do_thi_hoa.ntl.namAnh.3" data-fmt="y"></span></button>
+    <button type="button" data-go="4"><span data-num="l5_do_thi_hoa.ntl.namAnh.4" data-fmt="y"></span></button>
+    <button type="button" data-go="5"><span data-num="l5_do_thi_hoa.ntl.namAnh.5" data-fmt="y"></span></button>
+    <button type="button" data-go="6"><span data-num="l5_do_thi_hoa.ntl.namAnh.6" data-fmt="y"></span></button>
+    <button type="button" data-go="7"><span data-num="l5_do_thi_hoa.ntl.namAnh.7" data-fmt="y"></span></button>
+    <button type="button" data-go="8"><span data-num="l5_do_thi_hoa.ntl.namAnh.8" data-fmt="y"></span></button>
+    <span class="hint">← → keys</span>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-5-2"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> Li, Zhou, Zhao and Zhao (2020), harmonised DMSP–VIIRS night-time lights, version of 2025; boundary of Vietnam from geoBoundaries; base map OpenFreeMap, © OpenStreetMap contributors.</p>
+    <p><b>Note:</b> years up to 2013 are DMSP images; from 2014 they are VIIRS images converted to the DMSP scale. Cells darker than 7 are not drawn; lights outside Vietnam are left out. Two cells of 30 arc-seconds are averaged in each direction, which loses no detail, since the DMSP sensor sees a spot of about 3 km.</p>
+  </div>
+  <div class="about-data" data-sources="ntl_harmonized geoboundaries nen_ban_do" data-script="kich_ban/l5_do_thi_hoa.py" data-note="Moved each image onto the grid of Map 5.1 (the two grids are offset by about half a cell), kept the cells inside Vietnam and averaged them in blocks of two by two for the map."></div>
+</figure>
+
+<figure class="fig wide" id="fig-5-2">
+  <figcaption class="fig-head"><span class="fig-label">Figure 5.2</span>Lit area, and the share of light near the two largest cities, 1992–2024</figcaption>
+  <p class="fig-sub">Left: land of Vietnam brighter than two thresholds, km² (logarithmic scale). Right: share of the country’s light within 50 km of Ben Thanh and of Hoan Kiem Lake</p>
+  <div class="fig-body"><div class="pair-charts"><div id="c-5-2a"></div><div id="c-5-2b"></div></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> as Map 5.2.</p>
+    <p><b>Note:</b> the grey line marks the change from DMSP to VIIRS between 2013 and 2014. On a logarithmic scale a straight line means a constant rate of growth. Single years move a great deal; read the trend, not one year.</p>
+  </div>
+  <div class="about-data" data-sources="ntl_harmonized geoboundaries" data-script="kich_ban/l5_do_thi_hoa.py" data-note="For each year, added up the area of the cells inside Vietnam that are at least as bright as each threshold, and the brightness of all cells within 50 km of each centre as a share of the whole country."></div>
+</figure>
+
+<p>Measured in this series with the same threshold, the lit share of the land of Vietnam rose from <span data-num="l5_do_thi_hoa.thongKe.ntl.tyLe.1996" data-fmt="%2"></span> in 1996 to <span data-num="l5_do_thi_hoa.thongKe.ntl.tyLe.2012" data-fmt="%2"></span> in 2012 and <span data-num="l5_do_thi_hoa.thongKe.ntl.tyLe.2017" data-fmt="%2"></span> in 2017: lower than the report’s figures, but of the same order. The rates of growth tell a different story. Within the years of each instrument, the lit area grew by <span data-num="l5_do_thi_hoa.thongKe.ntl.cagrDmsp" data-fmt="%1"></span> a year from 1996 to 2013 and by <span data-num="l5_do_thi_hoa.thongKe.ntl.cagrViirs" data-fmt="%1"></span> a year from 2014 to 2024: growth slowed rather than sped up. The step from 2013 to 2014, where the two instruments meet, is <span data-num="l5_do_thi_hoa.thongKe.ntl.noi1314" data-fmt="%0"></span>, more than twice the typical change between two years (<span data-num="l5_do_thi_hoa.thongKe.ntl.trungViBuoc" data-fmt="%0"></span>). Measured across the change of instrument, as in the report, the rate does rise: from <span data-num="l5_do_thi_hoa.thongKe.ntl.cagr9612" data-fmt="%1"></span> a year in 1996–2012 to <span data-num="l5_do_thi_hoa.thongKe.ntl.cagr1217" data-fmt="%1"></span> in 2012–2017.</p>
+<div class="interp"><span class="label">Interpretation — to be tested with other data</span>Part of the acceleration reported in 2020 may come from the change of satellite rather than from the land. The harmonised series is itself an estimate, built by converting one instrument into the other, so this lesson cannot settle the question. It shows that the answer depends on how the two instruments are joined, and that a growth rate measured across the join needs a check from a source that does not change, such as the built-up land of Lesson 4.</div>
+<p>Lights also measure something other than land. Within 30 km of Ben Thanh, the area lit above the threshold grew <span data-num="l5_do_thi_hoa.thongKe.sangSoXay.hcm.sang" data-fmt="1"></span> times between 1992 and 2015, while built-up land measured from Landsat grew <span data-num="l5_do_thi_hoa.thongKe.sangSoXay.hcm.xay" data-fmt="1"></span> times; around Hoan Kiem Lake the factors are <span data-num="l5_do_thi_hoa.thongKe.sangSoXay.hn.sang" data-fmt="1"></span> and <span data-num="l5_do_thi_hoa.thongKe.sangSoXay.hn.xay" data-fmt="1"></span>. Land that was already built up became brighter, and a lit area counts every cell above the threshold, whether it is covered by buildings or by a single lit road.</p>
+<p>Finally, light has spread away from the two largest cities (Figure 5.2, right). The share of the country’s light emitted within 50 km of Ben Thanh or of Hoan Kiem Lake fell from <span data-num="l5_do_thi_hoa.thongKe.haiVung.1992" data-fmt="%0"></span> in 1992 to <span data-num="l5_do_thi_hoa.thongKe.haiVung.2013" data-fmt="%0"></span> in 2013, and from <span data-num="l5_do_thi_hoa.thongKe.haiVung.2014" data-fmt="%0"></span> in 2014 to <span data-num="l5_do_thi_hoa.thongKe.haiVung.2024" data-fmt="%0"></span> in 2024 — a fall within each instrument, not an effect of the join.</p>
+
+<h2 id="s4"><span class="sec">5.4</span>What this means for the model</h2>
+<p>The monocentric model places the edge of a city where the rent that city households bid for land falls to the rent of farmland (Lesson 1). None of the measures of this lesson observes that edge. Administrative status, population density and light at night each draw it somewhere else, and in Vietnam the choice of measure changes the answer more than three decades of growth have changed any one of them. Lesson 2 compared several measures for Ho Chi Minh City; this lesson shows why the same care is needed for the country as a whole.</p>
+
+<h2 id="ex"><span class="sec">5.5</span>Exercises</h2>
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 5.1</span>Where does Hanoi end?</p>
+  <p>Open the second view of Map 5.1. Find the urban centre of Hanoi and follow the land between it and the neighbouring provincial cities. Would you call that land urban or rural? Which of the three definitions matches your answer, and what would you need to know to decide?</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 5.2</span>Two instruments</p>
+  <p>On the left of Figure 5.2, read the lit area at the threshold of the World Bank in 1996, 2013, 2014 and 2024, and compute the yearly growth rate from 1996 to 2013 and from 2014 to 2024. Then compute it from 2012 to 2017 alone. Explain why the choice of years changes the conclusion.</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 5.3</span>Lights and land</p>
+  <p>Give two reasons why the lit area around a city can grow faster than its built-up land, and describe how you would check one of them with the data of this course.</p>
+</div>
+
+<h2 id="data"><span class="sec">5.6</span>Data and code</h2>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Data</th><th>Licence</th><th>Accessed</th></tr></thead>
+  <tbody id="data-rows"></tbody>
+</table></div>
+<p class="licence">Script: <code>kich_ban/l5_do_thi_hoa.py</code> (official share, Degree of Urbanisation, regions, night-time lights). It stops without writing its output if a check fails, including a check on every comparison stated in the text; the figures of the World Bank are read from the quoted sentences, not typed again.</p>
+
+<h2 id="refs"><span class="sec">5.7</span>References</h2>
+<ul class="references">
+  <li>European Commission, FAO, UN-Habitat, ILO, OECD &amp; World Bank (2021). <i>Applying the Degree of Urbanisation: A methodological manual to define cities, towns and rural areas for international comparisons</i>. Publications Office of the European Union. <a href="https://doi.org/10.2785/706535">doi:10.2785/706535</a></li>
+  <li>Li, X., Zhou, Y., Zhao, M., &amp; Zhao, X. (2020). A harmonized global nighttime light dataset 1992–2018. <i>Scientific Data, 7</i>, 168. <a href="https://doi.org/10.1038/s41597-020-0510-y">doi:10.1038/s41597-020-0510-y</a>. Data: <a href="https://doi.org/10.6084/m9.figshare.9828827">doi:10.6084/m9.figshare.9828827</a>, CC BY 4.0.</li>
+  <li>Runfola, D., et al. (2020). geoBoundaries: A global database of political administrative boundaries. <i>PLoS ONE, 15</i>(4), e0231866. <a href="https://doi.org/10.1371/journal.pone.0231866">doi:10.1371/journal.pone.0231866</a></li>
+  <li>Schiavina, M., Melchiorri, M., &amp; Freire, S. (2023). <i>GHS-DUC R2023A — GHS Degree of Urbanisation Classification, multitemporal (1975–2030)</i>. European Commission, Joint Research Centre. <a href="https://doi.org/10.2905/DC0EB21D-472C-4F5A-8846-823C50836305">doi:10.2905/DC0EB21D-472C-4F5A-8846-823C50836305</a>, CC BY 4.0.</li>
+  <li>Schiavina, M., Melchiorri, M., &amp; Pesaresi, M. (2023). <i>GHS-SMOD R2023A — GHS settlement layers, multitemporal (1975–2030)</i>. European Commission, Joint Research Centre. <a href="https://doi.org/10.2905/A0DF7A6F-49DE-46EA-9BDE-563437A6E2BA">doi:10.2905/A0DF7A6F-49DE-46EA-9BDE-563437A6E2BA</a>, CC BY 4.0.</li>
+  <li>World Bank (2020). <i>Vietnam’s urbanization at a crossroads: Embarking on an efficient, inclusive, and resilient pathway</i>. World Bank. <a href="https://hdl.handle.net/10986/34761">hdl:10986/34761</a>, CC BY 3.0 IGO.</li>
+  <li>World Bank. <i>World Development Indicators</i>: Urban population (% of total population), SP.URB.TOTL.IN.ZS. <a href="https://data.worldbank.org/indicator/SP.URB.TOTL.IN.ZS">data.worldbank.org</a>, CC BY 4.0.</li>
+</ul>
+
+</main>
+</div></div>
+
+<footer class="site-footer"><div class="inner">Urban Economics · The monocentric city. Teaching material for non-commercial classroom use. Text and figures are generated from the scripts in <code>kich_ban/</code>; every data source, licence and access date is listed in the data files in <code>du_lieu/</code>.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.js"></script>
+<script src="../assets/core.js"></script>
+<script src="../assets/chart.js"></script>
+<script src="../assets/map.js"></script>
+<script src="../du_lieu/trich_dan.js"></script>
+<script src="../du_lieu/l5_do_thi_hoa.js"></script>
+<script src="../assets/nguon.js"></script>
+<script src="../assets/lesson5.js"></script>
+</body>
+</html>

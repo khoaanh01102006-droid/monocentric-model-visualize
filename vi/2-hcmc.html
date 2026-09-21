@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bài 2 · Kiểm mô hình ở TP.HCM — Kinh tế đô thị</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%230071BC' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23111'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="course" href="index.html">Kinh tế đô thị <span>· Thành phố đơn tâm</span></a>
+  <nav><a href="1-model.html">1<span class="long"> · Mô hình</span></a><a href="2-hcmc.html" aria-current="page">2<span class="long"> · TP.HCM</span></a><a href="3-commuting.html">3<span class="long"> · Chi phí đi lại</span></a><a href="4-neighbours.html">4<span class="long"> · Láng giềng</span></a><a href="5-urbanisation.html">5<span class="long"> · Đô thị hoá</span></a></nav>
+  <div class="lang"><a href="../en/2-hcmc.html" hreflang="en">EN</a><span>VI</span></div>
+</div></header>
+
+<div class="page"><div class="layout">
+<aside class="toc"><nav aria-label="Trong bài"></nav></aside>
+<main class="main">
+
+<header class="lesson-head">
+  <p class="lesson-no">Bài 2</p>
+  <h1>Kiểm mô hình ở TP.HCM</h1>
+  <p class="standfirst">Bài 1 dự báo giá đất và mật độ dân giảm khi rời trung tâm. Bài này đo cả hai độ dốc ấy cho TP.HCM, xác định ranh thành phố bằng dữ liệu dân số thay vì bằng ranh hành chính, đặt độ dốc mật độ của thành phố vào phân bố của 192 thành phố, và chỉ ra chỗ thành phố lệch khỏi mô hình.</p>
+  <p class="meta">Dữ liệu: bảng giá đất TP.HCM áp dụng từ 01/01/2026; lưới dân số GHS-POP 2020 và WorldPop 2020; Cơ sở dữ liệu Trung tâm đô thị GHSL, 1975–2030. Con số trong lời giảng do <code>kich_ban/l2_tphcm.mjs</code> sinh ra; các câu trích được <code>kich_ban/trich_dan.mjs</code> đối chiếu với PDF gốc. Bản gốc của bài này viết bằng tiếng Anh; đây là bản dịch của học phần.</p>
+</header>
+
+<section class="objectives">
+  <h2>Mục tiêu học tập</h2>
+  <p>Học xong bài này, bạn có thể:</p>
+  <ol>
+    <li>ước lượng độ dốc của đường giá hoặc đường mật độ bằng hồi quy bán loga, và diễn giải hệ số ấy;</li>
+    <li>giải thích vì sao giá đất do Nhà nước quy định là bằng chứng yếu về đường giá sẵn lòng trả của thị trường;</li>
+    <li>đánh giá việc lựa chọn cách đo làm đổi ước lượng bao nhiêu;</li>
+    <li>phân biệt ranh hành chính của một thành phố với phạm vi đô thị đo bằng lưới dân số, và liên hệ cả hai với ranh thành phố trong mô hình;</li>
+    <li>so TP.HCM với các thành phố khác, và chỉ ra những khác biệt trong cách đo khiến phép so sánh có giới hạn.</li>
+  </ol>
+</section>
+
+<h2 id="s1"><span class="sec">2.1</span>Đo một độ dốc</h2>
+<p>Mô hình dự báo chiều của những đường ấy chứ không dự báo dạng hàm. Nghiên cứu thực nghiệm thường tóm tắt một độ dốc bằng hồi quy bán loga, dạng có từ Clark (1951):</p>
+<div class="eq"><div>\[ \ln y_i = a + b\,x_i + \varepsilon_i \]</div><span class="eq-no">(2.1)</span></div>
+<p>Ở đây \(y_i\) là giá hoặc mật độ của quan sát \(i\), \(x_i\) là khoảng cách tính bằng ki-lô-mét tới trung tâm, còn \(b\) là độ dốc. Ra xa thêm một ki-lô-mét, \(y\) được nhân với \(e^{b}\), tức đổi \(100\,(e^{b}-1)\) phần trăm; khi \(b\) nhỏ, con số này gần với \(100\,b\) phần trăm.</p>
+<aside class="note"><b>Điểm loga.</b> Hệ số \(b = -0,08\) là giảm 8 điểm loga mỗi km, tức \(100(e^{-0,08}-1) = -7,7\) phần trăm.</aside>
+<p>Phải quyết ba điều trước khi ước lượng (2.1): trung tâm đặt ở đâu, đo đại lượng nào, và quan sát nào được đưa vào hồi quy. Bài này đặt trung tâm ở ga Bến Thành của tuyến metro số 1, trong lõi lịch sử của thành phố, và bàn hai lựa chọn còn lại ở từng mục.</p>
+
+<h2 id="s2"><span class="sec">2.2</span>Giá đất</h2>
+<p>TP.HCM quy định giá đất cho từng đoạn đường trong một bảng giá đất. Bảng áp dụng từ 01/01/2026 có <span data-num="l2_tphcm.gia.soDoan" data-fmt="0"></span> đoạn đường. Bản đồ 2.1 vẽ, cho mỗi phường/xã trong số <span data-num="l2_tphcm.gia.soPhuong" data-fmt="0"></span> đơn vị vẽ được, trung vị giá đất ở của các đoạn đường trong đơn vị ấy.</p>
+
+<figure class="fig wide" id="map-2-1">
+  <figcaption class="fig-head"><span class="fig-label">Bản đồ 2.1</span>Giá đất ở do Nhà nước quy định, theo phường/xã, 2026</figcaption>
+  <p class="fig-sub">Trung vị giá các đoạn đường trong từng phường/xã, nghìn đồng/m²</p>
+  <div class="fig-body"><div class="map" id="m-2-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> HĐND TP.HCM, Nghị quyết 87/2025/NQ-HĐND (bảng giá đất từ 01/01/2026); ranh phường/xã © những người đóng góp OpenStreetMap (ODbL); nền bản đồ OpenFreeMap.</p>
+    <p><b>Ghi chú:</b> vòng nét đứt là 10, 20, 40 và 60 km tính từ Bến Thành; đường viền xanh là trung tâm đô thị năm 2020 (Bản đồ 2.3). <span data-num="l2_tphcm.gia.thieuHinh" data-fmt="0"></span> xã chưa có ranh giới trong OpenStreetMap nên không vẽ; đặc khu Côn Đảo nằm ngoài khung. Bảng giá dùng cho thuế, phí và bồi thường; nó không phải là ghi chép giao dịch thị trường.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_o osm_wards ghs_ucdb nen_ban_do" data-script="kich_ban/b1_gia_dat.mjs, kich_ban/l2_tphcm.mjs" data-note="Đọc mọi đoạn đường và giá của nó từ nghị quyết, gom các đoạn theo phường và lấy trung vị của từng phường. Mọi đoạn trong bảng đều được dùng, kể cả đường OpenStreetMap chưa vẽ."></div>
+</figure>
+
+<figure class="fig wide" id="fig-2-1">
+  <figcaption class="fig-head"><span class="fig-label">Hình 2.1</span>Giá đất phường/xã theo khoảng cách tới Bến Thành</figcaption>
+  <p class="fig-sub">Trung vị giá đất ở, nghìn đồng/m², thang loga</p>
+  <div class="fig-body"><div id="c-2-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> như Bản đồ 2.1; hồi quy bằng <code>kich_ban/l2_tphcm.mjs</code>.</p>
+    <p><b>Ghi chú:</b> mỗi chấm là một phường hoặc xã, đặt tại khoảng cách từ Bến Thành tới tâm ranh giới của nó. Đường khớp là phương trình (2.1) ước lượng trên các phường/xã trong 40 km.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_o osm_wards" data-script="kich_ban/l2_tphcm.mjs" data-note="Đo khoảng cách từ Bến Thành tới tâm từng phường và khớp phương trình (2.1) trên các phường trong giới hạn khoảng cách ghi ở phần ghi chú."></div>
+</figure>
+
+<p>Trong 40 km quanh Bến Thành, giá giảm <span data-num="l2_tphcm.gia.k40.phanTramMoiKm" data-fmt="abs%1"></span> mỗi ki-lô-mét (\(b =\) <span data-num="l2_tphcm.gia.k40.b" data-fmt="3"></span>, \(R^2 =\) <span data-num="l2_tphcm.gia.k40.r2" data-fmt="2"></span>, <span data-num="l2_tphcm.gia.k40.n" data-fmt="0"></span> phường/xã). Ước lượng trên mọi phường/xã vẽ được trừ đảo Côn Đảo, độ dốc là <span data-num="l2_tphcm.gia.k150.b" data-fmt="3"></span> và mức khớp kém hơn (\(R^2 =\) <span data-num="l2_tphcm.gia.k150.r2" data-fmt="2"></span>), vì ngoài khoảng 40 km giá thôi giảm. Bảng 2.1 cho thấy vì sao: một số đô thị ở xa Bến Thành có giá cao hơn hẳn các phường/xã ở cùng khoảng cách.</p>
+
+<figure class="fig" id="tab-2-1">
+  <figcaption class="fig-head"><span class="fig-label">Bảng 2.1</span>Giá đất ở bốn đô thị so với các phường/xã ở khoảng cách tương đương</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Phường</th><th class="r">Khoảng cách (km)</th><th class="r">Giá</th><th class="r">Trung vị các phường/xã trong ±5 km</th><th class="r">Tỷ số</th></tr></thead>
+    <tbody>
+      <tr><td data-str="l2_tphcm.gia.trungTamPhu.0.vi"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.0.kc" data-fmt="1"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.0.gia" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.0.trungViLang" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.0.tySo" data-fmt="x1"></td></tr>
+      <tr><td data-str="l2_tphcm.gia.trungTamPhu.2.vi"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.2.kc" data-fmt="1"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.2.gia" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.2.trungViLang" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.2.tySo" data-fmt="x1"></td></tr>
+      <tr><td data-str="l2_tphcm.gia.trungTamPhu.3.vi"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.3.kc" data-fmt="1"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.3.gia" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.3.trungViLang" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.3.tySo" data-fmt="x1"></td></tr>
+      <tr><td data-str="l2_tphcm.gia.trungTamPhu.1.vi"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.1.kc" data-fmt="1"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.1.gia" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.1.trungViLang" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.1.tySo" data-fmt="x1"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> như Bản đồ 2.1; <code>kich_ban/l2_tphcm.mjs</code>. Giá tính bằng nghìn đồng/m².</p>
+    <p><b>Ghi chú:</b> trước khi sáp nhập năm 2025, Thủ Dầu Một là tỉnh lỵ Bình Dương và Bà Rịa là tỉnh lỵ Bà Rịa – Vũng Tàu. Dĩ An được đưa vào để đối chiếu: nó nằm trong vùng đô thị liên tục và giá của nó xấp xỉ các phường lân cận. Kịch bản dừng nếu những phát biểu này không còn khớp dữ liệu.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_o osm_wards" data-script="kich_ban/l2_tphcm.mjs" data-note="So giá của mỗi đô thị với trung vị của các phường khác ở khoảng cách tương tự tới Bến Thành."></div>
+</figure>
+
+<p>Bản đồ 2.2 đưa giá đất của Hình 2.1 trở lại bản đồ. Giá của mỗi phường, xã được dựng thành một cột ngay trên địa bàn đó, theo thang loga như trong hình. Xoay đường khớp của Hình 2.1 quanh Bến Thành, ta được một bề mặt trên đó giá giảm cùng một tốc độ theo mọi hướng, đúng như giả định của mô hình đơn tâm. Bốn bước dưới đây đặt bảng giá cạnh bề mặt ấy.</p>
+
+<figure class="fig wide" id="map-cone">
+  <figcaption class="fig-head"><span class="fig-label">Bản đồ 2.2</span>Giá đất và bề mặt giá của mô hình thành phố đơn tâm</figcaption>
+  <p class="fig-sub">Giá đất ở theo phường, xã và bề mặt khớp theo phương trình (2.1), nghìn đồng/m²</p>
+  <div class="steps" role="group" aria-label="Các bước">
+    <button type="button" data-go="0">1 · Giá theo phường, xã</button>
+    <button type="button" data-go="1">2 · Bề mặt khớp</button>
+    <button type="button" data-go="2">3 · Cao hơn, thấp hơn bề mặt</button>
+    <button type="button" data-go="3">4 · Đất nông nghiệp và ranh thành phố</button>
+    <span class="hint">phím ← → · kéo để di chuyển, kéo chuột phải để xoay</span>
+  </div>
+  <div class="s3d-stage">
+    <div class="map" id="m-cone"></div>
+    <div class="s3d-scale" role="group" aria-label="Thang chiều cao"><span>Chiều cao</span><button type="button" data-scale="log">thang loga</button><button type="button" data-scale="lin">thang thường</button></div>
+  </div>
+  <div class="s3d-legend ngoai" aria-live="polite"></div>
+  <div class="step-text">
+    <div data-step="0"><p><b>Giá theo phường, xã.</b> Mỗi cột đứng ở tâm một phường, xã; chiều cao là giá đất ở trung vị tính theo thang loga, nghĩa là giá tăng gấp mười thì cột cao thêm một đoạn như nhau. Cột cao nhất thuộc <span data-str="l2_non_gia.thongKe.caoNhat.ten"></span>, <span data-num="l2_non_gia.thongKe.caoNhat.o" data-fmt="0"></span> nghìn đồng/m². Các cột cao nhất ở trung tâm, thấp dần về phía rìa bản đồ rồi lại nhô lên quanh những đô thị trong Bảng 2.1.</p></div>
+    <div data-step="1"><p><b>Bề mặt khớp.</b> Xoay quanh Bến Thành, đường khớp của Hình 2.1 thành một bề mặt trên đó giá giảm <span data-num="l2_non_gia.k40.phanTramMoiKm" data-fmt="abs%1"></span> sau mỗi ki-lô-mét, theo hướng nào cũng vậy. Với thang loga, bề mặt này là một hình nón. Nón chỉ được vẽ trong bán kính 40 km, đúng phạm vi số liệu dùng để khớp; trong bán kính ấy có <span data-num="l2_non_gia.thongKe.tren40" data-fmt="0"></span> phường, xã nằm trên bề mặt (đỏ) và <span data-num="l2_non_gia.thongKe.duoi40" data-fmt="0"></span> nằm dưới (xanh dương). Các vòng tròn trên nón đánh dấu những mức giá mà tại đó màu mặt đất chuyển bậc.</p></div>
+    <div data-step="2"><p><b>Cao hơn, thấp hơn bề mặt.</b> Mặt đất giờ được tô theo tỷ số giữa giá của từng phường, xã với giá trên bề mặt ở cùng khoảng cách, chỉ xét những nơi trong bán kính 40 km. Trong năm nơi vượt bề mặt nhiều nhất, bốn nơi cách Bến Thành 20–40 km về phía bắc và tây bắc, đứng đầu là <span data-str="l2_non_gia.thongKe.cao.0.ten"></span>, gấp <span data-num="l2_non_gia.thongKe.cao.0.heSo" data-fmt="2"></span> lần giá trên bề mặt; nơi còn lại là <span data-str="l2_non_gia.thongKe.cao.1.ten"></span> ngay trung tâm (gấp <span data-num="l2_non_gia.thongKe.cao.1.heSo" data-fmt="2"></span> lần). Năm nơi thấp hơn bề mặt nhiều nhất cách 10–25 km về phía bắc, tây và tây nam, thấp nhất là <span data-str="l2_non_gia.thongKe.thap.0.ten"></span> (chỉ bằng <span data-num="l2_non_gia.thongKe.thap.0.heSo" data-fmt="2"></span> lần). Trừ chính khu trung tâm, mọi chênh lệch lớn nhất đều nằm trong vành đai 10–40 km quanh Bến Thành. Mục 2.6 xem xét liệu một thành phố nhiều trung tâm có giải thích chúng tốt hơn không.</p></div>
+    <div data-step="3"><p><b>Đất nông nghiệp và ranh thành phố.</b> Trong mô hình, thành phố dừng lại ở nơi giá thuê đất hạ xuống bằng giá thuê đất nông nghiệp, tức phương trình (1.5). Cũng bảng giá này quy định giá đất nông nghiệp cho bốn khu vực (Bảng 2.2, Mục 2.3); các đĩa xanh lá là giá đất trồng cây hàng năm ở vị trí 1, từ <span data-num="l2_non_gia.thongKe.nnI" data-fmt="0"></span> nghìn đồng/m² ở khu vực I xuống <span data-num="l2_non_gia.thongKe.nnIV" data-fmt="0"></span> ở khu vực IV. Nếu kéo dài quá 40 km đã dùng để khớp, bề mặt sẽ hạ xuống bằng các mức giá này ở khoảng cách từ <span data-num="l2_non_gia.thongKe.gapI" data-fmt="1"></span> đến <span data-num="l2_non_gia.thongKe.gapIV" data-fmt="1"></span> km tính từ Bến Thành (dải xanh lá). Phần kéo dài không phải là ước lượng, và giá đất ở trong bảng giá cũng không đi theo nó: như Mục 2.3 cho thấy, không nơi nào giá đất ở hạ xuống tới giá đất nông nghiệp.</p></div>
+  </div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> như Bản đồ 2.1 và Hình 2.1; giá đất nông nghiệp như Bảng 2.2; trung tâm đô thị như Bản đồ 2.3; nền bản đồ OpenFreeMap, © những người đóng góp OpenStreetMap.</p>
+    <p><b>Ghi chú:</b> bề mặt là phương trình (2.1) khớp trên <span data-num="l2_non_gia.thongKe.n40" data-fmt="0"></span> phường, xã trong bán kính 40 km rồi xoay trọn một vòng, dù một phần vòng tròn ấy là sông và biển. Cả hai loại giá đều do Nhà nước quy định, không phải giá quan sát trên thị trường. Chuyển chiều cao sang thang thường để thấy bề mặt thành chiếc lều cong như Hình 1.2: trên đó, giá ở cách Bến Thành 10 km chỉ còn <span data-num="l2_non_gia.thongKe.con10" data-fmt="%0"></span> giá ở tâm.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_o gia_dat_nn osm_wards ghs_ucdb nen_ban_do" data-script="kich_ban/l2_tphcm.mjs, kich_ban/l2_nong_nghiep.mjs, kich_ban/l2_non_gia.mjs" data-note="Xoay đường khớp của Hình 2.1 quanh Bến Thành rồi so giá của từng phường, xã với bề mặt ở cùng khoảng cách. Kịch bản sẽ dừng nếu các nhận định trong lời giảng không còn khớp với dữ liệu."></div>
+</figure>
+
+
+<p>Những mức giá này nói được bao nhiêu về đường giá sẵn lòng trả ở Bài 1? Bảng giá đất do chính quyền thành phố ban hành. Báo cáo <i>Vietnam Urbanization Review</i> của World Bank mô tả cơ chế như sau:</p>
+<blockquote data-quote="trich_dan.vur.haiGia" data-who="World Bank (2011), Hộp 3.3"><p class="tr">Trong một nền kinh tế thị trường, giá đất do tương tác giữa cầu về đất và cung của nó quyết định. Ở Việt Nam, Nhà nước thu hồi đất của người sử dụng đất và giao cho nhà phát triển và nhà đầu tư theo một khung giá đất (LPF) áp đặt, không theo nguyên tắc thị trường.</p></blockquote>
+<p>Vì vậy bảng giá cho thấy chính quyền định giá vị trí ra sao, chứ không cho thấy người mua và người bán trả bao nhiêu. Việc bảng giá giảm theo khoảng cách là nhất quán với mô hình, nhưng không phải một phép kiểm mô hình: muốn kiểm thì cần giá thị trường theo vị trí, thứ mà học phần này chưa lấy được cho toàn thành phố. Còn một lý do nữa để thận trọng. Theo mục 1.4, giá <i>đất</i> phải giảm nhanh hơn giá <i>diện tích sàn</i>, vì càng ra xa thì công trình cũng càng thấp. Không thể so trực tiếp độ dốc của giá đất với độ dốc của giá thuê nhà ở, chẳng hạn con số mà Liotta, Viguié và Lepetit (2022) báo cáo cho 191 thành phố:</p>
+<blockquote data-quote="trich_dan.liotta.rent" data-who="Liotta, Viguié và Lepetit (2022)"><p class="tr">Tính bình quân trong mẫu các thành phố, chúng tôi tìm được độ dốc −0,014, nghĩa là đi xa trung tâm thành phố thêm 1 km thì giá thuê mỗi mét vuông giảm 1,4% (Phụ lục B, Hình B.5).</p></blockquote>
+
+<h2 id="edge"><span class="sec">2.3</span>TP.HCM kết thúc ở đâu?</h2>
+<p>Phương trình (1.5) khép lại mô hình ở Bài 1: thành phố kết thúc ở khoảng cách \(\bar{x}\) nơi giá thuê đất giảm xuống bằng giá thuê mà đất thu được khi dùng cho nông nghiệp. Ranh ấy là kết quả của thị trường đất. Không có gì trong mô hình buộc nó trùng với đường ranh mà pháp luật vạch quanh một thành phố, và một độ dốc đo bên trong đường ranh pháp lý có thể gồm cả đất nằm ngoài \(\bar{x}\) và bỏ sót đất nằm trong nó.</p>
+<p>Vậy nên vẽ một thành phố từ dữ liệu như thế nào? Giới nghiên cứu đi theo hai hướng lớn, được de Bellefon, Combes, Duranton, Gobillon và Gorin mô tả như sau:</p>
+<blockquote data-quote="trich_dan.bellefon.haiHo" data-who="de Bellefon, Combes, Duranton, Gobillon và Gorin (2019), NBER Working Paper 26482"><p class="tr">Luồng người đi làm nhằm nắm bắt các thị trường lao động thống nhất, trong khi các cách tiếp cận hình thái dựa vào độ gần nhau hoặc sự liền kề về vật lý được cho là phản ánh một tập hợp rộng các tương tác.</p></blockquote>
+<p>Định nghĩa hình thái được dùng rộng rãi nhất là <i>trung tâm đô thị</i> (urban centre) của phương pháp Mức độ đô thị hoá (Degree of Urbanisation), được Uỷ ban Thống kê Liên Hợp Quốc chấp thuận năm 2020 để so sánh quốc tế, và được Lớp Định cư Toàn cầu (GHSL) của Uỷ ban châu Âu áp cho mọi thành phố trên thế giới:</p>
+<blockquote data-quote="trich_dan.ucdb.dinhNghia" data-who="European Commission, Joint Research Centre (2024), Stats in the City – the GHSL Urban Centre Database 2025"><p class="tr">Theo phương pháp này, một trung tâm đô thị (UC) được xác định trên lưới ô vuông 1 km² như một vùng liền khối có mật độ dân trên 1.500 người/km² và tổng dân số trên 50.000 người.</p></blockquote>
+<p>Định nghĩa này đếm người ở, không đếm nhà, và các tác giả chọn dân số là có chủ ý:</p>
+<blockquote data-quote="trich_dan.degurba.theoThoiGian" data-who="European Commission, FAO, UN-Habitat, ILO, OECD và World Bank (2021), Applying the Degree of Urbanisation"><p class="tr">Đo trực tiếp các tập trung dân cư cũng làm chúng so sánh được hơn theo thời gian. Ở nhiều nước, diện tích đất xây dựng tăng nhanh hơn quy mô dân số.</p></blockquote>
+<p>Tuy vậy, riêng mật độ dân không xác định được ranh của thành phố trong mô hình. Ở Bài 1, thành phố kết thúc ở nơi đất thôi được dùng làm nhà ở, và mọi hộ trong đó đi làm ở trung tâm. Vì thế Bản đồ 2.3 vẽ TP.HCM theo ba cách, cùng một tỷ lệ: theo mật độ dân, theo đất xây dựng nhìn từ vệ tinh, và theo luồng đi làm. Cuộn qua tám bước, hoặc dùng các nút hay phím ← và →.</p>
+
+<figure class="fig wide" id="map-2-2">
+  <figcaption class="fig-head"><span class="fig-label">Bản đồ 2.3</span>Ba cách vẽ TP.HCM</figcaption>
+  <p class="fig-sub">Ranh hành chính; vùng đô thị theo mật độ dân, đất xây dựng và luồng đi làm; lớn lên 1985–2015; giá đất</p>
+  <div class="steps" role="group" aria-label="Các bước">
+    <button type="button" data-go="0">1 · Ranh pháp lý</button>
+    <button type="button" data-go="1">2 · Người sống ở đâu</button>
+    <button type="button" data-go="2">3 · Ranh theo mật độ</button>
+    <button type="button" data-go="3">4 · Ranh theo nhà cửa</button>
+    <button type="button" data-go="4">5 · Ranh theo đi làm</button>
+    <button type="button" data-go="5">6 · Lớn lên</button>
+    <button type="button" data-go="6">7 · Mật độ thành chiều cao</button>
+    <button type="button" data-go="7">8 · Giá đất</button>
+    <span class="hint">cuộn, hoặc ← →</span>
+  </div>
+  <div class="sc2">
+    <div class="sc2-stage">
+      <div class="map" id="m-2-2"></div>
+      <div class="sc2-year" hidden></div>
+      <div class="sc2-legend"></div>
+    </div>
+    <div class="sc2-cards">
+      <section class="sc2-card" id="card-2-2-1">
+        <h4><span>1</span>Ranh pháp lý</h4>
+        <p>Đường đen là ranh hành chính của TP.HCM sau sáp nhập ngày 01/07/2025, khi hai tỉnh cũ Bình Dương và Bà Rịa – Vũng Tàu nhập vào thành phố. Nó bao <span data-num="l2_vung_do_thi.hanhChinh.dienTichChinhThuc" data-fmt="2"></span> km².</p>
+        <p>Đường này đánh dấu nơi thẩm quyền của chính quyền thành phố kết thúc. Nó không do thị trường đất vạch ra, nên nó không phải là \(\bar{x}\).</p>
+      </section>
+      <section class="sc2-card" id="card-2-2-2">
+        <h4><span>2</span>Người sống ở đâu</h4>
+        <p>Mỗi ô khoảng 100 m được tô màu theo số người ước tính sống trên mỗi km² năm 2020. Lưới không để ý tới ranh. Vùng dân cư dày đặc chạy vượt qua đường ranh về phía đông bắc, sang Biên Hòa thuộc tỉnh Đồng Nai, trong khi phần lớn đất bên trong ranh, chẳng hạn rừng ngập mặn Cần Giờ ở phía nam, có ít người ở.</p>
+        <p>Hai đỉnh nổi lên xa Bến Thành. Gần Thủ Dầu Một, ô 500 m dày nhất có <span data-num="l2_luoi_dan_so.dinh.0.dinh" data-fmt="0"></span> người/km², so với trung vị <span data-num="l2_luoi_dan_so.dinh.0.trungViVanh" data-fmt="0"></span> của các ô cách Bến Thành cùng khoảng; gần Biên Hòa, <span data-num="l2_luoi_dan_so.dinh.1.dinh" data-fmt="0"></span> so với <span data-num="l2_luoi_dan_so.dinh.1.trungViVanh" data-fmt="0"></span>.</p>
+      </section>
+      <section class="sc2-card" id="card-2-2-3">
+        <h4><span>3</span>Ranh 1: mật độ dân</h4>
+        <p>Đường viền xanh là trung tâm đô thị GHSL năm 2020: các ô 1 km có ít nhất <span data-num="l2_vung_do_thi.dinhNghia.matDo" data-fmt="0"></span> người/km², nối thành một cụm chứa ít nhất <span data-num="l2_vung_do_thi.dinhNghia.dan" data-fmt="0"></span> người. Nó rộng <span data-num="l2_vung_do_thi.ttdt.moc.9.dienTich" data-fmt="0"></span> km² và có <span data-num="l2_vung_do_thi.ttdt.moc.9.dan" data-fmt="M1"></span> triệu người.</p>
+        <p><span data-num="l2_vung_do_thi.giao.ucNgoaiHC" data-fmt="0"></span> km² của nó, tức <span data-num="l2_vung_do_thi.giao.tyLeUcNgoaiHC" data-fmt="%0"></span>, nằm ngoài ranh hành chính; chỉ <span data-num="l2_vung_do_thi.giao.tyLeHcTrongUC" data-fmt="%0"></span> diện tích hành chính nằm trong nó.</p>
+        <p>Vòng tròn nét đứt có cùng diện tích, bán kính <span data-num="l2_vung_do_thi.ttdt.moc.9.banKinh" data-fmt="1"></span> km: thành phố như Bài 1 sẽ vẽ. Dọc mặt cắt của Hình 2.2, trung tâm đô thị kéo dài <span data-num="l2_vung_do_thi.matCatRa.bac" data-fmt="0"></span> km về phía bắc Bến Thành nhưng chỉ <span data-num="l2_vung_do_thi.matCatRa.nam" data-fmt="abs0"></span> km về phía nam.</p>
+      </section>
+      <section class="sc2-card" id="card-2-2-4">
+        <h4><span>4</span>Ranh 2: đất xây dựng</h4>
+        <p>Mỗi ô sẫm, cạnh khoảng 90 m, đã được xây dựng ít nhất một nửa vào năm 2015 theo World Settlement Footprint, bộ dữ liệu đọc từ ảnh vệ tinh Landsat. Nó ghi nhận nhà cửa và mặt đất được lát, không ghi nhận người ở.</p>
+        <p>Chỉ <span data-num="l2_ve_tinh.thongKe.tyLeXayUC2020" data-fmt="%0"></span> đất bên trong trung tâm đô thị đã được xây dựng. Phần còn lại không có nhà, chẳng hạn sông và đường băng sân bay Tân Sơn Nhất: trung tâm đô thị gồm cả phần này vì đường ranh vẽ trên ô 1 km và các lỗ trống được lấp. Bên ngoài trung tâm đô thị, thêm <span data-num="l2_ve_tinh.thongKe.xayNgoaiUC_trongFUA_2015" data-fmt="0"></span> km² đã được xây dựng trong vùng đô thị chức năng ở bước 5.</p>
+      </section>
+      <section class="sc2-card" id="card-2-2-5">
+        <h4><span>5</span>Ranh 3: luồng đi làm</h4>
+        <p>Đường viền tím là vùng đô thị chức năng năm 2015: thành phố cùng vùng đi làm của nó, tức các nơi xung quanh có ít nhất <span data-num="l2_vung_do_thi.diLam" data-fmt="%0"></span> người có việc làm đi làm vào thành phố. Về khái niệm, đây là ranh gần nhất trong ba ranh với thành phố của mô hình, nơi mọi hộ đi làm ở trung tâm.</p>
+        <p>Vùng này rộng <span data-num="l2_vung_do_thi.fua.dienTich" data-fmt="0"></span> km² với <span data-num="l2_vung_do_thi.fua.dan" data-fmt="M1"></span> triệu người, trong đó <span data-num="l2_vung_do_thi.fua.danVungDiLam" data-fmt="M1"></span> triệu ở vùng đi làm; <span data-num="l2_vung_do_thi.fua.ngoaiHC" data-fmt="0"></span> km² nằm ngoài ranh hành chính hiện nay.</p>
+        <p>Không có điều tra đi làm nào của TP.HCM được dùng: GHSL dự đoán vùng đi làm từ thời gian đi lại và dân số, học từ các nước có số liệu đi làm.</p>
+      </section>
+      <section class="sc2-card" id="card-2-2-6">
+        <h4><span>6</span>Lớn lên nhìn từ vệ tinh, 1985–2015</h4>
+        <p>Màu cho biết mỗi ô được xây dựng vào giai đoạn nào. Trong vùng đô thị chức năng, đất xây dựng tăng từ <span data-num="l2_ve_tinh.km2TheoNam.1985" data-fmt="0"></span> km² năm 1985 lên <span data-num="l2_ve_tinh.km2TheoNam.2015" data-fmt="0"></span> km² năm 2015, gấp <span data-num="l2_ve_tinh.thongKe.heSoTang" data-fmt="x1"></span>.</p>
+        <div id="c-2-2b"></div>
+        <p>Đường viền đỏ là trung tâm đô thị GHSL năm 1990, một năm có quan sát vệ tinh. Nó gồm hai phần: TP.HCM, và Biên Hòa (<span data-num="l2_vung_do_thi.manhRoi.dienTich" data-fmt="0"></span> km²), khi đó là một đô thị tách rời, nhập vào phần chính năm <span data-num="l2_vung_do_thi.manhRoi.namNhap" data-fmt="y"></span>. Chỉ <span data-num="l2_ve_tinh.thongKe.tyLeXayUC1990" data-fmt="%0"></span> đất bên trong đường viền 1990 đã được xây dựng vào năm đó.</p>
+        <p><button class="btn" type="button" data-act="replay">Chạy lại các năm</button></p>
+      </section>
+      <section class="sc2-card" id="card-2-2-7">
+        <h4><span>7</span>Mật độ thành chiều cao</h4>
+        <p>Lưới dân số của bước 2, gộp thành ô 500 m, mỗi cột cao tỷ lệ với mật độ của ô (thang ở chú giải). Cột cao nhất có <span data-num="l2_luoi_dan_so.luoi500.toiDa" data-fmt="0"></span> người/km².</p>
+        <p>Bề mặt này không phải hình nón duy nhất của Bài 1. Nó thấp dần khi rời trung tâm rồi nhô lên lại ở Thủ Dầu Một và Biên Hòa. Kéo bằng chuột phải, hoặc bằng hai ngón tay, để xoay góc nhìn.</p>
+      </section>
+      <section class="sc2-card" id="card-2-2-8">
+        <h4><span>8</span>Giá đất và trung tâm đô thị</h4>
+        <p>Bảng giá đất ở mục 2.2 chỉ phủ thành phố hành chính, nên Biên Hòa không có giá. Phường có tâm nằm trong trung tâm đô thị 2020 có giá trung vị <span data-num="l2_vung_do_thi.gia.trong.trungVi" data-fmt="0"></span> nghìn đồng/m² (<span data-num="l2_vung_do_thi.gia.trong.n" data-fmt="0"></span> phường); phường, xã nằm ngoài có giá trung vị <span data-num="l2_vung_do_thi.gia.ngoai.trungVi" data-fmt="0"></span> (<span data-num="l2_vung_do_thi.gia.ngoai.n" data-fmt="0"></span>); tỷ số là <span data-num="l2_vung_do_thi.gia.tySo" data-fmt="x0"></span>.</p>
+        <p>Hai nguồn lập độc lập với nhau, một bảng giá và một lưới dân số, tách đất đô thị khỏi đất nông thôn ở gần cùng một chỗ, và cả hai đều không đi theo ranh hành chính.</p>
+      </section>
+    </div>
+  </div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> trung tâm đô thị: Cơ sở dữ liệu Trung tâm đô thị GHSL R2024A; dân số: GHS-POP R2023A, năm 2020; vùng đô thị chức năng: GHS-FUA R2019A (cả ba của Uỷ ban châu Âu, Trung tâm Nghiên cứu Chung; bộ cuối cùng với OECD; CC BY 4.0). Đất xây dựng: World Settlement Footprint Evolution bản 1, © 2024 DLR (CC BY 4.0). Ranh hành chính: ghép ranh <span data-num="l2_tphcm.gia.soPhuong" data-fmt="0"></span> phường, xã của Bản đồ 2.1, © những người đóng góp OpenStreetMap (ODbL). Giá đất: như Bản đồ 2.1. Nền bản đồ: OpenFreeMap.</p>
+    <p><b>Ghi chú:</b> đặc khu Côn Đảo nằm ngoài khung. Một ô xây dựng gộp ba nhân ba điểm ảnh Landsat và được tính khi ít nhất năm trong chín điểm ảnh đã xây dựng; đất xây dựng trước 1985 hiện là 1985. GHSL có đường viền cho mỗi mốc năm năm, nhưng trong số đó chỉ 1975, 1990 và 2000 là năm quan sát; các mốc khác không vẽ. Phường được xếp vào trong hay ngoài trung tâm đô thị theo một điểm nằm bên trong ranh phường. Dữ liệu do <code>kich_ban/l2_vung_do_thi.py</code>, <code>kich_ban/l2_luoi_dan_so.mjs</code> và <code>kich_ban/l2_ve_tinh.mjs</code> chuẩn bị; mỗi kịch bản dừng và không ghi kết quả nếu một nhận định trên bản đồ này không còn khớp dữ liệu.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_ucdb ghs_pop wsf_evolution ghs_fua osm_wards gia_dat_o nen_ban_do" data-script="kich_ban/l2_vung_do_thi.py, kich_ban/l2_luoi_dan_so.mjs, kich_ban/l2_ve_tinh.mjs" data-note="Ghép ranh các phường thành một đường ranh hành chính; lấy đường viền, diện tích và dân số của trung tâm đô thị 5239 và của vùng đô thị chức năng; gộp điểm ảnh Landsat thành ô khoảng 90 m và ghi năm mỗi ô được xây dựng; đo phần chồng lấn giữa các đường viền và đất xây dựng."></div>
+</figure>
+
+<h3>Đường nào là ranh?</h3>
+<p>Không đường nào trong ba đường đúng là \(\bar{x}\), và mỗi đường trả lời một câu hỏi khác. Trung tâm đô thị là một quy ước thống kê để so sánh thành phố ở mọi nơi. Đất xây dựng sát nhất với cách dùng đất vốn xác định ranh trong mô hình. Vùng đô thị chức năng sát nhất với hình ảnh mọi hộ đều đi làm ở trung tâm, nhưng bản thân nó cũng là sản phẩm của một mô hình. Lưới dân số còn một giới hạn nữa ở gần trung tâm:</p>
+<blockquote data-quote="trich_dan.bellefon.cbd" data-who="de Bellefon, Combes, Duranton, Gobillon và Gorin (2019)"><p class="tr">Kết quả là, một cách tiếp cận dùng dữ liệu dân số có thể không xếp vào đô thị những khu trung tâm thương mại lớn không có cư dân.</p></blockquote>
+<p>Chuỗi số liệu theo thời gian cũng cần cẩn thận như vậy. GHSL công bố đường viền cho mỗi mốc năm năm, nhưng phần lớn các mốc đó không được quan sát:</p>
+<blockquote data-quote="trich_dan.ghsldp.quanSat" data-who="European Commission (2024), GHSL Data Package 2023"><p class="tr">Dữ liệu Landsat (các cảm biến MSS, TM, ETM) hỗ trợ các mốc 1975, 1990, 2000 và 2014, còn một ảnh ghép Sentinel-2 (GHS-composite-S2 R2020A) hỗ trợ mốc 2018.</p></blockquote>
+<blockquote data-quote="trich_dan.ghsldp.chiGiam" data-who="European Commission (2024), GHSL Data Package 2023"><p class="tr">Theo định nghĩa, quy trình chỉ có thể làm giảm diện tích bề mặt xây dựng khi đi từ các mốc gần đây về các mốc quá khứ.</p></blockquote>
+<p>Một chuỗi dựng theo cách này sẽ luôn cho thấy một thành phố lớn lên đều đặn ra phía ngoài. Chuỗi vệ tinh ở bước 6 có một giới hạn tương tự, vì nó cũng lùi dần từ bản đồ năm 2015 và không thể cho thấy đất từng xây rồi bị giải toả, nhưng đất xây dựng của mỗi năm được đọc từ ảnh chụp của chính năm đó. Khi phần còn lại của bài cần một đường viền duy nhất, bài dùng trung tâm đô thị năm 2020; điểm xa nhất của nó cách Bến Thành <span data-num="l2_vung_do_thi.giao.kcXaNhat" data-fmt="0"></span> km, hơi vượt vòng tròn 40 km mà mục 2.4 dùng để đo mật độ.</p>
+
+<h3>Ranh đô thị nhìn từ giá đất</h3>
+<p>Bảng giá đất cũng quy định giá đất nông nghiệp, nên điều kiện \(r(\bar{x}) = r_A\) cũng có thể xem xét từ phía giá. Quy định ban hành kèm Nghị quyết 87/2025 xếp mỗi đơn vị trong <span data-num="l2_nong_nghiep.tongDonVi" data-fmt="0"></span> phường, xã và đặc khu của thành phố vào một trong bốn khu vực đất nông nghiệp (Điều 3), và định giá đất nông nghiệp theo khu vực và vị trí (Điều 5). Thửa đất ở vị trí 1 nếu nằm trong phạm vi 200 m tiếp giáp đường có tên trong bảng giá; nhờ vậy vị trí 1 so được với giá đất ở, vốn cũng quy định cho thửa đất trên đường có tên. Bảng 2.2 ghi giá đất trồng cây hàng năm, nhóm đất bao gồm đất trồng lúa.</p>
+
+<figure class="fig" id="tab-2-2">
+  <figcaption class="fig-head"><span class="fig-label">Bảng 2.2</span>Giá đất nông nghiệp trồng cây hàng năm, 2026</figcaption>
+  <p class="fig-sub">Nghìn đồng/m²</p>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Khu vực</th><th class="r">Số phường, xã, đặc khu</th><th class="r">Vị trí 1</th><th class="r">Vị trí 2</th><th class="r">Vị trí 3</th></tr></thead>
+    <tbody>
+      <tr><td>I</td><td class="r" data-num="l2_nong_nghiep.khuVucSoDonVi.I" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.I.0" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.I.1" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.I.2" data-fmt="0"></td></tr>
+      <tr><td>II</td><td class="r" data-num="l2_nong_nghiep.khuVucSoDonVi.II" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.II.0" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.II.1" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.II.2" data-fmt="0"></td></tr>
+      <tr><td>III</td><td class="r" data-num="l2_nong_nghiep.khuVucSoDonVi.III" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.III.0" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.III.1" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.III.2" data-fmt="0"></td></tr>
+      <tr><td>IV</td><td class="r" data-num="l2_nong_nghiep.khuVucSoDonVi.IV" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.IV.0" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.IV.1" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.IV.2" data-fmt="0"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> HĐND TP.HCM, Nghị quyết 87/2025/NQ-HĐND, Quy định kèm theo, Điều 3 (khu vực) và Điều 5, Bảng 1; đọc từ chính văn bản nghị quyết bằng <code>kich_ban/l2_nong_nghiep.mjs</code>.</p>
+    <p><b>Ghi chú:</b> khu vực I gồm các phường trung tâm; khu vực IV gồm các xã nông thôn thuộc hai tỉnh cũ Bình Dương, Bà Rịa – Vũng Tàu và đặc khu Côn Đảo. Đất trồng cây lâu năm (Điều 5, Bảng 2) có giá cao hơn khoảng một phần năm. Kịch bản kiểm rằng mọi phường/xã có ranh giới thuộc đúng một khu vực.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_nn" data-script="kich_ban/l2_nong_nghiep.mjs" data-note="Đọc khu vực của từng phường, xã và mười hai mức giá từ chính văn bản nghị quyết."></div>
+</figure>
+
+<p>Giá đất nông nghiệp chênh nhau ít trong toàn thành phố: vị trí 1 ở khu vực I có giá bằng <span data-num="l2_nong_nghiep.tyNongNghiepIIV" data-fmt="x1"></span> vị trí 1 ở khu vực IV. Hình 2.2 đặt cả hai loại giá dọc một mặt cắt qua thành phố, tô nền đoạn nằm trong trung tâm đô thị 2020.</p>
+
+<figure class="fig wide" id="fig-2-2">
+  <figcaption class="fig-head"><span class="fig-label">Hình 2.2</span>Giá đất ở và giá đất nông nghiệp dọc một mặt cắt qua thành phố</figcaption>
+  <p class="fig-sub">Nghìn đồng/m², thang loga; khoảng cách dọc mặt cắt, âm về phía nam</p>
+  <div class="fig-body"><div id="c-2-2"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> giá đất ở như Bản đồ 2.1; giá đất nông nghiệp như Bảng 2.2 (vị trí 1, cây hàng năm); trung tâm đô thị như Bản đồ 2.3.</p>
+    <p><b>Ghi chú:</b> mặt cắt là đường nối tâm của Cần Giờ, Bình Khánh, Nhà Bè, Bến Thành, Thủ Dầu Một, Bến Cát và Bàu Bàng; gồm mọi phường/xã có tâm nằm trong <span data-num="l2_nong_nghiep.hanhLang" data-fmt="0"></span> km quanh đường ấy. Dải tô nền là đoạn đường ấy nằm trong trung tâm đô thị năm 2020. Đường khớp là hồi quy của Hình 2.1, chỉ vẽ trên 40 km mà nó được ước lượng.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_o gia_dat_nn ghs_ucdb" data-script="kich_ban/l2_nong_nghiep.mjs, kich_ban/l2_vung_do_thi.py" data-note="Đặt mỗi phường lên mặt cắt theo khoảng cách dọc đường; đo chỗ đường ấy cắt đường viền trung tâm đô thị."></div>
+</figure>
+
+<p>Hình 2.2 cũng có thể vẽ ngay trên bản đồ. Ở Bản đồ 2.4, giá đất của mỗi phường, xã được dựng đứng tại vị trí của nó trên tuyến cắt, theo cùng thang loga, để người đọc thấy tuyến cắt đi qua những phường, xã nào và cắt ranh trung tâm đô thị ở đâu.</p>
+
+<figure class="fig wide" id="map-section">
+  <figcaption class="fig-head"><span class="fig-label">Bản đồ 2.4</span>Mặt cắt của Hình 2.2 dựng trên bản đồ thành phố</figcaption>
+  <p class="fig-sub">Giá đất ở và giá đất nông nghiệp theo phường, xã, nghìn đồng/m², thang loga, dựng dọc tuyến từ Cần Giờ qua Bến Thành, Thủ Dầu Một đến Bàu Bàng</p>
+  <div class="steps" role="group" aria-label="Góc nhìn">
+    <button type="button" data-view="side">Nhìn ngang</button>
+    <button type="button" data-view="oblique">Nhìn chéo</button>
+    <button type="button" data-view="above">Nhìn từ trên</button>
+    <span class="hint">kéo để di chuyển · kéo chuột phải để xoay</span>
+  </div>
+  <div class="s3d-stage">
+    <div class="map" id="m-section"></div>
+    <div class="s3d-legend">
+      <div class="row"><svg width="14" height="12"><circle cx="7" cy="6" r="5" fill="#BE792B"/></svg><span>đất ở, trung vị của phường, xã</span></div>
+      <div class="row"><svg width="14" height="12"><circle cx="7" cy="6" r="4" fill="#27795A"/></svg><span>đất trồng cây hàng năm, vị trí 1</span></div>
+      <div class="row"><svg width="28" height="12"><line x1="0" x2="28" y1="6" y2="6" stroke="#111" stroke-width="2.5" stroke-dasharray="6 4"/></svg><span>đường khớp của Hình 2.1, trong phạm vi 40 km</span></div>
+      <div class="row"><svg width="28" height="12"><rect width="28" height="12" fill="#0B3C8C" fill-opacity=".15"/></svg><span>đoạn tuyến nằm trong trung tâm đô thị năm 2020</span></div>
+      <div class="h">Mỗi vạch ngang ứng với mức giá gấp mười lần vạch ngay dưới. Dưới mặt đất, các phường, xã trên tuyến cắt được tô theo giá đất ở như Bản đồ 2.1.</div>
+    </div>
+  </div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> như Hình 2.2; trung tâm đô thị như Bản đồ 2.3; nền bản đồ OpenFreeMap, © những người đóng góp OpenStreetMap.</p>
+    <p><b>Ghi chú:</b> mỗi phường, xã được đặt tại điểm trên tuyến cắt gần tâm ranh giới của nó nhất; tuyến đi qua tâm của Cần Giờ, Bình Khánh, Nhà Bè, ga Bến Thành, Thủ Dầu Một, Bến Cát và Bàu Bàng.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_o gia_dat_nn ghs_ucdb osm_wards nen_ban_do" data-script="kich_ban/l2_nong_nghiep.mjs, kich_ban/l2_vung_do_thi.py" data-note="Đặt mỗi phường, xã lên tuyến cắt và dựng hai mức giá của nó theo thang loga; vẽ dải ứng với đoạn tuyến nằm trong ranh trung tâm đô thị."></div>
+</figure>
+
+
+<p>Không nơi nào trong thành phố giá đất ở giảm xuống bằng giá đất nông nghiệp: tỷ số thấp nhất giữa hai giá, ở xã Châu Đức, là <span data-num="l2_nong_nghiep.tySoMin.tySo" data-fmt="x1"></span>. Vì vậy riêng bảng giá không xác định được \(\bar{x}\); lưới dân số ở Bản đồ 2.3 làm việc đó trực tiếp hơn.</p>
+<div class="interp"><span class="label">Diễn giải — bài này chưa kiểm</span>Hai đặc điểm của bảng giá có thể giữ tỷ số trên 1 ngay cả ở xã nông thôn. Giá đất ở chỉ quy định cho thửa trên đường có tên, nơi gần như ở đâu cũng có ít nhiều nhà ở và dịch vụ. Và giá đất nông nghiệp là giá quy định, không phải giá thuê thị trường: mười hai mức giá cho cả thành phố không thể ghi nhận một nông dân thật sự phải trả bao nhiêu cho đất ở một nơi cụ thể.</div>
+
+<h2 id="s3"><span class="sec">2.4</span>Mật độ dân</h2>
+<p>Mật độ dân không vướng vấn đề giá do Nhà nước ấn định, và đo được trên một lưới đều. GHS-POP, do Trung tâm Nghiên cứu Chung của Uỷ ban châu Âu lập, ước lượng dân số từng ô 100 m. Ở đây các ô được gộp thành lưới ô 1 km trong vòng 40 km quanh Bến Thành, và mật độ bằng dân số chia cho diện tích ô (Bản đồ 2.5, bản đồ này cũng vẽ đường viền trung tâm đô thị 2020 của Bản đồ 2.3). Tổng cộng, vòng tròn ấy chứa <span data-num="l2_tphcm.matDo.tongDan" data-fmt="0"></span> người vào năm 2020.</p>
+
+<figure class="fig wide" id="map-2-3">
+  <figcaption class="fig-head"><span class="fig-label">Bản đồ 2.5</span>Mật độ dân trên lưới 1 km, 2020</figcaption>
+  <p class="fig-sub">Người/km², các ô trong vòng 40 km quanh Bến Thành</p>
+  <div class="fig-body"><div class="map" id="m-2-3"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> Uỷ ban châu Âu, Trung tâm Nghiên cứu Chung, GHS-POP R2023A, mốc 2020 (CC BY 4.0); gộp ô bằng <code>kich_ban/l2_tphcm.mjs</code>; nền bản đồ OpenFreeMap, © những người đóng góp OpenStreetMap.</p>
+    <p><b>Ghi chú:</b> GHS-POP phân bổ dân số điều tra vào từng ô dựa trên diện tích xây dựng đo từ ảnh vệ tinh; đó là ước lượng của mô hình, không phải một cuộc đếm. Ô dưới 50 người/km² không vẽ. Vòng nét đứt là 10, 20, 30 và 40 km tính từ Bến Thành. Đường viền xanh là trung tâm đô thị năm 2020 (Bản đồ 2.3).</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop ghs_ucdb nen_ban_do" data-script="kich_ban/l2_tphcm.mjs" data-note="Cộng dân số các ô 100 m thành ô 1 km quanh Bến Thành rồi chia cho diện tích từng ô."></div>
+</figure>
+
+<figure class="fig wide" id="fig-2-3">
+  <figcaption class="fig-head"><span class="fig-label">Hình 2.3</span>Mật độ dân theo khoảng cách tới Bến Thành</figcaption>
+  <p class="fig-sub">Người/km², thang loga</p>
+  <div class="fig-body"><div id="c-2-3"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> như Bản đồ 2.5.</p>
+    <p><b>Ghi chú:</b> mỗi chấm là một ô 1 km có ít nhất 300 người/km². Đường liền là mật độ từng vành 1 km tính trên chính các ô ấy: tổng dân chia tổng diện tích. Đường khớp là phương trình (2.1) ước lượng trên các chấm.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop" data-script="kich_ban/l2_tphcm.mjs" data-note="Khớp phương trình (2.1) trên các ô 1 km vượt ngưỡng của Bảng 2.3, và tính mật độ bình quân của từng vành."></div>
+</figure>
+
+<p>Mật độ trong ki-lô-mét đầu tiên quanh Bến Thành là <span data-num="l2_tphcm.matDo.vanh.0.1" data-fmt="0"></span> người/km². Nó còn trên <span data-num="l2_tphcm.matDo.vanh.4.1" data-fmt="0"></span> cho tới 5 km, xuống <span data-num="l2_tphcm.matDo.vanh.9.1" data-fmt="0"></span> ở 9–10 km và <span data-num="l2_tphcm.matDo.vanh.19.1" data-fmt="0"></span> ở 19–20 km. Ngoài 20 km, mật độ bình quân theo vành thôi giảm trong vài ki-lô-mét; Thủ Dầu Một nằm ở khoảng cách này (Bản đồ 2.5).</p>
+<p>Ước lượng trên các ô có ít nhất 300 người/km², độ dốc là \(b =\) <span data-num="l2_tphcm.matDo.khop.b" data-fmt="3"></span>: mật độ giảm <span data-num="l2_tphcm.matDo.khop.phanTram" data-fmt="abs%1"></span> mỗi ki-lô-mét (\(R^2 =\) <span data-num="l2_tphcm.matDo.khop.r2" data-fmt="2"></span>, <span data-num="l2_tphcm.matDo.khop.n" data-fmt="0"></span> ô).</p>
+<aside class="note" data-so-tay="ngưỡng phân tích, cũng nằm trong dữ liệu"><b>Vì sao 300 và 1.500?</b> Phương pháp Degree of Urbanisation xếp ô lưới có ít nhất 300 người/km² vào diện có thể thuộc một cụm đô thị, và ít nhất 1.500 người/km² vào diện có thể thuộc một trung tâm đô thị (Dijkstra và cộng sự, 2021).</aside>
+<p>Ngưỡng 300 người/km² là một lựa chọn. Bảng 2.3 chạy lại hồi quy với hai ngưỡng khác và với một lưới dân số thứ hai, WorldPop 2020.</p>
+
+<figure class="fig" id="tab-2-3">
+  <figcaption class="fig-head"><span class="fig-label">Bảng 2.3</span>Độ dốc mật độ dưới sáu cách đo</figcaption>
+  <p class="fig-sub">Hồi quy ln mật độ theo khoảng cách, ô 1 km trong vòng 40 km quanh Bến Thành</p>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Lưới dân số</th><th>Ô đưa vào</th><th class="r">\(b\)</th><th class="r">% mỗi km</th><th class="r">\(R^2\)</th><th class="r">Số ô</th></tr></thead>
+    <tbody>
+      <tr><td>GHS-POP 2020</td><td>mọi ô có dân</td><td class="r" data-num="l2_tphcm.matDo.doNhay.0.b" data-fmt="3"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.0.phanTram" data-fmt="%1"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.0.r2" data-fmt="2"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.0.n" data-fmt="0"></td></tr>
+      <tr class="hl"><td>GHS-POP 2020</td><td>≥ <span data-num="l2_tphcm.matDo.doNhay.1.nguong" data-fmt="0"></span> người/km²</td><td class="r" data-num="l2_tphcm.matDo.doNhay.1.b" data-fmt="3"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.1.phanTram" data-fmt="%1"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.1.r2" data-fmt="2"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.1.n" data-fmt="0"></td></tr>
+      <tr><td>GHS-POP 2020</td><td>≥ <span data-num="l2_tphcm.matDo.doNhay.2.nguong" data-fmt="0"></span> người/km²</td><td class="r" data-num="l2_tphcm.matDo.doNhay.2.b" data-fmt="3"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.2.phanTram" data-fmt="%1"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.2.r2" data-fmt="2"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.2.n" data-fmt="0"></td></tr>
+      <tr><td>WorldPop 2020</td><td>mọi ô có dân</td><td class="r" data-num="l2_tphcm.matDo.doNhay.3.b" data-fmt="3"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.3.phanTram" data-fmt="%1"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.3.r2" data-fmt="2"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.3.n" data-fmt="0"></td></tr>
+      <tr><td>WorldPop 2020</td><td>≥ <span data-num="l2_tphcm.matDo.doNhay.4.nguong" data-fmt="0"></span> người/km²</td><td class="r" data-num="l2_tphcm.matDo.doNhay.4.b" data-fmt="3"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.4.phanTram" data-fmt="%1"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.4.r2" data-fmt="2"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.4.n" data-fmt="0"></td></tr>
+      <tr><td>WorldPop 2020</td><td>≥ <span data-num="l2_tphcm.matDo.doNhay.5.nguong" data-fmt="0"></span> người/km²</td><td class="r" data-num="l2_tphcm.matDo.doNhay.5.b" data-fmt="3"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.5.phanTram" data-fmt="%1"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.5.r2" data-fmt="2"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.5.n" data-fmt="0"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> GHS-POP R2023A (Uỷ ban châu Âu, JRC); WorldPop (2018), lưới 100 m không ràng buộc cho năm 2020; <code>kich_ban/l2_tphcm.mjs</code>.</p>
+    <p><b>Ghi chú:</b> dòng tô nền là ước lượng dùng trong lời giảng. “% mỗi km” là \(100(e^{b}-1)\).</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop worldpop" data-script="kich_ban/l2_tphcm.mjs" data-note="Lặp lại cùng một hồi quy với hai lưới dân số và ba ngưỡng. Kịch bản dừng nếu hai lưới lệch nhau quá một khoảng nhỏ ở cùng ngưỡng."></div>
+</figure>
+
+<p>Hai lưới cho kết quả gần nhau khi cùng ngưỡng. Ngưỡng mới là thứ quan trọng: đưa thêm các ô thưa dân ở rìa vòng tròn khiến đường mật độ dốc hơn, còn chỉ giữ ô dày dân làm nó thoải đi. Qua sáu dòng, \(b\) chạy từ <span data-num="l2_tphcm.matDo.bMin" data-fmt="3"></span> tới <span data-num="l2_tphcm.matDo.bMax" data-fmt="3"></span>.</p>
+
+<h2 id="s4"><span class="sec">2.5</span>So với 192 thành phố</h2>
+<p>Liotta, Viguié và Lepetit (2022) dựng lưới dân số, giá thuê và thời gian đi lại cho 192 thành phố trên năm châu lục, rồi ước lượng phương trình (2.1) cho từng thành phố.</p>
+<blockquote data-quote="trich_dan.liotta.gradients" data-who="Liotta, Viguié và Lepetit (2022)"><p class="tr">đi xa trung tâm thành phố thêm 1 km thì giá thuê giảm 1,4% và mật độ dân giảm 8,5%</p></blockquote>
+<p>Hình 2.4 đặt TP.HCM vào phân bố các độ dốc mật độ của họ. Thành phố không có trong mẫu của họ, nên ước lượng cho nó là do bài này đo.</p>
+
+<figure class="fig wide" id="fig-2-4">
+  <figcaption class="fig-head"><span class="fig-label">Hình 2.4</span>Độ dốc mật độ của 192 thành phố và của TP.HCM</figcaption>
+  <p class="fig-sub">Hệ số \(b\) trong hồi quy ln mật độ theo khoảng cách tới trung tâm, mỗi km</p>
+  <div class="fig-body"><div id="c-2-4"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> 192 thành phố: Liotta, Viguié và Lepetit (2022), Phụ lục B, Hình B.6 (nhỏ nhất, tứ phân vị, lớn nhất và trung bình, tr. <span data-num="trich_dan.phanBoLiotta.trang" data-fmt="0"></span>; CC BY 4.0). TP.HCM: Bảng 2.3.</p>
+    <p><b>Ghi chú:</b> hộp: từ tứ phân vị thứ nhất tới thứ ba; vạch đậm: trung vị; râu: nhỏ nhất và lớn nhất; vòng tròn rỗng: trung bình. Với TP.HCM, chấm là ước lượng dùng trong lời giảng và thanh trải qua sáu ước lượng của Bảng 2.3.</p>
+  </div>
+  <div class="about-data" data-sources="liotta_2022 ghs_pop" data-script="kich_ban/trich_dan.mjs, kich_ban/l2_tphcm.mjs" data-note="Đọc giá trị nhỏ nhất, các tứ phân vị và lớn nhất của Hình B.6 từ PDF và đối chiếu giá trị trung bình với lời văn của họ; ước lượng của TP.HCM là ước lượng ở Bảng 2.3."></div>
+</figure>
+
+<p>Ước lượng <span data-num="l2_tphcm.matDo.khop.b" data-fmt="3"></span> gần với trung vị <span data-num="trich_dan.phanBoLiotta.trungVi" data-fmt="3"></span>. Phép so cần ba lời dè dặt. Thứ nhất, Liotta, Viguié và Lepetit xác định trung tâm mỗi thành phố bằng quy tắc riêng của họ:</p>
+<blockquote data-quote="trich_dan.liotta.centre" data-who="Liotta, Viguié và Lepetit (2022)"><p class="tr">Vì vậy, nghiên cứu này xác định trung tâm thành phố dựa trên sự dung hoà giữa năm tiêu chí định tính: tâm hình học của dữ liệu, trung tâm lịch sử của thành phố, vị trí đầu mối giao thông công cộng, khu trung tâm thương mại chính thức, và vị trí toà thị chính.</p></blockquote>
+<p>Thứ hai, họ dùng một phiên bản cũ hơn của lưới dân số:</p>
+<blockquote data-quote="trich_dan.liotta.ghsl" data-who="Liotta, Viguié và Lepetit (2022)"><p class="tr">Với mật độ dân số, chúng tôi dùng dữ liệu GHSL của Uỷ ban châu Âu, có cho các năm 1975, 1990, 2000 và 2015 ở độ phân giải 250 m trên phạm vi toàn cầu</p></blockquote>
+<p>Thứ ba, và quan trọng nhất, Bảng 2.3 cho thấy việc chọn ô nào đưa vào hồi quy làm ước lượng của TP.HCM chạy từ dưới tứ phân vị thứ nhất của 192 thành phố (<span data-num="trich_dan.phanBoLiotta.q1" data-fmt="3"></span>) lên trên tứ phân vị thứ ba (<span data-num="trich_dan.phanBoLiotta.q3" data-fmt="3"></span>). Một phát biểu kiểu “TP.HCM có độ dốc mật độ ở mức điển hình” chỉ đáng tin bằng đúng mức độ tương thích giữa hai cách đo.</p>
+
+<h2 id="s5"><span class="sec">2.6</span>Chỗ mô hình không khớp</h2>
+<p>Hai đặc điểm của TP.HCM không được mô hình đơn tâm ở Bài 1 mô tả.</p>
+<h3>Lõi phẳng</h3>
+<p>Mô hình dự báo mật độ cao nhất ở CBD và giảm dốc nhất ngay gần đó (Hình 1.1). Trong Hình 2.3, mật độ gần như không đổi trong 5 km đầu. Tài liệu ghi nhận hình mẫu tương tự ở các thành phố khác:</p>
+<blockquote data-quote="trich_dan.liotta.crater" data-who="Liotta, Viguié và Lepetit (2022)"><p class="tr">Nhìn chung, mọi nghiên cứu này đều thống nhất rằng mật độ dân số giảm dần từ trung tâm ra vùng ven, có thể bị làm dịu đi bởi hố trũng mật độ ngay tại trung tâm, do hoạt động kinh tế tập trung ở đó.</p></blockquote>
+<div class="interp"><span class="label">Diễn giải — bài này chưa kiểm</span>Ở TP.HCM, văn phòng, cửa hàng, công sở và chợ có thể chiếm phần lớn đất gần Bến Thành, khiến phần đất dành cho nhà ở ít đi. Mô hình chỉ có một mục đích sử dụng đất nên không thể hiện được điều này. Muốn kiểm thì cần số việc làm trong từng ô, thứ mà bài này không dùng.</div>
+
+<h3>Nhiều hơn một trung tâm</h3>
+<p>Ngoài 20 km, mật độ thôi giảm ở khu vực Thủ Dầu Một (Hình 2.3), còn giá đất ở Thủ Dầu Một, Bà Rịa và Vũng Tàu cao gấp mấy lần các phường/xã ở cùng khoảng cách tới Bến Thành (Bảng 2.1). Thành phố sau sáp nhập năm 2025 có nhiều trung tâm, không phải một. Năm 2011, World Bank mô tả thành phố trước sáp nhập như sau:</p>
+<blockquote data-quote="trich_dan.vur.donTam" data-who="World Bank (2011)"><p class="tr">Như có thể thấy từ Hình 3.25 và 3.26, hiện thành phố có cấu trúc đơn tâm rõ rệt.</p></blockquote>
+<blockquote data-quote="trich_dan.vur.khongLau" data-who="World Bank (2011)"><p class="tr">Tuy nhiên, cấu trúc đơn tâm này có thể không kéo dài. Khu trung tâm của TP.HCM đang mở rộng theo chiều cao, nhưng không thể mở rộng xa theo chiều ngang vì gần sông và vì có nhiều công sở lớn mang giá trị lịch sử.</p></blockquote>
+<p>Liotta, Viguié và Lepetit thấy rằng những khác biệt kiểu này làm độ dốc thoải đi trên toàn mẫu của họ:</p>
+<blockquote data-quote="trich_dan.liotta.heterogeneity" data-who="Liotta, Viguié và Lepetit (2022)"><p class="tr">chúng tôi chỉ ra rằng tính đa tâm, tính phi chính thức và các tiện ích địa phương làm yếu đi quan hệ giữa giá thuê hoặc mật độ với thu nhập ròng sau chi phí đi lại, khiến đường mật độ và đường giá thuê trong thành phố thoải đi.</p></blockquote>
+<p>Các mở rộng nới lỏng giả định của mô hình là nội dung chương 3 của Brueckner (2011), “Modifications of the Urban Model”.</p>
+
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 2.1</span>Diễn giải một hệ số</p>
+  <p>Hồi quy ln mật độ theo khoảng cách cho \(b = -0,120\).</p>
+  <ol type="a">
+    <li>Mật độ đổi bao nhiêu phần trăm mỗi ki-lô-mét?</li>
+    <li>Tỷ số giữa mật độ ở 15 km và mật độ ở 5 km bằng bao nhiêu?</li>
+  </ol>
+  <details><summary>Xem đáp án</summary><div>(a) 100(e<sup>−0,12</sup> − 1) = −11,3 phần trăm mỗi km. (b) e<sup>−0,12 × 10</sup> = e<sup>−1,2</sup> ≈ 0,30: mật độ ở 15 km bằng khoảng 30 phần trăm mật độ ở 5 km.</div></details>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 2.2</span>Giá Nhà nước và giá thị trường</p>
+  <p>Giả sử giá thị trường quanh Bến Thành cao gấp mấy lần giá trong bảng giá đất, còn ở vùng rìa hai giá xấp xỉ nhau. Đường giá thị trường sẽ dốc hơn hay thoải hơn đường khớp ở Hình 2.1? Cần dữ liệu gì để kiểm?</p>
+  <details><summary>Xem đáp án</summary><div>Dốc hơn: khoảng cách giữa giá thị trường và giá bảng lớn nhất ở nơi giá cao nhất, tức gần trung tâm. Muốn kiểm thì cần giá giao dịch thật của đất, kèm vị trí của từng giao dịch.</div></details>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 2.3</span>Thành phố kết thúc ở đâu?</p>
+  <p>Dùng Bản đồ 2.3 và Hình 2.2.</p>
+  <ol type="a">
+    <li>Nêu một nơi thuộc thành phố theo nghĩa của mô hình nhưng không thuộc theo nghĩa hành chính, và một nơi ngược lại.</li>
+    <li>Dọc mặt cắt, trung tâm đô thị kéo dài về phía bắc Bến Thành xa hơn nhiều so với phía nam. Điều này trái với những giả định nào của Bài 1? Nêu hai lý do có thể.</li>
+    <li>Trên Hình 2.2, so giá đất ở ngay trong và ngay ngoài dải tô nền, ở đầu phía nam và ở đầu phía bắc của dải. Mép trung tâm đô thị có giống điểm mà \(r(\bar{x}) = r_A\) không?</li>
+    <li>Đường mật độ ước lượng chỉ trên các ô nằm trong ranh hành chính sẽ dốc hơn hay thoải hơn đường ước lượng trên một vòng tròn quanh Bến Thành? Giải thích.</li>
+    <li>Ở bước 6, vì sao trung tâm đô thị năm 1990 rộng hơn nhiều so với phần đất xây dựng bên trong nó? Điều đó có ý nghĩa gì khi so diện tích một thành phố qua các năm?</li>
+  </ol>
+  <details><summary>Xem đáp án</summary><div>(a) Biên Hòa, thuộc tỉnh Đồng Nai, nằm trong trung tâm đô thị nhưng ngoài ranh hành chính; rừng ngập mặn Cần Giờ và các xã nông thôn quanh Bàu Bàng nằm trong ranh nhưng ngoài trung tâm đô thị. (b) Mô hình giả định chi phí đi lại như nhau theo mọi hướng và tỷ lệ đất dành cho nhà ở như nhau ở mọi khoảng cách. Về phía bắc, các trục đường lớn làm chi phí đi lại thấp hơn và các khu công nghiệp ở tỉnh Bình Dương cũ tạo việc làm ngoài trung tâm; về phía nam, sông và rừng ngập mặn làm giảm đất dành cho nhà ở, tức \(\theta\) trong phương trình (1.6). (c) Ở phía nam, giá giảm mạnh giữa phường cuối cùng trong dải và xã đầu tiên ngoài dải; ở phía bắc, giá đã gần mức nông thôn trước khi dải kết thúc. Ở cả hai nơi giá đất ở đều không tiến gần giá đất nông nghiệp, nên bảng giá không cho thấy điều kiện của phương trình (1.5). (d) Có lẽ dốc hơn: ranh hành chính thêm vào đất nông thôn thưa dân ở xa Bến Thành và bỏ đi các ô dày đặc ở Biên Hòa ở khoảng cách tương tự. Ước lượng cả hai cách sẽ kiểm được điều này. (e) Đường viền nối nguyên các ô 1 km vượt một ngưỡng mật độ và lấp các khoảng trống giữa chúng, nên nó gồm cả đất chưa xây dựng giữa các làng dày đặc và dọc sông; và dân số trong mỗi ô cũng là ước lượng. Diện tích của những đường viền như vậy ở các năm khác nhau đo quy tắc nhiều như đo thành phố, nên so sự lớn lên tốt hơn bằng một thước đo được quan sát mỗi năm, như đất xây dựng.</div></details>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 2.4</span>Chọn một cách đo</p>
+  <p>Bạn phải báo cáo một độ dốc mật độ cho TP.HCM để so với 192 thành phố ở Hình 2.4. Bạn chọn dòng nào của Bảng 2.3, và vì sao? Lựa chọn ấy làm đổi kết luận của mục 2.5 thế nào?</p>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 2.5</span>Thảo luận: trung tâm phụ</p>
+  <p>Dùng Bản đồ 2.1, Bản đồ 2.5 và Bảng 2.1, hãy mô tả giá đất và mật độ sẽ biến thiên thế nào quanh một trung tâm phụ như Thủ Dầu Một nếu cư dân ở đó làm việc tại chỗ thay vì vào trung tâm TP.HCM. Bạn sẽ đổi giả định nào của Bài 1 để mô hình hoá điều đó?</p>
+</div>
+
+<h2 id="data"><span class="sec">2.7</span>Dữ liệu và mã</h2>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Dữ liệu</th><th>Giấy phép</th><th>Ngày truy cập</th></tr></thead>
+  <tbody id="data-rows"></tbody>
+</table></div>
+<p class="licence">Kịch bản: <code>kich_ban/l2_tphcm.mjs</code> (độ dốc, bảng, dữ liệu bản đồ) · <code>kich_ban/l2_vung_do_thi.py</code> (ranh hành chính và trung tâm đô thị) · <code>kich_ban/l2_luoi_dan_so.mjs</code> (ảnh mật độ 100 m, cột 500 m) · <code>kich_ban/l2_ve_tinh.mjs</code> (đất xây dựng từ Landsat, 1985–2015) · <code>kich_ban/l2_nong_nghiep.mjs</code> (giá đất nông nghiệp, mặt cắt) · <code>kich_ban/trich_dan.mjs</code> (trích dẫn) · <code>kich_ban/b1_gia_dat.mjs</code> (trích bảng giá đất). Mỗi kịch bản dừng và không ghi kết quả nếu một phép kiểm hỏng.</p>
+
+<h2 id="refs"><span class="sec">2.8</span>Tài liệu tham khảo</h2>
+<ul class="references">
+  <li>Brueckner, J. K. (2011). <i>Lectures on urban economics</i>. MIT Press. Chương 3, Modifications of the urban model.</li>
+  <li>Clark, C. (1951). Urban population densities. <i>Journal of the Royal Statistical Society, Series A, 114</i>(4), 490–496. <a href="https://doi.org/10.2307/2981088">doi:10.2307/2981088</a></li>
+  <li>Dijkstra, L., Florczyk, A. J., Freire, S., Kemper, T., Melchiorri, M., Pesaresi, M., &amp; Schiavina, M. (2021). Applying the Degree of Urbanisation to the globe: A new harmonised definition reveals a different picture of global urbanisation. <i>Journal of Urban Economics, 125</i>, 103312. <a href="https://doi.org/10.1016/j.jue.2020.103312">doi:10.1016/j.jue.2020.103312</a></li>
+  <li>European Commission, Joint Research Centre, Melchiorri, M., Mari Rivero, I., Florio, P., Schiavina, M., et al. (2024). <i>Stats in the City – the GHSL Urban Centre Database 2025</i>. Publications Office of the European Union. <a href="https://data.europa.eu/doi/10.2760/3046391">doi:10.2760/3046391</a>, CC BY 4.0.</li>
+  <li>de Bellefon, M.-P., Combes, P.-P., Duranton, G., Gobillon, L., &amp; Gorin, C. (2021). Delineating urban areas using building density. <i>Journal of Urban Economics, 125</i>. Quoted from NBER Working Paper 26482 (2019), © 2019 the authors.</li>
+  <li>European Commission (2024). <i>GHSL Data Package 2023</i>. Publications Office of the European Union. <a href="https://doi.org/10.2760/098587">doi:10.2760/098587</a>, CC BY 4.0.</li>
+  <li>European Commission, FAO, UN-Habitat, ILO, OECD &amp; World Bank (2021). <i>Applying the Degree of Urbanisation: A methodological manual to define cities, towns and rural areas for international comparisons</i>. Publications Office of the European Union. <a href="https://doi.org/10.2785/706535">doi:10.2785/706535</a></li>
+  <li>Marconcini, M., Metz-Marconcini, A., Üreyen, S., et al. (2020). Outlining where humans live, the World Settlement Footprint 2015. <i>Scientific Data, 7</i>, 242. World Settlement Footprint Evolution v1, © 2024 DLR, CC BY 4.0.</li>
+  <li>Mari Rivero, I., Melchiorri, M., Florio, P., Schiavina, M., et al. (2025). <i>GHS Urban Centre Database 2025 (GHS-UCDB R2024A)</i>, version 1.2. European Commission, Joint Research Centre. <a href="https://doi.org/10.2905/1A338BE6-7EAF-480C-9664-3A8ADE88CBCD">doi:10.2905/1A338BE6-7EAF-480C-9664-3A8ADE88CBCD</a>, CC BY 4.0.</li>
+  <li>Moreno-Monroy, A. I., Schiavina, M., &amp; Veneri, P. (2021). Metropolitan areas in the world. Delineation and population trends. <i>Journal of Urban Economics, 125</i>.</li>
+  <li>Schiavina, M., Freire, S., Carioli, A., &amp; MacManus, K. (2023). <i>GHS-POP R2023A: GHS population grid multitemporal (1975–2030)</i>. European Commission, Joint Research Centre. <a href="https://doi.org/10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE">doi:10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE</a>, CC BY 4.0.</li>
+  <li>Hội đồng nhân dân TP.HCM (2025). <i>Nghị quyết 87/2025/NQ-HĐND về bảng giá đất áp dụng từ ngày 01/01/2026</i>.</li>
+  <li>Liotta, C., Viguié, V., &amp; Lepetit, Q. (2022). Testing the monocentric standard urban model in a global sample of cities. <i>Regional Science and Urban Economics, 97</i>, 103832. <a href="https://doi.org/10.1016/j.regsciurbeco.2022.103832">doi:10.1016/j.regsciurbeco.2022.103832</a>. Trích từ bản chấp nhận đăng, <a href="https://arxiv.org/abs/2111.02112">arXiv:2111.02112</a>, CC BY 4.0.</li>
+  <li>World Bank (2011). <i>Vietnam urbanization review: Technical assistance report</i>. World Bank. <a href="https://openknowledge.worldbank.org/entities/publication/a2b30aef-198f-56e3-bfec-aa88c51ef67e">Open Knowledge Repository</a>, CC BY 3.0 IGO.</li>
+  <li>WorldPop (2018). <i>Global 100m population</i>. University of Southampton. <a href="https://doi.org/10.5258/SOTON/WP00645">doi:10.5258/SOTON/WP00645</a></li>
+</ul>
+
+</main>
+</div></div>
+
+<footer class="site-footer"><div class="inner">Kinh tế đô thị · Thành phố đơn tâm. Tài liệu giảng dạy phi thương mại. Chữ và hình sinh từ các kịch bản trong <code>kich_ban/</code>; nguồn, giấy phép và ngày truy cập của từng bộ dữ liệu nằm trong các tệp ở <code>du_lieu/</code>.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.js"></script>
+<script src="../assets/core.js"></script>
+<script src="../assets/chart.js"></script>
+<script src="../assets/map.js"></script>
+<script src="../du_lieu/trich_dan.js"></script>
+<script src="../du_lieu/l2_tphcm.js"></script>
+<script src="../du_lieu/l2_nong_nghiep.js"></script>
+<script src="../du_lieu/l2_vung_do_thi.js"></script>
+<script src="../du_lieu/l2_luoi_dan_so.js"></script>
+<script src="../du_lieu/l2_non_gia.js"></script>
+<script src="../du_lieu/anh/mat_do_2020_100m.js"></script>
+<script src="../du_lieu/l2_ve_tinh.js"></script>
+<script src="../du_lieu/anh/xay_dung_1985.js"></script>
+<script src="../du_lieu/anh/xay_dung_1990.js"></script>
+<script src="../du_lieu/anh/xay_dung_1995.js"></script>
+<script src="../du_lieu/anh/xay_dung_2000.js"></script>
+<script src="../du_lieu/anh/xay_dung_2005.js"></script>
+<script src="../du_lieu/anh/xay_dung_2010.js"></script>
+<script src="../du_lieu/anh/xay_dung_2015.js"></script>
+<script src="../du_lieu/anh/xay_dung_2015_don.js"></script>
+<script src="../assets/nguon.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js"></script>
+<script src="../assets/lop3d.js"></script>
+<script src="../assets/mat_cat_3d.js"></script>
+<script src="../assets/non_gia_3d.js"></script>
+<script src="../assets/canh_ranh.js"></script>
+<script src="../assets/lesson2.js"></script>
+</body>
+</html>

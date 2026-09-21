@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 2 · Testing the model in Ho Chi Minh City — Urban Economics</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%230071BC' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23111'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="course" href="index.html">Urban Economics <span>· The monocentric city</span></a>
+  <nav><a href="1-model.html">1<span class="long"> · The model</span></a><a href="2-hcmc.html" aria-current="page">2<span class="long"> · Ho Chi Minh City</span></a><a href="3-commuting.html">3<span class="long"> · Commuting cost</span></a><a href="4-neighbours.html">4<span class="long"> · Neighbours</span></a><a href="5-urbanisation.html">5<span class="long"> · Urbanisation</span></a></nav>
+  <div class="lang"><span>EN</span><a href="../vi/2-hcmc.html" hreflang="vi">VI</a></div>
+</div></header>
+
+<div class="page"><div class="layout">
+<aside class="toc"><nav aria-label="On this page"></nav></aside>
+<main class="main">
+
+<header class="lesson-head">
+  <p class="lesson-no">Lesson 2</p>
+  <h1>Testing the model in Ho Chi Minh City</h1>
+  <p class="standfirst">Lesson 1 predicts that land prices and population density fall with distance from the centre. This lesson measures both gradients for Ho Chi Minh City, locates the edge of the city with population data rather than with its administrative boundary, compares the density gradient with 192 cities, and identifies where the city departs from the model.</p>
+  <p class="meta">Data: the Ho Chi Minh City land price table applied from 1 January 2026; GHS-POP 2020 and WorldPop 2020 population grids; the GHSL Urban Centre Database, 1975–2030. Numbers in the text are produced by <code>kich_ban/l2_tphcm.mjs</code>; quotations are checked against the source PDFs by <code>kich_ban/trich_dan.mjs</code>.</p>
+</header>
+
+<section class="objectives">
+  <h2>Learning objectives</h2>
+  <p>After this lesson you should be able to:</p>
+  <ol>
+    <li>estimate a price or density gradient with a semi-logarithmic regression, and interpret its coefficient;</li>
+    <li>explain why an administratively set land price is weak evidence about a market bid-rent curve;</li>
+    <li>assess how choices of measurement change an estimated gradient;</li>
+    <li>distinguish the administrative boundary of a city from its urban extent measured with gridded population data, and relate both to the edge of the city in the model;</li>
+    <li>compare Ho Chi Minh City with other cities, and identify the differences in measurement that limit the comparison.</li>
+  </ol>
+</section>
+
+<h2 id="s1"><span class="sec">2.1</span>Measuring a gradient</h2>
+<p>The model predicts the direction of the gradients but not their functional form. Empirical studies usually summarise a gradient with a semi-logarithmic regression, a form that goes back to Clark (1951):</p>
+<div class="eq"><div>\[ \ln y_i = a + b\,x_i + \varepsilon_i \]</div><span class="eq-no">(2.1)</span></div>
+<p>Here \(y_i\) is the price or density of observation \(i\), \(x_i\) its distance in kilometres from the centre, and \(b\) the gradient. One kilometre farther out, \(y\) is multiplied by \(e^{b}\), a change of \(100\,(e^{b}-1)\) percent; for small values of \(b\) this is close to \(100\,b\) percent.</p>
+<aside class="note"><b>Log points.</b> A coefficient of \(b = -0.08\) is a fall of 8 log points per km, or \(100(e^{-0.08}-1) = -7.7\) percent.</aside>
+<p>Three choices must be made before equation (2.1) can be estimated: the location of the centre, the variable that is measured, and the observations that enter the regression. This lesson places the centre at Ben Thanh station on Metro Line 1, in the historic core of the city, and discusses the other two choices in each section.</p>
+
+<h2 id="s2"><span class="sec">2.2</span>Land prices</h2>
+<p>Ho Chi Minh City sets a land price for each street segment in a land price table. The table applied from 1 January 2026 contains <span data-num="l2_tphcm.gia.soDoan" data-fmt="0"></span> street segments. Map 2.1 shows, for each of the <span data-num="l2_tphcm.gia.soPhuong" data-fmt="0"></span> wards and communes that can be mapped, the median price of residential land across its segments.</p>
+
+<figure class="fig wide" id="map-2-1">
+  <figcaption class="fig-head"><span class="fig-label">Map 2.1</span>Residential land price set by the city, by ward, 2026</figcaption>
+  <p class="fig-sub">Median price across the street segments of each ward, thousand VND per m²</p>
+  <div class="fig-body"><div class="map" id="m-2-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> Ho Chi Minh City People’s Council, Resolution 87/2025/NQ-HĐND (land price table from 1 January 2026); ward boundaries © OpenStreetMap contributors (ODbL); base map OpenFreeMap.</p>
+    <p><b>Note:</b> dashed circles are 10, 20, 40 and 60 km from Ben Thanh; the blue outline is the urban centre of 2020 (Map 2.3). <span data-num="l2_tphcm.gia.thieuHinh" data-fmt="0"></span> commune without a boundary in OpenStreetMap is not shown; Con Dao special zone lies outside the map. The table sets prices for taxation, fees and compensation; it is not a record of market transactions.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_o osm_wards ghs_ucdb nen_ban_do" data-script="kich_ban/b1_gia_dat.mjs, kich_ban/l2_tphcm.mjs" data-note="Read every street segment and its price from the resolution, grouped the segments by ward and took the median of each ward. Every segment in the table is used, including streets that OpenStreetMap does not draw."></div>
+</figure>
+
+<figure class="fig wide" id="fig-2-1">
+  <figcaption class="fig-head"><span class="fig-label">Figure 2.1</span>Ward land price and distance from Ben Thanh</figcaption>
+  <p class="fig-sub">Median residential land price, thousand VND per m², logarithmic scale</p>
+  <div class="fig-body"><div id="c-2-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> as Map 2.1; regression by <code>kich_ban/l2_tphcm.mjs</code>.</p>
+    <p><b>Note:</b> each dot is a ward or commune, placed at the distance from Ben Thanh to the centroid of its boundary. The fitted line is equation (2.1) estimated on wards within 40 km.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_o osm_wards" data-script="kich_ban/l2_tphcm.mjs" data-note="Measured the distance from Ben Thanh to the centroid of each ward and fitted equation (2.1) to the wards within the distance limit given in the note."></div>
+</figure>
+
+<p>Within 40 km of Ben Thanh the price falls by <span data-num="l2_tphcm.gia.k40.phanTramMoiKm" data-fmt="abs%1"></span> per kilometre (\(b =\) <span data-num="l2_tphcm.gia.k40.b" data-fmt="3"></span>, \(R^2 =\) <span data-num="l2_tphcm.gia.k40.r2" data-fmt="2"></span>, <span data-num="l2_tphcm.gia.k40.n" data-fmt="0"></span> wards). Estimated on all mapped wards except the island of Con Dao, the gradient is <span data-num="l2_tphcm.gia.k150.b" data-fmt="3"></span> and the fit is weaker (\(R^2 =\) <span data-num="l2_tphcm.gia.k150.r2" data-fmt="2"></span>), because prices stop falling beyond about 40 km. Table 2.1 shows why: several towns far from Ben Thanh have prices well above those of wards at a similar distance.</p>
+
+<figure class="fig" id="tab-2-1">
+  <figcaption class="fig-head"><span class="fig-label">Table 2.1</span>Land price in four towns compared with wards at a similar distance</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Ward</th><th class="r">Distance (km)</th><th class="r">Price</th><th class="r">Median of wards within ±5 km</th><th class="r">Ratio</th></tr></thead>
+    <tbody>
+      <tr><td data-str="l2_tphcm.gia.trungTamPhu.0.en"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.0.kc" data-fmt="1"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.0.gia" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.0.trungViLang" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.0.tySo" data-fmt="x1"></td></tr>
+      <tr><td data-str="l2_tphcm.gia.trungTamPhu.2.en"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.2.kc" data-fmt="1"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.2.gia" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.2.trungViLang" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.2.tySo" data-fmt="x1"></td></tr>
+      <tr><td data-str="l2_tphcm.gia.trungTamPhu.3.en"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.3.kc" data-fmt="1"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.3.gia" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.3.trungViLang" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.3.tySo" data-fmt="x1"></td></tr>
+      <tr><td data-str="l2_tphcm.gia.trungTamPhu.1.en"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.1.kc" data-fmt="1"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.1.gia" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.1.trungViLang" data-fmt="0"></td><td class="r" data-num="l2_tphcm.gia.trungTamPhu.1.tySo" data-fmt="x1"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> as Map 2.1; <code>kich_ban/l2_tphcm.mjs</code>. Prices in thousand VND per m².</p>
+    <p><b>Note:</b> before the 2025 merger, Thu Dau Mot was the capital of Binh Duong province and Ba Ria the capital of Ba Ria–Vung Tau province. Di An is included for comparison: it lies inside the continuous urban area and its price is close to that of its neighbours. The script stops if these statements no longer match the data.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_o osm_wards" data-script="kich_ban/l2_tphcm.mjs" data-note="Compared the price of each town with the median of the other wards at a similar distance from Ben Thanh."></div>
+</figure>
+
+<p>Map 2.2 returns the prices of Figure 2.1 to the map. Each ward’s price stands as a column over the ward, on the logarithmic scale of the figure. Turning the fitted line of Figure 2.1 around Ben Thanh gives a surface on which price falls at the same rate in every direction, as the monocentric model assumes. The four steps set the table against that surface.</p>
+
+<figure class="fig wide" id="map-cone">
+  <figcaption class="fig-head"><span class="fig-label">Map 2.2</span>Land prices and the price surface of the monocentric model</figcaption>
+  <p class="fig-sub">Residential land price by ward and the fitted surface of equation (2.1), thousand VND per m²</p>
+  <div class="steps" role="group" aria-label="Steps">
+    <button type="button" data-go="0">1 · Prices by ward</button>
+    <button type="button" data-go="1">2 · The fitted surface</button>
+    <button type="button" data-go="2">3 · Above and below the surface</button>
+    <button type="button" data-go="3">4 · Farmland and the edge</button>
+    <span class="hint">← → keys · drag to move, right-drag to turn</span>
+  </div>
+  <div class="s3d-stage">
+    <div class="map" id="m-cone"></div>
+    <div class="s3d-scale" role="group" aria-label="Height scale"><span>Height</span><button type="button" data-scale="log">logarithmic</button><button type="button" data-scale="lin">ordinary</button></div>
+  </div>
+  <div class="s3d-legend ngoai" aria-live="polite"></div>
+  <div class="step-text">
+    <div data-step="0"><p><b>Prices by ward.</b> Each column stands on the centroid of a ward, and its height is the ward’s median residential price on a logarithmic scale: every tenfold rise in price adds the same height. The tallest column, <span data-str="l2_non_gia.thongKe.caoNhat.ten"></span>, reaches <span data-num="l2_non_gia.thongKe.caoNhat.o" data-fmt="0"></span> thousand VND per m². Columns are tallest in the centre, fall towards the edge of the map and rise again around the towns of Table 2.1.</p></div>
+    <div data-step="1"><p><b>The fitted surface.</b> Turned around Ben Thanh, the fitted line of Figure 2.1 becomes a surface on which price falls by <span data-num="l2_non_gia.k40.phanTramMoiKm" data-fmt="abs%1"></span> per kilometre in every direction. On a logarithmic scale the surface is a cone. It is drawn only to 40 km, the distance used in the fit; within it, <span data-num="l2_non_gia.thongKe.tren40" data-fmt="0"></span> wards stand above the surface (red) and <span data-num="l2_non_gia.thongKe.duoi40" data-fmt="0"></span> below it (blue). The rings on the surface mark the prices at which the colours on the ground change.</p></div>
+    <div data-step="2"><p><b>Above and below the surface.</b> The ground is now shaded by the ratio of each ward’s price to the price on the surface at the same distance, for wards within 40 km. Of the five wards furthest above the surface, four lie 20–40 km to the north and north-west, led by <span data-str="l2_non_gia.thongKe.cao.0.ten"></span> at <span data-num="l2_non_gia.thongKe.cao.0.heSo" data-fmt="2"></span> times the price on the surface; the fifth is <span data-str="l2_non_gia.thongKe.cao.1.ten"></span> in the centre (<span data-num="l2_non_gia.thongKe.cao.1.heSo" data-fmt="2"></span> times). The five furthest below lie 10–25 km to the north, west and south-west, down to <span data-str="l2_non_gia.thongKe.thap.0.ten"></span> (<span data-num="l2_non_gia.thongKe.thap.0.heSo" data-fmt="2"></span> times). Apart from the centre itself, the largest departures all lie 10–40 km from Ben Thanh. Section 2.6 asks whether a city with more than one centre accounts for them better.</p></div>
+    <div data-step="3"><p><b>Farmland and the edge.</b> In the model the city ends where land rent falls to agricultural rent, equation (1.5). The same table prices farmland in four zones (Table 2.2 in Section 2.3); the green discs show position 1 for annual crops, from <span data-num="l2_non_gia.thongKe.nnI" data-fmt="0"></span> thousand VND per m² in zone I to <span data-num="l2_non_gia.thongKe.nnIV" data-fmt="0"></span> in zone IV. Extended beyond the 40 km on which it was fitted, the surface falls to these prices between <span data-num="l2_non_gia.thongKe.gapI" data-fmt="1"></span> and <span data-num="l2_non_gia.thongKe.gapIV" data-fmt="1"></span> km from Ben Thanh (green band). The extension is not an estimate, and the residential prices of the table do not follow it: as Section 2.3 shows, they never fall to the price of farmland.</p></div>
+  </div>
+  <div class="fig-foot">
+    <p><b>Source:</b> as Map 2.1 and Figure 2.1; farmland prices as Table 2.2; urban centre as Map 2.3; base map OpenFreeMap, © OpenStreetMap contributors.</p>
+    <p><b>Note:</b> the surface is equation (2.1) fitted to the <span data-num="l2_non_gia.thongKe.n40" data-fmt="0"></span> wards within 40 km and turned through a full circle, although part of that circle is river or sea. Both prices are set by the city, not observed in the market. Switch the height to the ordinary scale to see the surface as the curved tent of Figure 1.2: on it, the price 10 km from Ben Thanh is <span data-num="l2_non_gia.thongKe.con10" data-fmt="%0"></span> of the price at the centre.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_o gia_dat_nn osm_wards ghs_ucdb nen_ban_do" data-script="kich_ban/l2_tphcm.mjs, kich_ban/l2_nong_nghiep.mjs, kich_ban/l2_non_gia.mjs" data-note="Turned the fitted line of Figure 2.1 around Ben Thanh and compared the price of each ward with the surface at the ward’s distance. The script stops if the statements in the step text no longer match the data."></div>
+</figure>
+
+
+<p>How far do these prices tell us about the bid-rent curve of Lesson 1? The land price table is set by the city government. The World Bank’s <i>Vietnam Urbanization Review</i> describes the system as follows:</p>
+<blockquote data-quote="trich_dan.vur.haiGia" data-who="World Bank (2011), Box 3.3"></blockquote>
+<p>The table therefore shows how the city government values locations, not what buyers and sellers pay. That the table falls with distance is consistent with the model, but it is not a test of it: a test requires market prices by location, which this course has not been able to obtain for the whole city. There is a second reason for care. By Section 1.4, the price of <i>land</i> should fall faster than the price of <i>floor space</i>, because buildings are also shorter farther out. A land price gradient cannot be compared directly with a gradient in dwelling rents, such as the one reported for 191 cities by Liotta, Viguié and Lepetit (2022):</p>
+<blockquote data-quote="trich_dan.liotta.rent" data-who="Liotta, Viguié and Lepetit (2022)"></blockquote>
+
+<h2 id="edge"><span class="sec">2.3</span>Where does Ho Chi Minh City end?</h2>
+<p>Equation (1.5) closes the model of Lesson 1: the city ends at the distance \(\bar{x}\) where land rent falls to the rent that land earns in agriculture. The edge is an outcome of the land market. Nothing in the model makes it coincide with the boundary that the law draws around a city, and a gradient measured inside that boundary may include land beyond \(\bar{x}\) and leave out land within it.</p>
+<p>How, then, should a city be drawn from data? Researchers take two broad approaches, which de Bellefon, Combes, Duranton, Gobillon and Gorin describe as follows:</p>
+<blockquote data-quote="trich_dan.bellefon.haiHo" data-who="de Bellefon, Combes, Duranton, Gobillon and Gorin (2019), NBER Working Paper 26482"></blockquote>
+<p>The most widely used morphological definition is the <i>urban centre</i> of the Degree of Urbanisation, endorsed by the UN Statistical Commission in 2020 for international comparisons and applied to every city in the world by the Global Human Settlement Layer (GHSL) of the European Commission:</p>
+<blockquote data-quote="trich_dan.ucdb.dinhNghia" data-who="European Commission, Joint Research Centre (2024), Stats in the City – the GHSL Urban Centre Database 2025"></blockquote>
+<p>The definition counts residents, not buildings, and its authors chose population on purpose:</p>
+<blockquote data-quote="trich_dan.degurba.theoThoiGian" data-who="European Commission, FAO, UN-Habitat, ILO, OECD and World Bank (2021), Applying the Degree of Urbanisation"></blockquote>
+<p>Population density alone, however, does not locate the edge of the model’s city. In Lesson 1 the city ends where land stops being used for housing, and every household in it commutes to the centre. Map 2.3 therefore draws Ho Chi Minh City in three ways at the same scale: by population density, by built-up land seen from satellites, and by commuting. Scroll through the eight steps, or use the buttons or the ← and → keys.</p>
+
+<figure class="fig wide" id="map-2-2">
+  <figcaption class="fig-head"><span class="fig-label">Map 2.3</span>Three ways of drawing Ho Chi Minh City</figcaption>
+  <p class="fig-sub">Administrative boundary; urban area by population density, built-up land and commuting; growth 1985–2015; land prices</p>
+  <div class="steps" role="group" aria-label="Steps">
+    <button type="button" data-go="0">1 · The legal boundary</button>
+    <button type="button" data-go="1">2 · Where people live</button>
+    <button type="button" data-go="2">3 · Edge by density</button>
+    <button type="button" data-go="3">4 · Edge by buildings</button>
+    <button type="button" data-go="4">5 · Edge by commuting</button>
+    <button type="button" data-go="5">6 · Growth</button>
+    <button type="button" data-go="6">7 · Density as height</button>
+    <button type="button" data-go="7">8 · Land prices</button>
+    <span class="hint">scroll, or ← →</span>
+  </div>
+  <div class="sc2">
+    <div class="sc2-stage">
+      <div class="map" id="m-2-2"></div>
+      <div class="sc2-year" hidden></div>
+      <div class="sc2-legend"></div>
+    </div>
+    <div class="sc2-cards">
+      <section class="sc2-card" id="card-2-2-1">
+        <h4><span>1</span>The legal boundary</h4>
+        <p>The black line is the administrative boundary of Ho Chi Minh City after the merger of 1 July 2025, which joined the former provinces of Binh Duong and Ba Ria–Vung Tau to the city. It encloses <span data-num="l2_vung_do_thi.hanhChinh.dienTichChinhThuc" data-fmt="2"></span> km².</p>
+        <p>The line marks where the authority of the city government ends. It was not drawn by the land market, so it is not \(\bar{x}\).</p>
+      </section>
+      <section class="sc2-card" id="card-2-2-2">
+        <h4><span>2</span>Where people live</h4>
+        <p>Each cell of about 100 m is coloured by its estimated number of residents per km² in 2020. The grid ignores the boundary. Dense settlement continues across the line to the north-east, into Bien Hoa in Dong Nai province, while much of the land inside the line, such as the mangrove forest of Can Gio in the south, has few residents.</p>
+        <p>Two peaks stand out away from Ben Thanh. Near Thu Dau Mot the densest 500 m cell has <span data-num="l2_luoi_dan_so.dinh.0.dinh" data-fmt="0"></span> residents per km², against a median of <span data-num="l2_luoi_dan_so.dinh.0.trungViVanh" data-fmt="0"></span> for cells at the same distance from Ben Thanh; near Bien Hoa, <span data-num="l2_luoi_dan_so.dinh.1.dinh" data-fmt="0"></span> against <span data-num="l2_luoi_dan_so.dinh.1.trungViVanh" data-fmt="0"></span>.</p>
+      </section>
+      <section class="sc2-card" id="card-2-2-3">
+        <h4><span>3</span>Edge 1: population density</h4>
+        <p>The blue outline is the GHSL urban centre of 2020: the 1 km cells with at least <span data-num="l2_vung_do_thi.dinhNghia.matDo" data-fmt="0"></span> residents per km², joined into one cluster of at least <span data-num="l2_vung_do_thi.dinhNghia.dan" data-fmt="0"></span> people. It covered <span data-num="l2_vung_do_thi.ttdt.moc.9.dienTich" data-fmt="0"></span> km² and held <span data-num="l2_vung_do_thi.ttdt.moc.9.dan" data-fmt="M1"></span> million people.</p>
+        <p><span data-num="l2_vung_do_thi.giao.ucNgoaiHC" data-fmt="0"></span> km² of it, <span data-num="l2_vung_do_thi.giao.tyLeUcNgoaiHC" data-fmt="%0"></span>, lies outside the administrative boundary; only <span data-num="l2_vung_do_thi.giao.tyLeHcTrongUC" data-fmt="%0"></span> of the administrative area lies inside it.</p>
+        <p>The dashed circle has the same area, a radius of <span data-num="l2_vung_do_thi.ttdt.moc.9.banKinh" data-fmt="1"></span> km: the city as Lesson 1 would draw it. Along the section of Figure 2.2 the urban centre extends <span data-num="l2_vung_do_thi.matCatRa.bac" data-fmt="0"></span> km north of Ben Thanh but only <span data-num="l2_vung_do_thi.matCatRa.nam" data-fmt="abs0"></span> km south.</p>
+      </section>
+      <section class="sc2-card" id="card-2-2-4">
+        <h4><span>4</span>Edge 2: built-up land</h4>
+        <p>Each dark cell, about 90 m across, was at least half built up in 2015 according to the World Settlement Footprint, which reads Landsat satellite images. It records buildings and paved land, not residents.</p>
+        <p>Only <span data-num="l2_ve_tinh.thongKe.tyLeXayUC2020" data-fmt="%0"></span> of the land inside the urban centre was built up. The rest has no buildings, such as rivers and the runways of Tan Son Nhat airport: the urban centre includes it because the outline is drawn on 1 km cells and its gaps are filled. Outside the urban centre, another <span data-num="l2_ve_tinh.thongKe.xayNgoaiUC_trongFUA_2015" data-fmt="0"></span> km² was built up within the functional urban area of step 5.</p>
+      </section>
+      <section class="sc2-card" id="card-2-2-5">
+        <h4><span>5</span>Edge 3: commuting</h4>
+        <p>The purple outline is the functional urban area of 2015: the city together with its commuting zone, the surrounding places from which at least <span data-num="l2_vung_do_thi.diLam" data-fmt="%0"></span> of employed residents commute to it. In concept it is the closest of the three to the city of the model, in which every household commutes to the centre.</p>
+        <p>It covered <span data-num="l2_vung_do_thi.fua.dienTich" data-fmt="0"></span> km² and <span data-num="l2_vung_do_thi.fua.dan" data-fmt="M1"></span> million people, <span data-num="l2_vung_do_thi.fua.danVungDiLam" data-fmt="M1"></span> million of them in the commuting zone; <span data-num="l2_vung_do_thi.fua.ngoaiHC" data-fmt="0"></span> km² of it lies outside today’s administrative boundary.</p>
+        <p>No commuting survey of Ho Chi Minh City was used: the GHSL predicts the commuting zone from travel time and population, learning from countries that do have commuting data.</p>
+      </section>
+      <section class="sc2-card" id="card-2-2-6">
+        <h4><span>6</span>Growth seen from satellites, 1985–2015</h4>
+        <p>The colours show when each cell became built up. Within the functional urban area, built-up land grew from <span data-num="l2_ve_tinh.km2TheoNam.1985" data-fmt="0"></span> km² in 1985 to <span data-num="l2_ve_tinh.km2TheoNam.2015" data-fmt="0"></span> km² in 2015, <span data-num="l2_ve_tinh.thongKe.heSoTang" data-fmt="x1"></span> as much.</p>
+        <div id="c-2-2b"></div>
+        <p>The red outline is the GHSL urban centre of 1990, a year observed from satellites. It had two parts: Ho Chi Minh City, and Bien Hoa (<span data-num="l2_vung_do_thi.manhRoi.dienTich" data-fmt="0"></span> km²), then a separate town that joined the main part in <span data-num="l2_vung_do_thi.manhRoi.namNhap" data-fmt="y"></span>. Only <span data-num="l2_ve_tinh.thongKe.tyLeXayUC1990" data-fmt="%0"></span> of the land inside the 1990 outline was built up that year.</p>
+        <p><button class="btn" type="button" data-act="replay">Replay the years</button></p>
+      </section>
+      <section class="sc2-card" id="card-2-2-7">
+        <h4><span>7</span>Density as height</h4>
+        <p>The population grid of step 2, summed into 500 m cells, with the height of each column proportional to its density (scale in the legend). The tallest column has <span data-num="l2_luoi_dan_so.luoi500.toiDa" data-fmt="0"></span> residents per km².</p>
+        <p>The surface is not the single cone of Lesson 1. It falls away from the centre and rises again at Thu Dau Mot and Bien Hoa. Drag with the right mouse button, or with two fingers, to turn the view.</p>
+      </section>
+      <section class="sc2-card" id="card-2-2-8">
+        <h4><span>8</span>Land prices and the urban centre</h4>
+        <p>The land price table of Section 2.2 covers only the administrative city, so Bien Hoa has no price. The median ward whose centre lies inside the 2020 urban centre is priced at <span data-num="l2_vung_do_thi.gia.trong.trungVi" data-fmt="0"></span> thousand VND per m² (<span data-num="l2_vung_do_thi.gia.trong.n" data-fmt="0"></span> wards); the median ward or commune outside it at <span data-num="l2_vung_do_thi.gia.ngoai.trungVi" data-fmt="0"></span> (<span data-num="l2_vung_do_thi.gia.ngoai.n" data-fmt="0"></span>); the ratio is <span data-num="l2_vung_do_thi.gia.tySo" data-fmt="x0"></span>.</p>
+        <p>A price table and a population grid, made independently, separate urban from rural land in a similar place, and neither follows the administrative boundary.</p>
+      </section>
+    </div>
+  </div>
+  <div class="fig-foot">
+    <p><b>Source:</b> urban centre: GHSL Urban Centre Database R2024A; population: GHS-POP R2023A, 2020; functional urban area: GHS-FUA R2019A (all European Commission, Joint Research Centre; the last with the OECD; CC BY 4.0). Built-up land: World Settlement Footprint Evolution v1, © 2024 DLR (CC BY 4.0). Administrative boundary: the <span data-num="l2_tphcm.gia.soPhuong" data-fmt="0"></span> ward and commune boundaries of Map 2.1 joined together, © OpenStreetMap contributors (ODbL). Land prices: as Map 2.1. Base map: OpenFreeMap.</p>
+    <p><b>Note:</b> Con Dao special zone lies outside the map. A built-up cell groups three by three Landsat pixels and counts when at least five of the nine are built up; land built up before 1985 is shown as 1985. GHSL outlines exist for every fifth year, but only 1975, 1990 and 2000 among them are observed years; the others are not drawn. Wards are placed inside or outside the urban centre by a point inside each ward boundary. Prepared by <code>kich_ban/l2_vung_do_thi.py</code>, <code>kich_ban/l2_luoi_dan_so.mjs</code> and <code>kich_ban/l2_ve_tinh.mjs</code>; each stops without writing its output if a statement on this map no longer matches the data.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_ucdb ghs_pop wsf_evolution ghs_fua osm_wards gia_dat_o nen_ban_do" data-script="kich_ban/l2_vung_do_thi.py, kich_ban/l2_luoi_dan_so.mjs, kich_ban/l2_ve_tinh.mjs" data-note="Joined the ward boundaries into one administrative outline; took the outlines, areas and populations of urban centre 5239 and of the functional urban area; grouped Landsat pixels into cells of about 90 m and recorded the year each cell became built up; measured how the outlines and the built-up land overlap."></div>
+</figure>
+
+<h3>Which line is the edge?</h3>
+<p>None of the three lines is \(\bar{x}\) exactly, and each answers a different question. The urban centre is a statistical convention designed to compare cities everywhere. Built-up land comes closest to the land use that defines the edge in the model. The functional urban area comes closest to its commuting households, but is itself modelled. A population grid has a further limit near the centre:</p>
+<blockquote data-quote="trich_dan.bellefon.cbd" data-who="de Bellefon, Combes, Duranton, Gobillon and Gorin (2019)"></blockquote>
+<p>Series over time need the same care. The GHSL publishes an outline for every fifth year, but most of those years were not observed:</p>
+<blockquote data-quote="trich_dan.ghsldp.quanSat" data-who="European Commission (2024), GHSL Data Package 2023"></blockquote>
+<blockquote data-quote="trich_dan.ghsldp.chiGiam" data-who="European Commission (2024), GHSL Data Package 2023"></blockquote>
+<p>A series built this way will always show a city that grew smoothly outward. The satellite series of step 6 has a similar limit, since it too works back from the map of 2015 and cannot show land that was built on and later cleared, but the built-up land of each year is read from images of that year. Where the rest of this lesson needs a single outline, it uses the urban centre of 2020, which reaches <span data-num="l2_vung_do_thi.giao.kcXaNhat" data-fmt="0"></span> km from Ben Thanh at its farthest point, slightly beyond the 40 km circle used for density in Section 2.4.</p>
+
+<h3>The edge in land prices</h3>
+<p>The land price table also prices agricultural land, so the condition \(r(\bar{x}) = r_A\) can be examined from prices as well. The regulation attached to Resolution 87/2025 assigns each of the city’s <span data-num="l2_nong_nghiep.tongDonVi" data-fmt="0"></span> wards, communes and special zone to one of four agricultural zones (Article 3), and prices agricultural land by zone and by position (Article 5). A plot is in position 1 if it lies within 200 m of a road named in the table, which makes position 1 comparable with residential prices, which are also set for plots on named roads. Table 2.2 gives the prices for annual crops, a category that includes rice.</p>
+
+<figure class="fig" id="tab-2-2">
+  <figcaption class="fig-head"><span class="fig-label">Table 2.2</span>Price of agricultural land for annual crops, 2026</figcaption>
+  <p class="fig-sub">Thousand VND per m²</p>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Zone</th><th class="r">Wards, communes and special zone</th><th class="r">Position 1</th><th class="r">Position 2</th><th class="r">Position 3</th></tr></thead>
+    <tbody>
+      <tr><td>I</td><td class="r" data-num="l2_nong_nghiep.khuVucSoDonVi.I" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.I.0" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.I.1" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.I.2" data-fmt="0"></td></tr>
+      <tr><td>II</td><td class="r" data-num="l2_nong_nghiep.khuVucSoDonVi.II" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.II.0" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.II.1" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.II.2" data-fmt="0"></td></tr>
+      <tr><td>III</td><td class="r" data-num="l2_nong_nghiep.khuVucSoDonVi.III" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.III.0" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.III.1" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.III.2" data-fmt="0"></td></tr>
+      <tr><td>IV</td><td class="r" data-num="l2_nong_nghiep.khuVucSoDonVi.IV" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.IV.0" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.IV.1" data-fmt="0"></td><td class="r" data-num="l2_nong_nghiep.bang1.IV.2" data-fmt="0"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> Ho Chi Minh City People’s Council, Resolution 87/2025/NQ-HĐND, attached regulation, Article 3 (zones) and Article 5, Table 1; read from the text of the resolution by <code>kich_ban/l2_nong_nghiep.mjs</code>.</p>
+    <p><b>Note:</b> zone I consists of central wards; zone IV of rural communes of the former Binh Duong and Ba Ria–Vung Tau provinces and the Con Dao special zone. Land for perennial crops (Article 5, Table 2) is priced about a fifth higher. The script checks that every ward with a mapped boundary belongs to exactly one zone.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_nn" data-script="kich_ban/l2_nong_nghiep.mjs" data-note="Read the zone of every ward and commune and the twelve prices from the text of the resolution."></div>
+</figure>
+
+<p>Agricultural land prices vary little across the city: position 1 in zone I is priced at <span data-num="l2_nong_nghiep.tyNongNghiepIIV" data-fmt="x1"></span> position 1 in zone IV. Figure 2.2 sets both prices along a section through the city, with the stretch that lies inside the 2020 urban centre shaded.</p>
+
+<figure class="fig wide" id="fig-2-2">
+  <figcaption class="fig-head"><span class="fig-label">Figure 2.2</span>Residential and agricultural land prices along a section through the city</figcaption>
+  <p class="fig-sub">Thousand VND per m², logarithmic scale; distance along the section, south negative</p>
+  <div class="fig-body"><div id="c-2-2"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> residential prices as Map 2.1; agricultural prices as Table 2.2 (position 1, annual crops); urban centre as Map 2.3.</p>
+    <p><b>Note:</b> the section is the line through the centroids of Can Gio, Binh Khanh, Nha Be, Ben Thanh, Thu Dau Mot, Ben Cat and Bau Bang; it includes every ward or commune whose centroid lies within <span data-num="l2_nong_nghiep.hanhLang" data-fmt="0"></span> km of the line. The shaded band is where the line lies inside the urban centre of 2020. The fitted line is the regression of Figure 2.1, drawn only over the 40 km on which it was estimated.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_o gia_dat_nn ghs_ucdb" data-script="kich_ban/l2_nong_nghiep.mjs, kich_ban/l2_vung_do_thi.py" data-note="Placed each ward on the section by its distance along the line; measured where the line crosses the outline of the urban centre."></div>
+</figure>
+
+<p>Figure 2.2 can also be drawn on the map itself. In Map 2.4 the prices of each ward stand above its place on the section line, on the same logarithmic scale, so that the reader can see which wards the section passes through and where it crosses the outline of the urban centre.</p>
+
+<figure class="fig wide" id="map-section">
+  <figcaption class="fig-head"><span class="fig-label">Map 2.4</span>The section of Figure 2.2, raised over the city</figcaption>
+  <p class="fig-sub">Residential and agricultural land prices by ward, thousand VND per m², logarithmic scale, standing on the line from Can Gio through Ben Thanh and Thu Dau Mot to Bau Bang</p>
+  <div class="steps" role="group" aria-label="Views">
+    <button type="button" data-view="side">Side view</button>
+    <button type="button" data-view="oblique">Oblique view</button>
+    <button type="button" data-view="above">From above</button>
+    <span class="hint">drag to move · right-drag to turn</span>
+  </div>
+  <div class="s3d-stage">
+    <div class="map" id="m-section"></div>
+    <div class="s3d-legend">
+      <div class="row"><svg width="14" height="12"><circle cx="7" cy="6" r="5" fill="#BE792B"/></svg><span>residential land, median of the ward</span></div>
+      <div class="row"><svg width="14" height="12"><circle cx="7" cy="6" r="4" fill="#27795A"/></svg><span>farmland for annual crops, position 1</span></div>
+      <div class="row"><svg width="28" height="12"><line x1="0" x2="28" y1="6" y2="6" stroke="#111" stroke-width="2.5" stroke-dasharray="6 4"/></svg><span>fitted line of Figure 2.1, within 40 km</span></div>
+      <div class="row"><svg width="28" height="12"><rect width="28" height="12" fill="#0B3C8C" fill-opacity=".15"/></svg><span>where the line lies inside the urban centre of 2020</span></div>
+      <div class="h">Each horizontal line marks a price ten times the one below it. On the ground, wards on the section are shaded by residential price as in Map 2.1.</div>
+    </div>
+  </div>
+  <div class="fig-foot">
+    <p><b>Source:</b> as Figure 2.2; urban centre as Map 2.3; base map OpenFreeMap, © OpenStreetMap contributors.</p>
+    <p><b>Note:</b> each ward is placed at the point of the section line nearest to the centroid of its boundary; the line passes through the centroids of Can Gio, Binh Khanh, Nha Be, Ben Thanh station, Thu Dau Mot, Ben Cat and Bau Bang.</p>
+  </div>
+  <div class="about-data" data-sources="gia_dat_o gia_dat_nn ghs_ucdb osm_wards nen_ban_do" data-script="kich_ban/l2_nong_nghiep.mjs, kich_ban/l2_vung_do_thi.py" data-note="Placed each ward on the section line and raised its two prices on a logarithmic scale; drew the band where the line crosses the outline of the urban centre."></div>
+</figure>
+
+
+<p>Nowhere in the city does the residential price fall to the price of agricultural land: the lowest ratio of the two, in Chau Duc commune, is <span data-num="l2_nong_nghiep.tySoMin.tySo" data-fmt="x1"></span>. The price table therefore does not locate \(\bar{x}\) by itself; the population grid of Map 2.3 does so more directly.</p>
+<div class="interp"><span class="label">Interpretation — not tested in this lesson</span>Two features of the table can keep the ratio above 1 even in rural communes. Residential prices are set only for plots on named roads, where some housing and services exist almost everywhere. And agricultural prices are administered, not market rents: twelve prices for the whole city cannot record how much a farmer would actually pay for land at a given place.</div>
+
+<h2 id="s3"><span class="sec">2.4</span>Population density</h2>
+<p>Population density does not suffer from the problem of administered prices, and it can be measured on a regular grid. GHS-POP, produced by the European Commission’s Joint Research Centre, estimates the population of each 100 m cell. Here the cells are added up into a grid of 1 km cells within 40 km of Ben Thanh, and density is population divided by the area of each cell (Map 2.5, which also shows the outline of the 2020 urban centre from Map 2.3). In total, the circle contains <span data-num="l2_tphcm.matDo.tongDan" data-fmt="0"></span> people in 2020.</p>
+
+<figure class="fig wide" id="map-2-3">
+  <figcaption class="fig-head"><span class="fig-label">Map 2.5</span>Population density on a 1 km grid, 2020</figcaption>
+  <p class="fig-sub">Persons per km², cells within 40 km of Ben Thanh</p>
+  <div class="fig-body"><div class="map" id="m-2-3"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> European Commission, Joint Research Centre, GHS-POP R2023A, epoch 2020 (CC BY 4.0); aggregation by <code>kich_ban/l2_tphcm.mjs</code>; base map OpenFreeMap, © OpenStreetMap contributors.</p>
+    <p><b>Note:</b> GHS-POP distributes census population to cells using satellite measurements of built-up area; it is a modelled estimate, not a count. Cells with fewer than 50 persons per km² are not drawn. Dashed circles are 10, 20, 30 and 40 km from Ben Thanh. The blue outline is the urban centre of 2020 (Map 2.3).</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop ghs_ucdb nen_ban_do" data-script="kich_ban/l2_tphcm.mjs" data-note="Added up the population of the 100 m cells into 1 km cells around Ben Thanh and divided by the area of each cell."></div>
+</figure>
+
+<figure class="fig wide" id="fig-2-3">
+  <figcaption class="fig-head"><span class="fig-label">Figure 2.3</span>Population density and distance from Ben Thanh</figcaption>
+  <p class="fig-sub">Persons per km², logarithmic scale</p>
+  <div class="fig-body"><div id="c-2-3"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> as Map 2.5.</p>
+    <p><b>Note:</b> dots are 1 km cells with at least 300 persons per km². The solid line is the density of each 1 km ring computed on the same cells: their total population divided by their total area. The fitted line is equation (2.1) estimated on the dots.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop" data-script="kich_ban/l2_tphcm.mjs" data-note="Fitted equation (2.1) to the 1 km cells above the threshold of Table 2.3, and computed the average density of each ring."></div>
+</figure>
+
+<p>Density in the first kilometre around Ben Thanh is <span data-num="l2_tphcm.matDo.vanh.0.1" data-fmt="0"></span> persons per km². It remains above <span data-num="l2_tphcm.matDo.vanh.4.1" data-fmt="0"></span> up to 5 km, falls to <span data-num="l2_tphcm.matDo.vanh.9.1" data-fmt="0"></span> at 9–10 km and to <span data-num="l2_tphcm.matDo.vanh.19.1" data-fmt="0"></span> at 19–20 km. Beyond 20 km the ring averages stop falling for several kilometres; Thu Dau Mot lies at this distance (Map 2.5).</p>
+<p>Estimated on cells with at least 300 persons per km², the gradient is \(b =\) <span data-num="l2_tphcm.matDo.khop.b" data-fmt="3"></span>: density falls by <span data-num="l2_tphcm.matDo.khop.phanTram" data-fmt="abs%1"></span> per kilometre (\(R^2 =\) <span data-num="l2_tphcm.matDo.khop.r2" data-fmt="2"></span>, <span data-num="l2_tphcm.matDo.khop.n" data-fmt="0"></span> cells).</p>
+<aside class="note" data-so-tay="ngưỡng phân tích, cũng nằm trong dữ liệu"><b>Why 300 and 1,500?</b> The Degree of Urbanisation classifies grid cells with at least 300 persons per km² as potentially part of an urban cluster, and at least 1,500 as potentially part of an urban centre (Dijkstra et al., 2021).</aside>
+<p>The threshold of 300 persons per km² is a choice. Table 2.3 repeats the regression with two other thresholds and with a second population grid, WorldPop 2020.</p>
+
+<figure class="fig" id="tab-2-3">
+  <figcaption class="fig-head"><span class="fig-label">Table 2.3</span>The density gradient under six choices of measurement</figcaption>
+  <p class="fig-sub">Regression of ln density on distance, 1 km cells within 40 km of Ben Thanh</p>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Population grid</th><th>Cells included</th><th class="r">\(b\)</th><th class="r">% per km</th><th class="r">\(R^2\)</th><th class="r">Cells</th></tr></thead>
+    <tbody>
+      <tr><td>GHS-POP 2020</td><td>all with population</td><td class="r" data-num="l2_tphcm.matDo.doNhay.0.b" data-fmt="3"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.0.phanTram" data-fmt="%1"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.0.r2" data-fmt="2"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.0.n" data-fmt="0"></td></tr>
+      <tr class="hl"><td>GHS-POP 2020</td><td>≥ <span data-num="l2_tphcm.matDo.doNhay.1.nguong" data-fmt="0"></span> persons/km²</td><td class="r" data-num="l2_tphcm.matDo.doNhay.1.b" data-fmt="3"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.1.phanTram" data-fmt="%1"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.1.r2" data-fmt="2"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.1.n" data-fmt="0"></td></tr>
+      <tr><td>GHS-POP 2020</td><td>≥ <span data-num="l2_tphcm.matDo.doNhay.2.nguong" data-fmt="0"></span> persons/km²</td><td class="r" data-num="l2_tphcm.matDo.doNhay.2.b" data-fmt="3"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.2.phanTram" data-fmt="%1"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.2.r2" data-fmt="2"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.2.n" data-fmt="0"></td></tr>
+      <tr><td>WorldPop 2020</td><td>all with population</td><td class="r" data-num="l2_tphcm.matDo.doNhay.3.b" data-fmt="3"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.3.phanTram" data-fmt="%1"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.3.r2" data-fmt="2"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.3.n" data-fmt="0"></td></tr>
+      <tr><td>WorldPop 2020</td><td>≥ <span data-num="l2_tphcm.matDo.doNhay.4.nguong" data-fmt="0"></span> persons/km²</td><td class="r" data-num="l2_tphcm.matDo.doNhay.4.b" data-fmt="3"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.4.phanTram" data-fmt="%1"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.4.r2" data-fmt="2"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.4.n" data-fmt="0"></td></tr>
+      <tr><td>WorldPop 2020</td><td>≥ <span data-num="l2_tphcm.matDo.doNhay.5.nguong" data-fmt="0"></span> persons/km²</td><td class="r" data-num="l2_tphcm.matDo.doNhay.5.b" data-fmt="3"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.5.phanTram" data-fmt="%1"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.5.r2" data-fmt="2"></td><td class="r" data-num="l2_tphcm.matDo.doNhay.5.n" data-fmt="0"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> GHS-POP R2023A (European Commission, JRC); WorldPop (2018), unconstrained 100 m grid for 2020; <code>kich_ban/l2_tphcm.mjs</code>.</p>
+    <p><b>Note:</b> the shaded row is the estimate used in the text. “% per km” is \(100(e^{b}-1)\).</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop worldpop" data-script="kich_ban/l2_tphcm.mjs" data-note="Repeated the same regression with two population grids and three thresholds. The script stops if the two grids disagree by more than a small margin at the same threshold."></div>
+</figure>
+
+<p>The two grids give similar results for the same threshold. The threshold matters more: including sparsely populated cells at the edge of the circle steepens the gradient, and keeping only dense cells flattens it. Across the six rows, \(b\) ranges from <span data-num="l2_tphcm.matDo.bMin" data-fmt="3"></span> to <span data-num="l2_tphcm.matDo.bMax" data-fmt="3"></span>.</p>
+
+<h2 id="s4"><span class="sec">2.5</span>Comparison with 192 cities</h2>
+<p>Liotta, Viguié and Lepetit (2022) assembled grids of population, rents and travel times for 192 cities on five continents, and estimated equation (2.1) for each of them.</p>
+<blockquote data-quote="trich_dan.liotta.gradients" data-who="Liotta, Viguié and Lepetit (2022)"></blockquote>
+<p>Figure 2.4 places Ho Chi Minh City in the distribution of their density gradients. The city is not in their sample, so its estimate comes from this lesson.</p>
+
+<figure class="fig wide" id="fig-2-4">
+  <figcaption class="fig-head"><span class="fig-label">Figure 2.4</span>Density gradients of 192 cities and of Ho Chi Minh City</figcaption>
+  <p class="fig-sub">Coefficient \(b\) from the regression of ln density on distance to the city centre, per km</p>
+  <div class="fig-body"><div id="c-2-4"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> 192 cities: Liotta, Viguié and Lepetit (2022), Annex B, Figure B.6 (minimum, quartiles, maximum and mean, p. <span data-num="trich_dan.phanBoLiotta.trang" data-fmt="0"></span>; CC BY 4.0). Ho Chi Minh City: Table 2.3.</p>
+    <p><b>Note:</b> box: first to third quartile; thick line: median; whiskers: minimum and maximum; open circle: mean. For Ho Chi Minh City, the dot is the estimate used in the text and the bar spans the six estimates of Table 2.3.</p>
+  </div>
+  <div class="about-data" data-sources="liotta_2022 ghs_pop" data-script="kich_ban/trich_dan.mjs, kich_ban/l2_tphcm.mjs" data-note="Read the minimum, quartiles and maximum of their Figure B.6 from the PDF and checked the mean against their text; the Ho Chi Minh City estimate is the one in Table 2.3."></div>
+</figure>
+
+<p>The estimate of <span data-num="l2_tphcm.matDo.khop.b" data-fmt="3"></span> is close to the median of <span data-num="trich_dan.phanBoLiotta.trungVi" data-fmt="3"></span>. The comparison needs three qualifications. First, Liotta, Viguié and Lepetit locate the centre of each city with a rule of their own:</p>
+<blockquote data-quote="trich_dan.liotta.centre" data-who="Liotta, Viguié and Lepetit (2022)"></blockquote>
+<p>Second, they use an earlier version of the population grid:</p>
+<blockquote data-quote="trich_dan.liotta.ghsl" data-who="Liotta, Viguié and Lepetit (2022)"></blockquote>
+<p>Third, and most important, Table 2.3 shows that choices about which cells to include move the estimate for Ho Chi Minh City from below the first quartile of the 192 cities (<span data-num="trich_dan.phanBoLiotta.q1" data-fmt="3"></span>) to above the third (<span data-num="trich_dan.phanBoLiotta.q3" data-fmt="3"></span>). A statement such as “Ho Chi Minh City has a typical density gradient” is only as good as the agreement between the two methods.</p>
+
+<h2 id="s5"><span class="sec">2.6</span>Where the model does not fit</h2>
+<p>Two features of Ho Chi Minh City are not described by the monocentric model of Lesson 1.</p>
+<h3>A flat centre</h3>
+<p>The model predicts that density is highest at the CBD and falls most steeply near it (Figure 1.1). In Figure 2.3 density changes little over the first 5 km. The literature reports the same pattern in other cities:</p>
+<blockquote data-quote="trich_dan.liotta.crater" data-who="Liotta, Viguié and Lepetit (2022)"></blockquote>
+<div class="interp"><span class="label">Interpretation — not tested in this lesson</span>In Ho Chi Minh City, offices, shops, public buildings and markets may occupy much of the land nearest Ben Thanh, leaving less of it for housing. The model has a single land use and cannot show this. A test would require the number of jobs in each cell, which this lesson does not use.</div>
+
+<h3>More than one centre</h3>
+<p>Beyond 20 km, density stops falling near Thu Dau Mot (Figure 2.3), and land prices in Thu Dau Mot, Ba Ria and Vung Tau are several times those of wards at the same distance from Ben Thanh (Table 2.1). The merged city of 2025 contains several centres, not one. In 2011 the World Bank described the city before the merger as follows:</p>
+<blockquote data-quote="trich_dan.vur.donTam" data-who="World Bank (2011)"></blockquote>
+<blockquote data-quote="trich_dan.vur.khongLau" data-who="World Bank (2011)"></blockquote>
+<p>Liotta, Viguié and Lepetit find that such departures flatten gradients across their whole sample:</p>
+<blockquote data-quote="trich_dan.liotta.heterogeneity" data-who="Liotta, Viguié and Lepetit (2022)"></blockquote>
+<p>Extensions of the model that relax its assumptions are the subject of Brueckner (2011), chapter 3, “Modifications of the Urban Model”.</p>
+
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 2.1</span>Interpreting a coefficient</p>
+  <p>A regression of ln density on distance gives \(b = -0.120\).</p>
+  <ol type="a">
+    <li>By what percentage does density change per kilometre?</li>
+    <li>What is the ratio of density at 15 km to density at 5 km?</li>
+  </ol>
+  <details><summary>Show answer</summary><div>(a) 100(e<sup>−0.12</sup> − 1) = −11.3 percent per km. (b) e<sup>−0.12 × 10</sup> = e<sup>−1.2</sup> ≈ 0.30: density at 15 km is about 30 percent of density at 5 km.</div></details>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 2.2</span>Set prices and market prices</p>
+  <p>Suppose that market prices near Ben Thanh are several times the prices in the land price table, while near the edge of the city the two are similar. Would the gradient of market prices be steeper or flatter than the gradient in Figure 2.1? What data would you need to check?</p>
+  <details><summary>Show answer</summary><div>Steeper: the gap between market and table prices would be largest where prices are highest, near the centre. To check, you need market transaction prices of land, with the location of each transaction.</div></details>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 2.3</span>Where does the city end?</p>
+  <p>Use Map 2.3 and Figure 2.2.</p>
+  <ol type="a">
+    <li>Name one place that is part of the city in the sense of the model but not in the administrative sense, and one place for which the reverse is true.</li>
+    <li>Along the section, the urban centre extends much farther north of Ben Thanh than south. Which assumptions of Lesson 1 does this contradict? Give two possible reasons.</li>
+    <li>In Figure 2.2, compare residential prices just inside and just outside the shaded band, at its southern end and at its northern end. Does the edge of the urban centre look like the point where \(r(\bar{x}) = r_A\)?</li>
+    <li>Would a density gradient estimated only on cells inside the administrative boundary be steeper or flatter than one estimated on a circle around Ben Thanh? Explain.</li>
+    <li>In step 6, why is the urban centre of 1990 much larger than the built-up land inside it? What does this imply if you compare the area of a city over time?</li>
+  </ol>
+  <details><summary>Show answer</summary><div>(a) Bien Hoa, in Dong Nai province, lies inside the urban centre but outside the administrative boundary; the mangroves of Can Gio and the rural communes around Bau Bang lie inside the boundary but outside the urban centre. (b) The model assumes that commuting costs are the same in every direction and that the same share of land is available for housing at every distance. To the north, main roads lower commuting costs and industrial areas in the former Binh Duong province provide jobs outside the centre; to the south, rivers and mangroves reduce the land available for housing, \(\theta\) in equation (1.6). (c) In the south, prices fall sharply between the last ward inside the band and the first commune outside it; in the north they are already close to rural levels before the band ends. In neither place does the residential price come close to the agricultural price, so the price table does not show the condition of equation (1.5). (d) Probably steeper: the boundary adds sparsely populated rural land far from Ben Thanh and removes dense cells in Bien Hoa at a similar distance. Estimating both would check this. (e) The outline joins whole 1 km cells that pass a density threshold and fills the gaps between them, so it includes unbuilt land between dense villages and along rivers; and the population in each cell is itself estimated. Areas of such outlines in different years measure the rule as much as the city, so growth is better compared with a measure observed in each year, such as built-up land.</div></details>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 2.4</span>Choosing a measure</p>
+  <p>You must report one density gradient for Ho Chi Minh City to compare it with the 192 cities in Figure 2.4. Which row of Table 2.3 would you choose, and why? How does your choice change the conclusion of Section 2.5?</p>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 2.5</span>Discussion: subcentres</p>
+  <p>Using Map 2.1, Map 2.5 and Table 2.1, describe how land prices and density would vary around a subcentre such as Thu Dau Mot if its residents worked there rather than in central Ho Chi Minh City. Which assumption of Lesson 1 would you change to model this?</p>
+</div>
+
+<h2 id="data"><span class="sec">2.7</span>Data and code</h2>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Data</th><th>Licence</th><th>Accessed</th></tr></thead>
+  <tbody id="data-rows"></tbody>
+</table></div>
+<p class="licence">Scripts: <code>kich_ban/l2_tphcm.mjs</code> (gradients, tables, map data) · <code>kich_ban/l2_vung_do_thi.py</code> (administrative boundary and urban centre) · <code>kich_ban/l2_luoi_dan_so.mjs</code> (100 m density image, 500 m columns) · <code>kich_ban/l2_ve_tinh.mjs</code> (built-up land from Landsat, 1985–2015) · <code>kich_ban/l2_nong_nghiep.mjs</code> (agricultural land prices, section) · <code>kich_ban/trich_dan.mjs</code> (quotations) · <code>kich_ban/b1_gia_dat.mjs</code> (extraction of the land price table). Each script stops without writing its output if a check fails.</p>
+
+<h2 id="refs"><span class="sec">2.8</span>References</h2>
+<ul class="references">
+  <li>Brueckner, J. K. (2011). <i>Lectures on urban economics</i>. MIT Press. Chapter 3, Modifications of the urban model.</li>
+  <li>Clark, C. (1951). Urban population densities. <i>Journal of the Royal Statistical Society, Series A, 114</i>(4), 490–496. <a href="https://doi.org/10.2307/2981088">doi:10.2307/2981088</a></li>
+  <li>Dijkstra, L., Florczyk, A. J., Freire, S., Kemper, T., Melchiorri, M., Pesaresi, M., &amp; Schiavina, M. (2021). Applying the Degree of Urbanisation to the globe: A new harmonised definition reveals a different picture of global urbanisation. <i>Journal of Urban Economics, 125</i>, 103312. <a href="https://doi.org/10.1016/j.jue.2020.103312">doi:10.1016/j.jue.2020.103312</a></li>
+  <li>European Commission, Joint Research Centre, Melchiorri, M., Mari Rivero, I., Florio, P., Schiavina, M., et al. (2024). <i>Stats in the City – the GHSL Urban Centre Database 2025</i>. Publications Office of the European Union. <a href="https://data.europa.eu/doi/10.2760/3046391">doi:10.2760/3046391</a>, CC BY 4.0.</li>
+  <li>de Bellefon, M.-P., Combes, P.-P., Duranton, G., Gobillon, L., &amp; Gorin, C. (2021). Delineating urban areas using building density. <i>Journal of Urban Economics, 125</i>. Quoted from NBER Working Paper 26482 (2019), © 2019 the authors.</li>
+  <li>European Commission (2024). <i>GHSL Data Package 2023</i>. Publications Office of the European Union. <a href="https://doi.org/10.2760/098587">doi:10.2760/098587</a>, CC BY 4.0.</li>
+  <li>European Commission, FAO, UN-Habitat, ILO, OECD &amp; World Bank (2021). <i>Applying the Degree of Urbanisation: A methodological manual to define cities, towns and rural areas for international comparisons</i>. Publications Office of the European Union. <a href="https://doi.org/10.2785/706535">doi:10.2785/706535</a></li>
+  <li>Marconcini, M., Metz-Marconcini, A., Üreyen, S., et al. (2020). Outlining where humans live, the World Settlement Footprint 2015. <i>Scientific Data, 7</i>, 242. World Settlement Footprint Evolution v1, © 2024 DLR, CC BY 4.0.</li>
+  <li>Mari Rivero, I., Melchiorri, M., Florio, P., Schiavina, M., et al. (2025). <i>GHS Urban Centre Database 2025 (GHS-UCDB R2024A)</i>, version 1.2. European Commission, Joint Research Centre. <a href="https://doi.org/10.2905/1A338BE6-7EAF-480C-9664-3A8ADE88CBCD">doi:10.2905/1A338BE6-7EAF-480C-9664-3A8ADE88CBCD</a>, CC BY 4.0.</li>
+  <li>Moreno-Monroy, A. I., Schiavina, M., &amp; Veneri, P. (2021). Metropolitan areas in the world. Delineation and population trends. <i>Journal of Urban Economics, 125</i>.</li>
+  <li>Schiavina, M., Freire, S., Carioli, A., &amp; MacManus, K. (2023). <i>GHS-POP R2023A: GHS population grid multitemporal (1975–2030)</i>. European Commission, Joint Research Centre. <a href="https://doi.org/10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE">doi:10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE</a>, CC BY 4.0.</li>
+  <li>Ho Chi Minh City People’s Council (2025). <i>Resolution 87/2025/NQ-HĐND on the land price table applied from 1 January 2026</i>.</li>
+  <li>Liotta, C., Viguié, V., &amp; Lepetit, Q. (2022). Testing the monocentric standard urban model in a global sample of cities. <i>Regional Science and Urban Economics, 97</i>, 103832. <a href="https://doi.org/10.1016/j.regsciurbeco.2022.103832">doi:10.1016/j.regsciurbeco.2022.103832</a>. Quoted from the accepted manuscript, <a href="https://arxiv.org/abs/2111.02112">arXiv:2111.02112</a>, CC BY 4.0.</li>
+  <li>World Bank (2011). <i>Vietnam urbanization review: Technical assistance report</i>. World Bank. <a href="https://openknowledge.worldbank.org/entities/publication/a2b30aef-198f-56e3-bfec-aa88c51ef67e">Open Knowledge Repository</a>, CC BY 3.0 IGO.</li>
+  <li>WorldPop (2018). <i>Global 100m population</i>. University of Southampton. <a href="https://doi.org/10.5258/SOTON/WP00645">doi:10.5258/SOTON/WP00645</a></li>
+</ul>
+
+</main>
+</div></div>
+
+<footer class="site-footer"><div class="inner">Urban Economics · The monocentric city. Teaching material for non-commercial classroom use. Text and figures are generated from the scripts in <code>kich_ban/</code>; every data source, licence and access date is listed in the data files in <code>du_lieu/</code>.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.js"></script>
+<script src="../assets/core.js"></script>
+<script src="../assets/chart.js"></script>
+<script src="../assets/map.js"></script>
+<script src="../du_lieu/trich_dan.js"></script>
+<script src="../du_lieu/l2_tphcm.js"></script>
+<script src="../du_lieu/l2_nong_nghiep.js"></script>
+<script src="../du_lieu/l2_vung_do_thi.js"></script>
+<script src="../du_lieu/l2_luoi_dan_so.js"></script>
+<script src="../du_lieu/l2_non_gia.js"></script>
+<script src="../du_lieu/anh/mat_do_2020_100m.js"></script>
+<script src="../du_lieu/l2_ve_tinh.js"></script>
+<script src="../du_lieu/anh/xay_dung_1985.js"></script>
+<script src="../du_lieu/anh/xay_dung_1990.js"></script>
+<script src="../du_lieu/anh/xay_dung_1995.js"></script>
+<script src="../du_lieu/anh/xay_dung_2000.js"></script>
+<script src="../du_lieu/anh/xay_dung_2005.js"></script>
+<script src="../du_lieu/anh/xay_dung_2010.js"></script>
+<script src="../du_lieu/anh/xay_dung_2015.js"></script>
+<script src="../du_lieu/anh/xay_dung_2015_don.js"></script>
+<script src="../assets/nguon.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js"></script>
+<script src="../assets/lop3d.js"></script>
+<script src="../assets/mat_cat_3d.js"></script>
+<script src="../assets/non_gia_3d.js"></script>
+<script src="../assets/canh_ranh.js"></script>
+<script src="../assets/lesson2.js"></script>
+</body>
+</html>

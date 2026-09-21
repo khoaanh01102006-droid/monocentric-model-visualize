@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 4 · Ho Chi Minh City among its neighbours — Urban Economics</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%230071BC' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23111'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="course" href="index.html">Urban Economics <span>· The monocentric city</span></a>
+  <nav><a href="1-model.html">1<span class="long"> · The model</span></a><a href="2-hcmc.html">2<span class="long"> · Ho Chi Minh City</span></a><a href="3-commuting.html">3<span class="long"> · Commuting cost</span></a><a href="4-neighbours.html" aria-current="page">4<span class="long"> · Neighbours</span></a><a href="5-urbanisation.html">5<span class="long"> · Urbanisation</span></a></nav>
+  <div class="lang"><span>EN</span><a href="../vi/4-neighbours.html" hreflang="vi">VI</a></div>
+</div></header>
+
+<div class="page"><div class="layout">
+<aside class="toc"><nav aria-label="On this page"></nav></aside>
+<main class="main">
+
+<header class="lesson-head">
+  <p class="lesson-no">Lesson 4</p>
+  <h1>Ho Chi Minh City among its neighbours</h1>
+  <p class="standfirst">Lessons 2 and 3 looked at one city. This lesson sets Ho Chi Minh City beside five other large cities of South-East Asia, drawn with the same definition of a city and at the same scale, so that differences in size, density and growth can be seen directly on the map. It then compares Ho Chi Minh City with Hanoi in more detail.</p>
+  <p class="meta">Data: the GHSL Urban Centre Database R2024A, the GHS-POP population grid of 2020 and the GHS-LAND land grid, published by the European Commission’s Joint Research Centre, and the World Settlement Footprint Evolution of the German Aerospace Center (DLR). Numbers in the text are produced by <code>kich_ban/l4_do_thi_chau_a.py</code> and <code>kich_ban/l4_ha_noi.py</code>.</p>
+</header>
+
+<section class="objectives">
+  <h2>Learning objectives</h2>
+  <p>After this lesson you should be able to:</p>
+  <ol>
+    <li>explain why cities can be compared only when they are measured with the same definition, and name the definition used here;</li>
+    <li>read a density map drawn at the same scale for several cities, and compare their size, density and shape;</li>
+    <li>relate the differences between cities to the comparative statics of Lesson 1, and say what such a comparison cannot show;</li>
+    <li>compare Hanoi and Ho Chi Minh City with built-up land observed from satellites and with density gradients, and explain why a gradient depends on how density is measured.</li>
+  </ol>
+</section>
+
+<h2 id="s1"><span class="sec">4.1</span>One definition for every city</h2>
+<p>The administrative boundaries of cities are drawn for government, not for comparison: some enclose farmland and forest, others stop short of the built-up area. Lesson 2 therefore measured Ho Chi Minh City with the urban centre of the Global Human Settlement Layer, which is defined by population density alone:</p>
+<blockquote data-quote="trich_dan.ucdb.dinhNghia" data-who="European Commission, Joint Research Centre (2024), Stats in the City – the GHSL Urban Centre Database 2025"></blockquote>
+<p>Because the same rule is applied to the same population grid everywhere, the urban centre of Ho Chi Minh City can be set beside that of any other city. This lesson takes five: Hanoi, and four capitals of the region that are larger or similar in size.</p>
+
+<h2 id="s2"><span class="sec">4.2</span>Six cities at the same scale</h2>
+<p>Map 4.1 shows one city at a time, always at the same ground scale; Figure 4.1 shows all six side by side. Each is drawn in a square of 90 by 90 km around the population-weighted centre of its urban centre in 2020, with population density from the GHS-POP grid and the outline of the urban centre in 1990 and 2020.</p>
+
+<figure class="fig wide" id="map-4-1">
+  <figcaption class="fig-head"><span class="fig-label">Map 4.1</span>Population density and the urban centre, six cities of South-East Asia</figcaption>
+  <p class="fig-sub">Persons per km², 2020, on a grid of 30 arc-seconds (about 1 km); every city at the same scale</p>
+  <div class="steps" role="group" aria-label="City">
+    <button type="button" data-go="0"><span data-str="l4_do_thi.thanhPho.0.ten"></span></button>
+    <button type="button" data-go="1"><span data-str="l4_do_thi.thanhPho.1.ten"></span></button>
+    <button type="button" data-go="2"><span data-str="l4_do_thi.thanhPho.2.ten"></span></button>
+    <button type="button" data-go="3"><span data-str="l4_do_thi.thanhPho.3.ten"></span></button>
+    <button type="button" data-go="4"><span data-str="l4_do_thi.thanhPho.4.ten"></span></button>
+    <button type="button" data-go="5"><span data-str="l4_do_thi.thanhPho.5.ten"></span></button>
+    <span class="hint">← → keys</span>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-4-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> European Commission, Joint Research Centre: GHS-POP R2023A (population grid, 2020) and GHS Urban Centre Database R2024A (urban centres, 1990 and 2020); base map OpenFreeMap, © OpenStreetMap contributors.</p>
+    <p><b>Note:</b> the zoom of each city is corrected for its latitude, so that one centimetre on the screen covers the same distance in every city. Dashed circles are 10, 20 and 40 km from the centre of each frame. The population of 2020 is estimated by the GHSL from census data and satellite measurements of built-up area.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop ghs_ucdb nen_ban_do" data-script="kich_ban/l4_do_thi_chau_a.py" data-note="Read the urban centre of each city in 1990 and 2020, found the population-weighted centre of the 2020 urban centre, and cut a 90 by 90 km square of the 2020 population grid around it."></div>
+</figure>
+
+<figure class="fig wide" id="fig-4-1">
+  <figcaption class="fig-head"><span class="fig-label">Figure 4.1</span>The six cities side by side</figcaption>
+  <p class="fig-sub">Each square is 90 by 90 km; persons per km², 2020; red: urban centre 2020; black dashes: urban centre 1990</p>
+  <div class="fig-body"><div class="small-multiples" id="f-4-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> as Map 4.1.</p>
+    <p><b>Note:</b> the population and area under each square are those of the urban centre in 2020, from the Urban Centre Database. The urban centres of Jakarta and Manila extend beyond their squares.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop ghs_ucdb" data-script="kich_ban/l4_do_thi_chau_a.py" data-note="Drew each city’s 90 by 90 km square of the 2020 population grid at the same size, with the outlines of its urban centre."></div>
+</figure>
+
+<figure class="fig" id="tab-4-1">
+  <figcaption class="fig-head"><span class="fig-label">Table 4.1</span>Population and area of the urban centre, 1990 and 2020</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>City</th><th class="r">Population 1990 (million)</th><th class="r">Population 2020 (million)</th><th class="r">Area 1990 (km²)</th><th class="r">Area 2020 (km²)</th><th class="r">Area 2020 ÷ 1990</th><th class="r">Persons per km², 2020</th></tr></thead>
+    <tbody>
+      <tr><td data-str="l4_do_thi.thanhPho.0.ten"></td><td class="r" data-num="l4_do_thi.thanhPho.0.thongKe.1990.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.0.thongKe.2020.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.0.thongKe.1990.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.0.thongKe.2020.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.0.tyLeDienTich" data-fmt="x2"></td><td class="r" data-num="l4_do_thi.thanhPho.0.thongKe.2020.matDo" data-fmt="0"></td></tr>
+      <tr><td data-str="l4_do_thi.thanhPho.1.ten"></td><td class="r" data-num="l4_do_thi.thanhPho.1.thongKe.1990.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.1.thongKe.2020.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.1.thongKe.1990.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.1.thongKe.2020.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.1.tyLeDienTich" data-fmt="x2"></td><td class="r" data-num="l4_do_thi.thanhPho.1.thongKe.2020.matDo" data-fmt="0"></td></tr>
+      <tr><td data-str="l4_do_thi.thanhPho.2.ten"></td><td class="r" data-num="l4_do_thi.thanhPho.2.thongKe.1990.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.2.thongKe.2020.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.2.thongKe.1990.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.2.thongKe.2020.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.2.tyLeDienTich" data-fmt="x2"></td><td class="r" data-num="l4_do_thi.thanhPho.2.thongKe.2020.matDo" data-fmt="0"></td></tr>
+      <tr><td data-str="l4_do_thi.thanhPho.3.ten"></td><td class="r" data-num="l4_do_thi.thanhPho.3.thongKe.1990.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.3.thongKe.2020.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.3.thongKe.1990.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.3.thongKe.2020.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.3.tyLeDienTich" data-fmt="x2"></td><td class="r" data-num="l4_do_thi.thanhPho.3.thongKe.2020.matDo" data-fmt="0"></td></tr>
+      <tr><td data-str="l4_do_thi.thanhPho.4.ten"></td><td class="r" data-num="l4_do_thi.thanhPho.4.thongKe.1990.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.4.thongKe.2020.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.4.thongKe.1990.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.4.thongKe.2020.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.4.tyLeDienTich" data-fmt="x2"></td><td class="r" data-num="l4_do_thi.thanhPho.4.thongKe.2020.matDo" data-fmt="0"></td></tr>
+      <tr><td data-str="l4_do_thi.thanhPho.5.ten"></td><td class="r" data-num="l4_do_thi.thanhPho.5.thongKe.1990.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.5.thongKe.2020.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.5.thongKe.1990.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.5.thongKe.2020.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.5.tyLeDienTich" data-fmt="x2"></td><td class="r" data-num="l4_do_thi.thanhPho.5.thongKe.2020.matDo" data-fmt="0"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> European Commission, Joint Research Centre, GHS Urban Centre Database R2024A.</p>
+    <p><b>Note:</b> population and area of each urban centre as delineated in each year. The script checks that the area of each outline matches the database.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_ucdb" data-script="kich_ban/l4_do_thi_chau_a.py" data-note="Read the population and area of each urban centre in 1990 and 2020 from the database."></div>
+</figure>
+
+<p>Three differences stand out. By population, Ho Chi Minh City is fourth of the six, after Jakarta, Manila and Bangkok; Hanoi is sixth. By density, the urban centre of Ho Chi Minh City is the second highest of the six, after Manila, with <span data-num="l4_do_thi.thanhPho.0.thongKe.2020.matDo" data-fmt="0"></span> persons per km². And by growth, the urban centre of Hanoi expanded fastest between 1990 and 2020, to <span data-num="l4_do_thi.thanhPho.1.tyLeDienTich" data-fmt="x2"></span> its earlier area, while those of Jakarta and Manila, already the largest in 1990, expanded least.</p>
+<div class="interp"><span class="label">Interpretation — not tested in this lesson</span>By the comparative statics of Lesson 1, a city with more people, higher incomes or cheaper commuting should cover more land. Across these six cities, the more populous urban centres are also the larger ones, but the cities differ at once in income, transport, geography and planning, so a comparison of six cases cannot separate these causes.</div>
+
+<h2 id="s3"><span class="sec">4.3</span>Hanoi and Ho Chi Minh City</h2>
+<p>Two of the six cities share a country. Hanoi and Ho Chi Minh City have grown under the same land law and the same national policies, and in both the motorcycle is the main means of transport. The World Bank’s review of urbanisation in Vietnam describes the growth of the whole country as led by these two cities:</p>
+<blockquote data-quote="trich_dan.vur.haiHeThong" data-who="World Bank (2011), Vietnam Urbanization Review"></blockquote>
+<p>This section compares their shape. Both cities are measured from their historical business centres, Hoan Kiem Lake in Hanoi and Ben Thanh in Ho Chi Minh City, rather than from the population-weighted centres of Section 4.2, because the monocentric model measures every distance from the centre of business.</p>
+
+<figure class="fig wide" id="map-4-2">
+  <figcaption class="fig-head"><span class="fig-label">Map 4.2</span>Built-up land by period of construction, Hanoi and Ho Chi Minh City, 1985–2015</figcaption>
+  <p class="fig-sub">Cells of about 90 m, coloured by the period in which Landsat satellites first recorded them as built up; both cities at the same scale</p>
+  <div class="steps" role="group" aria-label="City">
+    <button type="button" data-go="0"><span data-str="l4_ha_noi.thanhPho.0.ten"></span></button>
+    <button type="button" data-go="1"><span data-str="l4_ha_noi.thanhPho.1.ten"></span></button>
+    <span class="hint">← → keys</span>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-4-2"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> World Settlement Footprint Evolution, © 2024 DLR; urban centres from the GHS Urban Centre Database R2024A (European Commission, Joint Research Centre); centres from OpenStreetMap; base map OpenFreeMap, © OpenStreetMap contributors.</p>
+    <p><b>Note:</b> dashed circles are 5, 10, 20 and 30 km from Hoan Kiem Lake and from Ben Thanh. A cell counts as built up when at least five of its nine Landsat pixels are; land built up before 1985 is shown with 1985. The red line is the urban centre of 2020, as in Map 4.1.</p>
+  </div>
+  <div class="about-data" data-sources="wsf_evolution ghs_ucdb tam_lich_su nen_ban_do" data-script="kich_ban/l4_ha_noi.py" data-note="Joined the two Landsat tiles around each city, grouped the pixels into cells of about 90 m, recorded the period in which each cell became built up, and cut a rectangle of 100 by 80 km around each historical centre."></div>
+</figure>
+
+<p>The two maps look different, yet in 2015 the two cities had almost the same area of built-up land within 30 km of their centres: <span data-num="l4_ha_noi.thongKe.xay2015.hn" data-fmt="0"></span> km² around Hoan Kiem Lake and <span data-num="l4_ha_noi.thongKe.xay2015.hcm" data-fmt="0"></span> km² around Ben Thanh. About <span data-num="l4_ha_noi.thongKe.tySoDan" data-fmt="1"></span> times as many people lived within 30 km of Ben Thanh, so the Hanoi area had about <span data-num="l4_ha_noi.thongKe.m2MoiNguoi.hn" data-fmt="0"></span> m² of built-up land per resident, against <span data-num="l4_ha_noi.thongKe.m2MoiNguoi.hcm" data-fmt="0"></span> m² in Ho Chi Minh City (built-up land in 2015 divided by population in 2020).</p>
+
+<figure class="fig wide" id="fig-4-2">
+  <figcaption class="fig-head"><span class="fig-label">Figure 4.2</span>Share of land built up, by distance from the centre, 1990, 2000 and 2015</figcaption>
+  <p class="fig-sub">Built-up land as a share of all land in each ring of 1 km; water is excluded</p>
+  <div class="fig-body"><div class="pair-charts"><div id="c-4-2a"></div><div id="c-4-2b"></div></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> World Settlement Footprint Evolution, © 2024 DLR; land area from GHS-LAND R2022A (European Commission, Joint Research Centre).</p>
+    <p><b>Note:</b> distances from Hoan Kiem Lake and from Ben Thanh. The dotted line marks one half: the distance at which the curve first falls below it is the edge of the continuously built-up core used in the text.</p>
+  </div>
+  <div class="about-data" data-sources="wsf_evolution ghs_land tam_lich_su" data-script="kich_ban/l4_ha_noi.py" data-note="Measured, for each ring of 1 km, the area of Landsat pixels built up by each year and the area of land (not water) in the ring, and divided the first by the second."></div>
+</figure>
+
+<p>Figure 4.2 shows how that land is arranged. Close to both centres almost all land is built up; the difference lies at intermediate distances. In 2015, more than half of the land was built up in every ring out to <span data-num="l4_ha_noi.thongKe.r50.hcm.2015" data-fmt="0"></span> km from Ben Thanh, but only out to <span data-num="l4_ha_noi.thongKe.r50.hn.2015" data-fmt="0"></span> km from Hoan Kiem Lake. Both of these continuously built-up cores have widened steadily, from <span data-num="l4_ha_noi.thongKe.r50.hcm.1990" data-fmt="0"></span> and <span data-num="l4_ha_noi.thongKe.r50.hn.1990" data-fmt="0"></span> km in 1990.</p>
+<p>Over the whole 30 km, built-up land grew faster around Hanoi: by a factor of <span data-num="l4_ha_noi.thongKe.tang.9015.hn" data-fmt="1"></span> between 1990 and 2015, against <span data-num="l4_ha_noi.thongKe.tang.9015.hcm" data-fmt="1"></span> around Ho Chi Minh City. The World Bank observed the same difference in 1999–2009 and suggested one reason for it:</p>
+<blockquote data-quote="trich_dan.vur.chuyenDoi" data-who="World Bank (2011), Vietnam Urbanization Review"></blockquote>
+<p>Satellite images do not depend on boundaries. Measured with them, built-up land within 30 km grew by <span data-num="l4_ha_noi.thongKe.moiNam9909.hn" data-fmt="%1"></span> a year around Hanoi and by <span data-num="l4_ha_noi.thongKe.moiNam9909.hcm" data-fmt="%1"></span> around Ho Chi Minh City over the same decade: faster in Hanoi, but by a far smaller margin than in the World Bank’s figures, which the report itself links in part to a change of boundary.</p>
+
+<figure class="fig" id="fig-4-3">
+  <figcaption class="fig-head"><span class="fig-label">Figure 4.3</span>Population density by distance from the centre, Hanoi and Ho Chi Minh City, 2020</figcaption>
+  <p class="fig-sub">Persons per km² in each ring of 1 km (logarithmic scale), with the fitted exponential line</p>
+  <div class="toggles" role="group" aria-label="Land counted">
+    <span class="lbl">Divide by</span><button type="button" data-md="dat">all land</button><button type="button" data-md="xay">built-up land only</button>
+  </div>
+  <div class="fig-body"><div id="c-4-3"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> GHS-POP R2023A, population grid 2020, and GHS-LAND R2022A (European Commission, Joint Research Centre); built-up land from World Settlement Footprint Evolution, © 2024 DLR.</p>
+    <p><b>Note:</b> distances from Hoan Kiem Lake and from Ben Thanh. Each dashed line is the straight line fitted to the logarithm of density over the rings from 0 to 30 km (Lesson 2). “Built-up land only” divides the population of 2020 by the land built up by 2015.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop ghs_land wsf_evolution" data-script="kich_ban/l4_ha_noi.py" data-note="Spread the population of each grid cell of about 1 km evenly over the land in the cell, added it up by ring of 1 km, and divided by the land of the ring, or by its built-up land; then fitted a straight line to the logarithm of density."></div>
+</figure>
+
+<p>Figure 4.3 turns from land to people. Density around Ben Thanh is higher than around Hoan Kiem Lake at <span data-num="l4_ha_noi.thongKe.soVanhHcmCaoHon" data-fmt="0"></span> of the <span data-num="l4_ha_noi.banKinh" data-fmt="0"></span> distances, and it stays above <span data-num="l4_ha_noi.thongKe.nguongMatDo" data-fmt="0"></span> persons per km² out to <span data-num="l4_ha_noi.thanhPho.1.duoi10000" data-fmt="0"></span> km, against <span data-num="l4_ha_noi.thanhPho.0.duoi10000" data-fmt="0"></span> km in Hanoi.</p>
+<div class="interp"><span class="label">Interpretation — consistent with the model, not a test of it</span>In the closed-city model, a larger population raises housing prices at every distance and pushes the edge of the city outward (Table 1.1); with dearer housing, households use less space and density rises. Ho Chi Minh City has the larger population and fits this description. The two cities also differ in incomes, in the kinds of jobs they offer and in geography — Hanoi sits in the densely settled Red River Delta — so the comparison agrees with the model without testing it.</div>
+
+<p>The density gradient sums up such a profile in one number: the slope <i>b</i> of the line ln <i>D</i>(<i>x</i>) = <i>a</i> − <i>b</i><i>x</i> fitted to the rings (Lesson 2). In 2011 the World Bank, drawing on work by Alain Bertaud, compared the gradient of Hanoi with those of other Asian cities:</p>
+<blockquote data-quote="trich_dan.vur.doDoc" data-who="World Bank (2011), Vietnam Urbanization Review"></blockquote>
+<p>Its densities were net densities, with population divided by built-up land only:</p>
+<blockquote data-quote="trich_dan.vur.matDoRong" data-who="World Bank (2011), Vietnam Urbanization Review"></blockquote>
+<p>Table 4.2 repeats the comparison for 2020, with the same data and the same method for all six cities, and gives the gradient both ways: on all land, as in Figure 4.3, and on built-up land only.</p>
+
+<figure class="fig" id="tab-4-2">
+  <figcaption class="fig-head"><span class="fig-label">Table 4.2</span>Density gradients of the six cities, 2020</figcaption>
+  <p class="fig-sub">Slope <i>b</i> of ln density against distance in km; a larger value means density falls faster</p>
+  <div class="table-wrap"><table class="data">
+    <thead>
+      <tr><th rowspan="2">City</th><th class="r" rowspan="2">People within 30 km (million)</th><th class="c" colspan="2">Density on all land</th><th class="c" colspan="2">Density on built-up land</th></tr>
+      <tr><th class="r">0–10 km</th><th class="r">0–30 km</th><th class="r">0–10 km</th><th class="r">0–30 km</th></tr>
+    </thead>
+    <tbody id="tab-4-2-rows"></tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> as Figure 4.3; the rows of the six cities are measured from the population-weighted centres of Map 4.1.</p>
+    <p><b>Note:</b> the last two rows measure Hanoi and Ho Chi Minh City again from their historical centres. Each gradient is fitted by least squares with one point per ring of 1 km. Built-up land is that of 2015 and population that of 2020.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop ghs_land wsf_evolution" data-script="kich_ban/l4_ha_noi.py" data-note="Repeated the measurement of Figure 4.3 for each of the six cities, from the centre used in Map 4.1."></div>
+</figure>
+
+<p>The answer depends on the measure and on the distance. Within 10 km of the centre, Hanoi has the steepest gradient of the six on either measure: on all land, density falls by about <span data-num="l4_ha_noi.sauDoThi.1.hoiQuy10.giamMoiKm" data-fmt="%0"></span> per km. Over 30 km, its gradient on all land is second only to that of Ho Chi Minh City, and on built-up land it is about the same as Bangkok’s. Jakarta’s gradient is the flattest on all land at both distances, and on built-up land over 30 km. In no column is Hanoi’s gradient clearly flatter than those of Bangkok and Jakarta. The statement of 2011 may have held for the city of 2009, for its built-up area of that time, or over a different range of distances; the data of this lesson cannot tell which.</p>
+<p>Two general points also emerge. Dividing by built-up land gives a flatter gradient in every city, because the share of land that is built up itself falls with distance (Figure 4.2). And a single exponential describes Hanoi less well than Ho Chi Minh City (r² of <span data-num="l4_ha_noi.thanhPho.0.hoiQuy.r2" data-fmt="2"></span> against <span data-num="l4_ha_noi.thanhPho.1.hoiQuy.r2" data-fmt="2"></span> on all land): around Hoan Kiem Lake density falls steeply across the built-up core and then only slowly beyond it, a shape that one number cannot capture.</p>
+
+
+<h2 id="s4"><span class="sec">4.4</span>The road network</h2>
+<p>The commuting cost <i>t</i> of Lesson 1 depends on the network people travel on, and Lesson 3 measured how new links changed travel time in one city. Cities can also be compared by the network itself. In its 2020 review of urbanisation in Vietnam, the World Bank did exactly that:</p>
+<blockquote data-quote="trich_dan.wb20.duongBanKinh" data-who="World Bank (2020), Vietnam’s Urbanization at a Crossroads"></blockquote>
+<p>Two of its findings can be checked with open data. The first concerns Bangkok:</p>
+<blockquote data-quote="trich_dan.wb20.duongBangkok" data-who="World Bank (2020), Vietnam’s Urbanization at a Crossroads"></blockquote>
+<p>The second puts numbers on the densest squares of each network:</p>
+<blockquote data-quote="trich_dan.wb20.duongMax" data-who="World Bank (2020), Vietnam’s Urbanization at a Crossroads"></blockquote>
+<p>Map 4.3 repeats the comparison with OpenStreetMap, measured in the same way in every city: the length of road in each square kilometre, divided by the land in that square. Shanghai is missing, because the OpenStreetMap extract of China is far larger than this course can process; Seoul and Bangkok remain, and the four other cities of Section 4.2 are added.</p>
+
+<figure class="fig wide" id="map-4-3">
+  <figcaption class="fig-head"><span class="fig-label">Map 4.3</span>Road network density within 50 km of seven city centres</figcaption>
+  <p class="fig-sub">Kilometres of road per km² of land, cells of 1 km; main roads, from motorway to residential street; every city at the same scale</p>
+  <div class="steps" role="group" aria-label="City">
+    <button type="button" data-go="0"><span data-str="l4_duong.thanhPho.0.ten"></span></button>
+    <button type="button" data-go="1"><span data-str="l4_duong.thanhPho.1.ten"></span></button>
+    <button type="button" data-go="2"><span data-str="l4_duong.thanhPho.2.ten"></span></button>
+    <button type="button" data-go="3"><span data-str="l4_duong.thanhPho.3.ten"></span></button>
+    <button type="button" data-go="4"><span data-str="l4_duong.thanhPho.4.ten"></span></button>
+    <button type="button" data-go="5"><span data-str="l4_duong.thanhPho.5.ten"></span></button>
+    <button type="button" data-go="6"><span data-str="l4_duong.thanhPho.6.ten"></span></button>
+    <span class="hint">← → keys</span>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-4-3"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> © OpenStreetMap contributors (ODbL), country extracts by Geofabrik; land area from GHS-LAND R2022A (European Commission, Joint Research Centre); centres as Map 4.1, with Seoul added by the same rule; base map OpenFreeMap.</p>
+    <p><b>Note:</b> a cell is 1 km across; its value is the length of road whose midpoint falls in the cell, divided by the land in the cell. Dashed circles are 10, 25 and 50 km from the centre. Service roads, tracks and pedestrian streets are excluded here and added in Table 4.3. OpenStreetMap is mapped by volunteers, and coverage is not equally complete everywhere.</p>
+  </div>
+  <div class="about-data" data-sources="osm_geofabrik ghs_land ghs_ucdb nen_ban_do" data-script="kich_ban/l4_mang_duong.py" data-note="Read every road of each country extract once, kept the segments within 50 km of each centre, added their length into cells of 1 km and divided by the land in each cell."></div>
+</figure>
+
+<figure class="fig" id="fig-4-4">
+  <figcaption class="fig-head"><span class="fig-label">Figure 4.4</span>Road density by distance from the centre</figcaption>
+  <p class="fig-sub">Kilometres of main road per km² of land in each ring of 1 km</p>
+  <div class="fig-body"><div id="c-4-4"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> as Map 4.3.</p>
+    <p><b>Note:</b> each point is a ring of 1 km around the centre; the value is the road length of the ring divided by its land.</p>
+  </div>
+  <div class="about-data" data-sources="osm_geofabrik ghs_land" data-script="kich_ban/l4_mang_duong.py" data-note="Added up the road length and the land of each ring of 1 km and divided one by the other."></div>
+</figure>
+
+<figure class="fig" id="tab-4-3">
+  <figcaption class="fig-head"><span class="fig-label">Table 4.3</span>Road network within 50 km of each centre</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead>
+      <tr><th rowspan="2">City</th><th class="r" rowspan="2">Main roads (km)</th><th class="c" colspan="2">Km per km² of land</th><th class="c" colspan="2">Densest square kilometre</th></tr>
+      <tr><th class="r">main roads</th><th class="r">all roads</th><th class="r">main roads</th><th class="r">all roads</th></tr>
+    </thead>
+    <tbody id="tab-4-3-rows"></tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> as Map 4.3.</p>
+    <p><b>Note:</b> “main roads” are the classes from motorway to residential street, including unclassified roads; “all roads” adds service roads, tracks and pedestrian streets, but not driveways or parking aisles. The densest square kilometre is the highest cell with at least half a km² of land.</p>
+  </div>
+  <div class="about-data" data-sources="osm_geofabrik ghs_land" data-script="kich_ban/l4_mang_duong.py" data-note="Added up the road length within 50 km of each centre in two groups of road classes, and found the densest cell of each city."></div>
+</figure>
+
+<p>Within 50 km of Ben Thanh the main network holds <span data-num="l4_duong.thanhPho.0.kmChinh" data-fmt="0"></span> km of road, or <span data-num="l4_duong.thanhPho.0.matDoChinh" data-fmt="1"></span> km per km² of land; around Hoan Kiem Lake, <span data-num="l4_duong.thanhPho.1.matDoChinh" data-fmt="1"></span>. Bangkok reaches <span data-num="l4_duong.thanhPho.2.matDoChinh" data-fmt="1"></span> km per km², <span data-num="l4_duong.thongKe.tySoBkkHcm" data-fmt="1"></span> times the figure for Ho Chi Minh City, and Seoul <span data-num="l4_duong.thanhPho.6.matDoChinh" data-fmt="1"></span>, <span data-num="l4_duong.thongKe.tySoSelHcm" data-fmt="1"></span> times. The ordering the World Bank reported is confirmed, and Figure 4.4 shows that it does not come from the centre alone: beyond 25 km Bangkok still carries more road on each km² of land than Ho Chi Minh City.</p>
+<p>The second finding does not survive the same test. Averaged over the whole circle of 50 km, Seoul is not denser than the two Vietnamese cities: <span data-num="l4_duong.thanhPho.6.matDoChinh" data-fmt="1"></span> km per km² of land, beside <span data-num="l4_duong.thanhPho.0.matDoChinh" data-fmt="1"></span> in Ho Chi Minh City and <span data-num="l4_duong.thanhPho.1.matDoChinh" data-fmt="1"></span> in Hanoi. Its densest square kilometre is another matter: <span data-num="l4_duong.thanhPho.6.oCaoNhatChinh" data-fmt="0"></span> km of main road, close to the <span data-num="l4_duong.thongKe.wb.toiDa" data-fmt="0"></span> that the report gives, against <span data-num="l4_duong.thanhPho.0.oCaoNhatChinh" data-fmt="0"></span> in Ho Chi Minh City and <span data-num="l4_duong.thanhPho.1.oCaoNhatChinh" data-fmt="0"></span> in Hanoi — both above the <span data-num="l4_duong.thongKe.wb.hnHcmDuoi" data-fmt="0"></span>–<span data-num="l4_duong.thongKe.wb.hnHcmTren" data-fmt="0"></span> of the report. Across the seven cities the highest mean belongs to Jakarta and the lowest to Kuala Lumpur, and the densest single square kilometre is in Manila.</p>
+<p>A mean over a circle of 50 km also depends on what else the circle holds. Of the circle around Manila, <span data-num="l4_duong.thongKe.tyDatVong.mnl" data-fmt="%0"></span> is land; around Seoul <span data-num="l4_duong.thongKe.tyDatVong.sel" data-fmt="%0"></span>, and around Ho Chi Minh City <span data-num="l4_duong.thongKe.tyDatVong.hcm" data-fmt="%0"></span>. Land is what this figure divides by, but land that is mountain, forest or paddy carries few roads wherever it lies.</p>
+<div class="interp"><span class="label">Interpretation — a network is not accessibility</span>Kilometres of road say nothing about width, capacity or speed. In Ho Chi Minh City a large share of the network is narrow alleys, which carry motorcycles easily and cars hardly at all, so a kilometre of road there is not the same good as a kilometre of arterial road in Seoul. Lesson 3 measured what these differences produce — travel time — for one city; doing that for seven would need a network model for each of them.</div>
+
+<h2 id="ex"><span class="sec">4.5</span>Exercises</h2>
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 4.1</span>Denser or more spread out?</p>
+  <p>Use Table 4.1 to compute the density of each urban centre in 1990 and compare it with the density of 2020. Which cities became denser, and which spread out faster than their population grew? Which of the conditions of Lesson 1 could explain each pattern?</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 4.2</span>Shape</p>
+  <p>On Map 4.1, use the circles to compare how far each urban centre of 2020 reaches from the centre of its frame. Which city is the most compact, and which the most elongated? Suggest one feature of geography or transport that could explain the shape of Ho Chi Minh City.</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 4.3</span>Two ways of growing</p>
+  <p>In Figure 4.2, read the edge of the continuously built-up core of each city in 1990, 2000 and 2015: the first ring in which less than half of the land is built up. Which core widened faster? Section 4.3 also shows that built-up land within 30 km grew faster around Hanoi. How can both statements be true? Use Map 4.2 to describe where the new built-up land of Hanoi appeared.</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 4.4</span>Gross and net density</p>
+  <p>Density on all land equals density on built-up land multiplied by the share of land that is built up. Taking logarithms, show that the gradient on all land equals the gradient on built-up land plus the rate at which the built-up share falls with distance. Then compare the two gradients over 30 km for each city in Table 4.2: where is the difference largest, and what does it tell you about the built-up share in that city?</p>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 4.5</span>Roads and journeys</p>
+  <p>Figure 4.4 compares networks, not journeys. Using Lesson 3, name two things that decide how long a trip takes but do not appear in this figure, and say which of them could be measured with the data of this course.</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 4.6</span>What the map cannot see</p>
+  <p>OpenStreetMap is drawn by volunteers. Give two reasons why its coverage of streets might be better in one of these cities than in another, and propose a check that would reveal such a difference.</p>
+</div>
+
+<h2 id="data"><span class="sec">4.6</span>Data and code</h2>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Data</th><th>Licence</th><th>Accessed</th></tr></thead>
+  <tbody id="data-rows"></tbody>
+</table></div>
+<p class="licence">Scripts: <code>kich_ban/l4_do_thi_chau_a.py</code> (urban centres, population grid, Table 4.1), <code>kich_ban/l4_ha_noi.py</code> (Section 4.3: built-up land, land area, density gradients, Table 4.2) and <code>kich_ban/l4_mang_duong.py</code> (Section 4.4: road network). Each stops without writing its output if a check fails, including a check on every comparison stated in the text.</p>
+
+<h2 id="refs"><span class="sec">4.7</span>References</h2>
+<ul class="references">
+  <li>Clark, C. (1951). Urban population densities. <i>Journal of the Royal Statistical Society, Series A, 114</i>(4), 490–496. <a href="https://doi.org/10.2307/2981088">doi:10.2307/2981088</a></li>
+  <li>European Commission, Joint Research Centre, Melchiorri, M., Mari Rivero, I., Florio, P., Schiavina, M., et al. (2024). <i>Stats in the City – the GHSL Urban Centre Database 2025</i>. Publications Office of the European Union. <a href="https://data.europa.eu/doi/10.2760/3046391">doi:10.2760/3046391</a>, CC BY 4.0.</li>
+  <li>Marconcini, M., Metz-Marconcini, A., Üreyen, S., et al. (2020). Outlining where humans live, the World Settlement Footprint 2015. <i>Scientific Data, 7</i>, 242. World Settlement Footprint Evolution v1, © 2024 DLR, CC BY 4.0.</li>
+  <li>Pesaresi, M., &amp; Politis, P. (2022). <i>GHS-LAND R2022A — Land fraction as derived from Sentinel-2 image composite (2018) and OSM data</i>. European Commission, Joint Research Centre. <a href="https://doi.org/10.2905/AB7AD451-5ED5-44A6-A4D0-9F7A4E848CEE">doi:10.2905/AB7AD451-5ED5-44A6-A4D0-9F7A4E848CEE</a>, CC BY 4.0.</li>
+  <li>Schiavina, M., Freire, S., Carioli, A., &amp; MacManus, K. (2023). <i>GHS-POP R2023A — GHS population grid multitemporal (1975–2030)</i>. European Commission, Joint Research Centre. <a href="https://doi.org/10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE">doi:10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE</a>, CC BY 4.0.</li>
+  <li>World Bank (2011). <i>Vietnam urbanization review: Technical assistance report</i>. World Bank. <a href="https://openknowledge.worldbank.org/entities/publication/a2b30aef-198f-56e3-bfec-aa88c51ef67e">Open Knowledge Repository</a>, CC BY 3.0 IGO. Section 3.3.2 is drawn from Bertaud (2011).</li>
+  <li>Wheaton, W. C. (1974). A comparative static analysis of urban spatial structure. <i>Journal of Economic Theory, 9</i>(2), 223–237. <a href="https://doi.org/10.1016/0022-0531(74)90068-4">doi:10.1016/0022-0531(74)90068-4</a></li>
+</ul>
+
+</main>
+</div></div>
+
+<footer class="site-footer"><div class="inner">Urban Economics · The monocentric city. Teaching material for non-commercial classroom use. Text and figures are generated from the scripts in <code>kich_ban/</code>; every data source, licence and access date is listed in the data files in <code>du_lieu/</code>.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.js"></script>
+<script src="../assets/core.js"></script>
+<script src="../assets/chart.js"></script>
+<script src="../assets/map.js"></script>
+<script src="../du_lieu/trich_dan.js"></script>
+<script src="../du_lieu/l4_do_thi.js"></script>
+<script src="../du_lieu/l4_ha_noi.js"></script>
+<script src="../du_lieu/l4_duong.js"></script>
+<script src="../assets/nguon.js"></script>
+<script src="../assets/lesson4.js"></script>
+</body>
+</html>

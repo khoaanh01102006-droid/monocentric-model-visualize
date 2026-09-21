@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bài 1 · Mô hình thành phố đơn tâm — Kinh tế đô thị</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%230071BC' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23111'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="course" href="index.html">Kinh tế đô thị <span>· Thành phố đơn tâm</span></a>
+  <nav><a href="1-model.html" aria-current="page">1<span class="long"> · Mô hình</span></a><a href="2-hcmc.html">2<span class="long"> · TP.HCM</span></a><a href="3-commuting.html">3<span class="long"> · Chi phí đi lại</span></a><a href="4-neighbours.html">4<span class="long"> · Láng giềng</span></a><a href="5-urbanisation.html">5<span class="long"> · Đô thị hoá</span></a></nav>
+  <div class="lang"><a href="../en/1-model.html" hreflang="en">EN</a><span>VI</span></div>
+</div></header>
+
+<div class="page"><div class="layout">
+<aside class="toc"><nav aria-label="Trong bài"></nav></aside>
+<main class="main">
+
+<header class="lesson-head">
+  <p class="lesson-no">Bài 1</p>
+  <h1>Mô hình thành phố đơn tâm</h1>
+  <p class="standfirst">Vì sao ở gần trung tâm thì nhà đắt hơn, căn nhà nhỏ hơn và toà nhà cao hơn, và điều gì quyết định thành phố trải rộng tới đâu.</p>
+  <p class="meta">Mô hình do Alonso (1964), Muth (1969) và Mills (1967) xây dựng. Ký hiệu theo Brueckner (2011), chương 2, “Analyzing Urban Spatial Structure”. Các đường cong do trình duyệt tính trực tiếp từ mô hình; con số trong lời giảng do <code>kich_ban/l1_mo_hinh.mjs</code> sinh ra. Bản gốc của bài này viết bằng tiếng Anh; đây là bản dịch của học phần.</p>
+</header>
+
+<section class="objectives">
+  <h2>Mục tiêu học tập</h2>
+  <p>Học xong bài này, bạn có thể:</p>
+  <ol>
+    <li>nêu các giả định của mô hình thành phố đơn tâm;</li>
+    <li>rút ra điều kiện khiến hộ gia đình bàng quan giữa các vị trí, và giải thích vì sao giá nhà ở giảm khi rời trung tâm;</li>
+    <li>giải thích vì sao càng ra xa thì diện tích ở của hộ càng lớn, còn chiều cao công trình và mật độ dân càng giảm;</li>
+    <li>xác định ranh đô thị, và dự báo thành phố đổi thế nào khi dân số, thu nhập, chi phí đi lại hoặc giá thuê đất nông nghiệp thay đổi.</li>
+  </ol>
+</section>
+
+<h2 id="s1"><span class="sec">1.1</span>Quy luật mà mô hình giải thích</h2>
+<p>Đất và nhà ở gần trung tâm thành phố đắt hơn ở vùng rìa. Gần trung tâm, toà nhà cao hơn, căn nhà nhỏ hơn, và mỗi ki-lô-mét vuông đất có nhiều người sinh sống hơn. Quy luật ấy thấy được ở những thành phố rất khác nhau về lịch sử, về thu nhập và về cách quy hoạch. Mô hình thành phố đơn tâm giải thích nó bằng một số ít giả định, và cho tới nay vẫn là điểm xuất phát chuẩn khi phân tích cấu trúc không gian đô thị.</p>
+<blockquote data-quote="trich_dan.liotta.sum" data-who="Liotta, Viguié và Lepetit (2022)"><p class="tr">Mô hình đô thị chuẩn (SUM), do Alonso (1964), Muth (1969) và Mills (1967) khởi xướng, mô tả quan hệ giữa sử dụng đất, giá trị đất và chi phí đi lại trong thành phố, và dựa trên các cơ chế sau. Hộ gia đình đánh đổi giữa diện tích nhà ở và chi phí đi lại tới nơi làm việc; trong một thành phố đơn tâm, điều đó dẫn tới giá sẵn lòng trả cao ở trung tâm — nơi chi phí đi lại thấp — và thấp ở vùng ven.</p></blockquote>
+<p>Bài dựng mô hình theo ba bước. Hộ gia đình chọn nơi ở (mục 1.3). Chủ đầu tư quyết định xây bao nhiêu diện tích sàn trên mỗi đơn vị đất (mục 1.4). Thị trường đất quyết định thành phố dừng lại ở đâu (mục 1.5). Mục 1.6 dùng mô hình đã dựng xong để so sánh những thành phố khác nhau về dân số, thu nhập, chi phí đi lại hoặc giá thuê đất nông nghiệp.</p>
+
+<h2 id="s2"><span class="sec">1.2</span>Giả định</h2>
+<p>Bản trình bày ở đây có các hộ gia đình giống hệt nhau và dân số cố định, thường gọi là mô hình <em class="term">thành phố đóng</em>.</p>
+<aside class="note"><b>Thành phố đóng và thành phố mở.</b> Ở thành phố mở, hộ gia đình di chuyển giữa các thành phố mà không tốn kém, nên độ thoả dụng do phần còn lại của nền kinh tế ấn định và dân số tự điều chỉnh. Hai bản cho kết quả tĩnh học so sánh khác nhau (Brueckner, 1987).</aside>
+<ol class="assumptions">
+  <li>Mọi việc làm nằm ở khu trung tâm thương mại (CBD), coi như một điểm. Một vị trí được mô tả bằng khoảng cách \(x\), tính bằng ki-lô-mét, tới CBD.</li>
+  <li>Thành phố có \(N\) hộ gia đình giống hệt nhau. Mỗi hộ có một người đi làm, thu nhập \(y\) kiếm được ở CBD.</li>
+  <li>Đi lại tốn \(t\) cho mỗi ki-lô-mét khoảng cách, nên hộ ở khoảng cách \(x\) chi \(tx\) cho việc đi lại.</li>
+  <li>Độ thoả dụng của hộ gia đình đến từ diện tích sàn \(q\) và từ một hàng hoá tổng hợp \(c\) có giá bằng 1. Giá một mét vuông sàn ở khoảng cách \(x\) là \(p(x)\).</li>
+  <li>Diện tích sàn do chủ đầu tư tạo ra bằng cách kết hợp đất với vốn. Đất không dùng cho nhà ở thì dùng cho nông nghiệp, ở đó nó có giá thuê \(r_A\).</li>
+  <li>Dân số \(N\) cố định. Mức độ thoả dụng mà các hộ đạt được do chính mô hình xác định.</li>
+</ol>
+<aside class="note"><b>Hàng hoá tổng hợp.</b> Mọi tiêu dùng ngoài nhà ở, tính bằng tiền.</aside>
+<p>Để vẽ được đường cong, trang này dùng hàm thoả dụng và hàm sản xuất dạng Cobb–Douglas với các tham số liệt kê ở cuối bài. Chiều của các tác động rút ra dưới đây không phụ thuộc lựa chọn ấy.</p>
+
+<h2 id="s3"><span class="sec">1.3</span>Hộ gia đình và giá nhà ở</h2>
+<p>Hộ ở khoảng cách \(x\) còn lại \(y - tx\) sau khi trả chi phí đi lại. Hộ chia phần còn lại cho diện tích sàn và hàng hoá tổng hợp:</p>
+<div class="eq"><div>\[ c + p(x)\,q = y - t\,x \]</div><span class="eq-no">(1.1)</span></div>
+<p>Vì các hộ giống hệt nhau nên ở trạng thái cân bằng, ở đâu họ cũng phải đạt cùng một mức độ thoả dụng. Nếu hộ ở một vị trí nào đó khá hơn, những hộ khác sẽ chuyển tới và đẩy giá sàn lên cho tới khi phần lợi thế biến mất. Đó là điều kiện <em class="term">cân bằng không gian</em>.</p>
+<aside class="note"><b>Cân bằng không gian.</b> Không hộ nào tăng được độ thoả dụng bằng cách đổi chỗ ở. Với các hộ giống hệt nhau, độ thoả dụng bằng nhau ở mọi vị trí có người ở.</aside>
+<p>Xét một hộ chuyển ra xa CBD thêm một ki-lô-mét. Chi phí đi lại của hộ tăng thêm \(t\). Độ thoả dụng chỉ giữ nguyên nếu hộ tiết kiệm đúng chừng ấy tiền nhà, tức là giá mỗi mét vuông trong \(q\) mét vuông của hộ phải giảm \(t/q\). Với một bước dịch chuyển nhỏ, điều đó cho</p>
+<div class="eq"><div>\[ \frac{\partial p}{\partial x} = -\,\frac{t}{q} \;<\; 0 \]</div><span class="eq-no">(1.2)</span></div>
+<p>Phương trình (1.2) thường được gọi là điều kiện Alonso–Muth. Nó nói rằng giá diện tích sàn giảm khi rời trung tâm, và giảm nhanh hơn ở nơi căn nhà nhỏ. Hàm \(p(x)\) là <em class="term">giá sẵn lòng trả</em> (bid rent) của hộ gia đình cho diện tích sàn.</p>
+<aside class="note"><b>Giá sẵn lòng trả (bid rent).</b> Mức giá cao nhất cho một đơn vị diện tích sàn mà hộ gia đình chịu trả ở một vị trí, trong khi vẫn đạt mức độ thoả dụng cân bằng.</aside>
+<p>Càng ra xa, diện tích sàn càng rẻ, nên hộ ở đó thay thế theo hướng dùng nhiều diện tích hơn: \(q\) tăng theo \(x\). Theo (1.2), \(q\) lớn hơn làm đường giá thoải hơn. Vì vậy đường giá dốc ở gần trung tâm và thoải dần về phía ranh (Hình 1.1, bước 1).</p>
+
+<h2 id="s4"><span class="sec">1.4</span>Chủ đầu tư, chiều cao công trình và mật độ</h2>
+<p>Chủ đầu tư tạo diện tích sàn từ đất và vốn. Gọi \(S\) là vốn trên một đơn vị đất và \(h(S)\) là diện tích sàn xây được trên một đơn vị đất, với \(h\) tăng và lõm. Chủ đầu tư ở khoảng cách \(x\) chọn \(S\) để tối đa hoá lợi nhuận trên một đơn vị đất, \(p(x)\,h(S) - iS - r(x)\), trong đó \(i\) là giá vốn và \(r(x)\) là giá thuê đất. Việc chọn \(S\) cùng với cạnh tranh giữa các chủ đầu tư cho</p>
+<div class="eq"><div>\[ p(x)\,h'(S) = i, \qquad r(x) = p(x)\,h(S) - i\,S \]</div><span class="eq-no">(1.3)</span></div>
+<p>Điều kiện thứ nhất nói rằng vốn được bỏ thêm cho tới khi giá trị phần sàn tăng thêm bằng chi phí của nó. Ở nơi giá sàn cao, điều đó xảy ra tại mức \(S\) cao hơn. Vì \(p\) giảm theo khoảng cách nên \(S\) và \(h\) cũng giảm: nhiều sàn nhất trên một đơn vị đất được xây ở trung tâm. Điều kiện thứ hai nói rằng cạnh tranh đẩy lợi nhuận về không, nên đất nhận phần còn lại sau khi trả cho vốn.</p>
+<blockquote data-quote="trich_dan.liotta.supply" data-who="Liotta, Viguié và Lepetit (2022)"><p class="tr">Với giả định thị trường đất cạnh tranh, chủ đầu tư tư nhân sẽ cung nhiều nhà ở tại trung tâm thành phố và ít nhà ở tại vùng ven, bởi đất có cung không co giãn và lợi tức giảm dần theo yếu tố đầu vào hàm ý rằng toà nhà càng cao thì giá thuê mỗi mét vuông sàn phải càng cao (Ahlfeldt và Barr, 2022).</p></blockquote>
+<p>Mật độ dân bằng diện tích sàn trên một đơn vị đất chia cho diện tích sàn mỗi hộ sử dụng:</p>
+<div class="eq"><div>\[ D(x) = \frac{h(x)}{q(x)} \]</div><span class="eq-no">(1.4)</span></div>
+<p>Hai thành phần cùng chiều: ra xa thì \(h\) giảm và \(q\) tăng, nên mật độ giảm. Giá thuê đất giảm nhanh hơn giá sàn, vì cả giá sàn lẫn lượng sàn xây trên mỗi đơn vị đất đều giảm.</p>
+
+<figure class="fig wide" id="fig-1-1">
+  <figcaption class="fig-head"><span class="fig-label">Hình 1.1</span>Năm đại lượng biến thiên theo khoảng cách trong thành phố đơn tâm</figcaption>
+  <p class="fig-sub">Kết quả mô hình theo khoảng cách tới CBD, dạng chỉ số: giá trị ở trung tâm = 100</p>
+  <div class="steps" role="group" aria-label="Các bước">
+    <button type="button" data-go="0">1 · Giá sàn</button>
+    <button type="button" data-go="1">2 · Diện tích ở của hộ</button>
+    <button type="button" data-go="2">3 · Sàn trên một đơn vị đất</button>
+    <button type="button" data-go="3">4 · Mật độ dân</button>
+    <button type="button" data-go="4">5 · Giá thuê đất</button>
+    <span class="hint">phím ← →</span>
+  </div>
+  <div class="fig-body"><div id="chart-1-1"></div></div>
+  <div class="step-text">
+    <div data-step="0"><p><b>Giá sàn \(p(x)\)</b> giảm theo khoảng cách, dốc nhất ở gần trung tâm, đúng như (1.2) đòi hỏi. Giá ở trung tâm bằng <span data-num="l1_mo_hinh.goc.tySo.p" data-fmt="x1"></span> giá ở ranh.</p></div>
+    <div data-step="1"><p><b>Diện tích ở của hộ \(q(x)\)</b> tăng theo khoảng cách vì sàn rẻ hơn. Căn nhà ở ranh rộng bằng <span data-num="l1_mo_hinh.goc.tySo.q" data-fmt="x1"></span> căn nhà ở trung tâm.</p></div>
+    <div data-step="2"><p><b>Sàn trên một đơn vị đất \(h(x)\)</b> — tức chiều cao công trình — giảm theo khoảng cách. Một đơn vị đất ở trung tâm mang lượng sàn bằng <span data-num="l1_mo_hinh.goc.tySo.h" data-fmt="x1"></span> một đơn vị đất ở ranh.</p></div>
+    <div data-step="3"><p><b>Mật độ dân \(D(x) = h(x)/q(x)\)</b> gộp hai bước trên. Mật độ ở trung tâm gấp <span data-num="l1_mo_hinh.goc.tySo.D" data-fmt="x1"></span> mật độ ở ranh; cứ ra xa thêm một ki-lô-mét, mật độ giảm bình quân <span data-num="l1_mo_hinh.goc.matDoMoiKm" data-fmt="abs%1"></span>.</p></div>
+    <div data-step="4"><p><b>Giá thuê đất \(r(x)\)</b> giảm nhanh nhất, vì cả giá sàn lẫn lượng sàn trên mỗi đơn vị đất đều giảm. Tại ranh, nó bằng giá thuê đất nông nghiệp.</p></div>
+  </div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> tính từ mô hình trong <code>js/mo_hinh.js</code> với các tham số ở Bảng 1.2.</p>
+    <p><b>Ghi chú:</b> nét đứt là kết quả mô hình, không phải số đo. Giá trị tham số chỉ để minh hoạ, không ước lượng cho thành phố nào.</p>
+  </div>
+  <div class="about-data" data-sources="mo_hinh" data-script="kich_ban/l1_mo_hinh.mjs" data-note="Giải mô hình với tham số ở Bảng 1.2 và kiểm phương trình (1.2) ở mọi khoảng cách."></div>
+</figure>
+
+<h2 id="s5"><span class="sec">1.5</span>Ranh đô thị</h2>
+<p>Đất thôi dùng cho đô thị ở nơi nhà ở không còn trả giá cao hơn nông nghiệp. Tại ranh đô thị \(\bar{x}\), giá thuê đất bằng giá thuê đất nông nghiệp. Ngoài ra, cả \(N\) hộ phải ở lọt bên trong ranh:</p>
+<div class="eq"><div>\[ r(\bar{x}) = r_A \]</div><span class="eq-no">(1.5)</span></div>
+<div class="eq"><div>\[ \int_0^{\bar{x}} \theta\, x\, D(x)\, dx = N \]</div><span class="eq-no">(1.6)</span></div>
+<p>Ở đây \(\theta\) là góc phần đất dành cho nhà ở tại mỗi khoảng cách: \(2\pi\) nếu trọn vòng tròn, nhỏ hơn khi một phần đất là mặt nước hoặc dùng cho mục đích khác. Hai phương trình (1.5) và (1.6) cùng xác định ranh đô thị và mức độ thoả dụng mà các hộ đạt được. Với các tham số ở Bảng 1.2, ranh nằm cách CBD <span data-num="l1_mo_hinh.goc.ranh" data-fmt="1"></span> km.</p>
+<aside class="note"><b>Phần đất dành cho nhà ở.</b> Phép tính giả định <span data-num="l1_mo_hinh.thetaPhan" data-fmt="%0"></span> đất tại mỗi khoảng cách là đất ở, tức \(\theta\) bằng phần ấy của \(2\pi\). Con số chỉ để minh hoạ.</aside>
+
+<h2 id="s6"><span class="sec">1.6</span>Tĩnh học so sánh</h2>
+<p>Có thể dùng mô hình để so sánh hai thành phố giống nhau mọi mặt, chỉ khác một điều kiện. Với quy mô thành phố, chiều của những tác động này đã được Wheaton (1974) chứng minh.</p>
+<blockquote data-quote="trich_dan.liotta.wheaton" data-who="Liotta, Viguié và Lepetit (2022)"><p class="tr">Wheaton (1974) đã chứng minh rằng, với giả định đơn tâm và chi phí đi làm bằng tiền, dân số đông và thu nhập cao dẫn tới vùng đô thị lớn hơn, còn chi phí đi lại cao và giá đất nông nghiệp cao dẫn tới vùng đô thị nhỏ hơn.</p></blockquote>
+<p>Hình 1.2 cho phép thay đổi từng điều kiện trong bốn điều kiện. Bên trái, giá thuê đất được vẽ thành chiều cao trên mặt phẳng của thành phố mô hình: thành phố kết thúc ở nơi bề mặt hạ xuống bằng mức phẳng của giá thuê đất nông nghiệp, đúng như phương trình (1.5) đòi hỏi. Một phần tư bề mặt được cắt bỏ, nên đường mặt cắt ở bên phải cũng hiện trên các mặt cắt của khối. Đường xám cho thấy thành phố trước khi thay đổi.</p>
+
+<figure class="fig wide" id="fig-1-2">
+  <figcaption class="fig-head"><span class="fig-label">Hình 1.2</span>Thay đổi dân số, thu nhập, chi phí đi lại và giá thuê đất nông nghiệp</figcaption>
+  <p class="fig-sub">Giá thuê đất trên thành phố mô hình (trái) và dọc một đường từ trung tâm (phải)</p>
+  <div class="controls" id="controls-1-2"></div>
+  <p class="readout" id="readout-1-2"></p>
+  <div class="fig-body fig-2col fig-surface">
+    <div><div class="surface" id="surface-1-2" role="img" aria-label="Giá thuê đất trong thành phố mô hình, vẽ thành bề mặt"></div><p class="s-hint">Kéo để xoay góc nhìn.</p><div id="surface-key-1-2"></div></div>
+    <div><div id="chart-1-2"></div></div>
+  </div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> tính từ mô hình trong <code>js/mo_hinh.js</code>; tham số ở Bảng 1.2.</p>
+    <p><b>Ghi chú:</b> thành phố này là trừu tượng: không có gì trong hình được đo, và nó không được vẽ lên bản đồ. Bề mặt và biểu đồ dùng cùng một chỉ số giá thuê đất, trên một thang cố định khi kéo thanh trượt. Bài 2 (mục 2.3) so một thành phố hình tròn kiểu này với phạm vi đo được của TP.HCM.</p>
+  </div>
+  <div class="about-data" data-sources="mo_hinh" data-script="js/mo_hinh.js" data-note="Giải lại mô hình ngay trong trình duyệt mỗi khi kéo thanh trượt, và vẽ lời giải hai lần: thành bề mặt và thành đường mặt cắt."></div>
+</figure>
+
+<p>Bảng 1.1 ghi kết quả khi tăng từng điều kiện thêm <span data-num="l1_mo_hinh.buoc" data-fmt="%0"></span>, giữ nguyên các điều kiện còn lại.</p>
+<figure class="fig" id="tab-1-1">
+  <figcaption class="fig-head"><span class="fig-label">Bảng 1.1</span>Tác động khi một điều kiện tăng thêm <span data-num="l1_mo_hinh.buoc" data-fmt="%0"></span></figcaption>
+  <p class="fig-sub">Phần trăm thay đổi so với thành phố gốc</p>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Điều kiện tăng</th><th class="r">Ranh đô thị \(\bar{x}\)</th><th class="r">Giá sàn ở trung tâm</th><th class="r">Giá sàn gần ranh cũ</th></tr></thead>
+    <tbody>
+      <tr><td>Dân số \(N\)</td><td class="r" data-num="l1_mo_hinh.tinhSo.0.ranh" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.0.pTam" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.0.pXa" data-fmt="+%1"></td></tr>
+      <tr><td>Thu nhập \(y\)</td><td class="r" data-num="l1_mo_hinh.tinhSo.1.ranh" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.1.pTam" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.1.pXa" data-fmt="+%1"></td></tr>
+      <tr><td>Chi phí đi lại \(t\)</td><td class="r" data-num="l1_mo_hinh.tinhSo.2.ranh" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.2.pTam" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.2.pXa" data-fmt="+%1"></td></tr>
+      <tr><td>Giá thuê đất nông nghiệp \(r_A\)</td><td class="r" data-num="l1_mo_hinh.tinhSo.3.ranh" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.3.pTam" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.3.pXa" data-fmt="+%1"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> <code>kich_ban/l1_mo_hinh.mjs</code>. “Gần ranh cũ” là <span data-num="l1_mo_hinh.xaTam" data-fmt="%0"></span> khoảng cách tới ranh ban đầu.</p>
+    <p><b>Ghi chú:</b> dấu của các tác động khớp kết quả thành phố đóng của Wheaton (1974) và Brueckner (1987); kịch bản dừng và không sinh bảng nếu có một dấu sai. Độ lớn phụ thuộc bộ tham số minh hoạ.</p>
+  </div>
+  <div class="about-data" data-sources="mo_hinh" data-script="kich_ban/l1_mo_hinh.mjs" data-note="Tăng lần lượt từng điều kiện, giải lại mô hình và so với thành phố gốc. Kịch bản dừng nếu một dấu khác với kết quả đã công bố."></div>
+</figure>
+
+<h3>Đọc kết quả</h3>
+<p><b>Dân số.</b> Phải lo chỗ ở cho nhiều hộ hơn. Giá sàn tăng ở mọi khoảng cách, chủ đầu tư xây dày đặc hơn, và thành phố lan ra ngoài.</p>
+<p><b>Thu nhập.</b> Thu nhập cao hơn làm tăng cầu về diện tích sàn, nên căn nhà rộng hơn. Theo (1.2), căn nhà rộng hơn làm đường giá thoải hơn. Đường giá xoay: giảm ở gần trung tâm, tăng ở xa hơn, và thành phố lan rộng.</p>
+<p><b>Chi phí đi lại.</b> \(t\) cao hơn làm mỗi ki-lô-mét đắt hơn, nên theo (1.2) đường giá dốc hơn. Giá tăng ở gần trung tâm, giảm ở xa hơn, và thành phố co lại.</p>
+<p><b>Giá thuê đất nông nghiệp.</b> Đất ở vùng rìa sinh lợi hơn trong nông nghiệp, nên thành phố co lại. Với dân số cố định trong một diện tích nhỏ hơn, giá sàn tăng ở mọi khoảng cách.</p>
+
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 1.1</span>Điều kiện Alonso–Muth</p>
+  <p>Giả sử đi lại tốn 30.000 đồng cho mỗi ki-lô-mét khoảng cách mỗi tháng, và một hộ sống cách CBD 10 km ở trong 50 m² sàn.</p>
+  <ol type="a">
+    <li>Giá mỗi mét vuông mỗi tháng phải giảm bao nhiêu khi đi từ 10 km ra 11 km để hộ bàng quan giữa hai vị trí?</li>
+    <li>Một hộ sống cách CBD 20 km ở trong 80 m². Ở đó đường giá dốc hơn hay thoải hơn? Nêu giá trị.</li>
+  </ol>
+  <details><summary>Xem đáp án</summary><div>(a) Theo (1.2), giá giảm t/q = 30.000 / 50 = 600 đồng/m²/tháng. (b) Thoải hơn: 30.000 / 80 = 375 đồng/m²/tháng. Căn nhà rộng hơn trải phần chi phí đi lại tăng thêm lên nhiều mét vuông hơn.</div></details>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 1.2</span>Đi lại rẻ hơn</p>
+  <p>Ở Hình 1.2, giảm chi phí đi lại 40 phần trăm và giữ nguyên các điều kiện khác.</p>
+  <ol type="a">
+    <li>Ranh đô thị thay đổi thế nào?</li>
+    <li>Giá nhà ở trung tâm tăng hay giảm?</li>
+    <li>Giải thích cả hai kết quả bằng các phương trình (1.2), (1.5) và (1.6).</li>
+  </ol>
+  <details><summary>Xem đáp án</summary><div>(a) Ranh lan ra ngoài. (b) Giá ở trung tâm giảm. (c) t thấp hơn làm đường giá thoải hơn (1.2). Hộ gia đình ra xa với chi phí thấp hơn, nên cùng một dân số (1.6) trải trên diện tích lớn hơn; giá thuê đất chạm giá thuê đất nông nghiệp (1.5) ở khoảng cách xa hơn, và cạnh tranh cho vị trí trung tâm yếu đi.</div></details>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 1.3</span>Thảo luận: giả định và TP.HCM</p>
+  <p>Chọn giả định mà bạn cho là kém thực tế nhất với TP.HCM trong các giả định A1–A6. Giải thích việc nới lỏng giả định ấy sẽ làm đường giá và đường mật độ mà mô hình dự báo thay đổi thế nào. Bài 2 đo chính hai đường ấy cho thành phố thật.</p>
+</div>
+
+<h2 id="params"><span class="sec">1.7</span>Tham số và phép kiểm</h2>
+<figure class="fig" id="tab-1-2">
+  <figcaption class="fig-head"><span class="fig-label">Bảng 1.2</span>Giá trị tham số dùng trên trang này</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Ký hiệu</th><th>Ý nghĩa</th><th class="r">Giá trị</th></tr></thead>
+    <tbody>
+      <tr><td>\(y\)</td><td>thu nhập mỗi hộ</td><td class="r" data-num="l1_mo_hinh.thamSo.y" data-fmt="0"></td></tr>
+      <tr><td>\(t\)</td><td>chi phí đi lại mỗi km</td><td class="r" data-num="l1_mo_hinh.thamSo.t" data-fmt="2"></td></tr>
+      <tr><td>\(N\)</td><td>số hộ gia đình</td><td class="r" data-num="l1_mo_hinh.thamSo.N" data-fmt="0"></td></tr>
+      <tr><td>\(r_A\)</td><td>giá thuê đất nông nghiệp trên một đơn vị đất</td><td class="r" data-num="l1_mo_hinh.thamSo.rA" data-fmt="2"></td></tr>
+      <tr><td>\(\alpha\)</td><td>tỷ phần chi cho nhà ở, thoả dụng \(c^{1-\alpha}q^{\alpha}\)</td><td class="r" data-num="l1_mo_hinh.thamSo.alpha" data-fmt="2"></td></tr>
+      <tr><td>\(\beta\)</td><td>số mũ của vốn, sản xuất \(h(S) = A\,S^{\beta}\)</td><td class="r" data-num="l1_mo_hinh.thamSo.beta" data-fmt="2"></td></tr>
+      <tr><td>\(A,\ i\)</td><td>năng suất xây dựng; giá vốn</td><td class="r"><span data-num="l1_mo_hinh.thamSo.A" data-fmt="0"></span>; <span data-num="l1_mo_hinh.thamSo.i" data-fmt="0"></span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Ghi chú:</b> thu nhập, giá và giá thuê tính bằng đơn vị quy ước; khoảng cách tính bằng ki-lô-mét. Các giá trị được chọn sao cho thành phố mô hình lớn cỡ một vùng đô thị thật và độ dốc mật độ cùng bậc với các độ dốc mà Liotta, Viguié và Lepetit (2022) đo được. Chúng không phải ước lượng.</p>
+  </div>
+  <div class="about-data" data-sources="mo_hinh" data-script="js/mo_hinh.js" data-note="Thử một lưới giá trị cho chi phí đi lại và giá thuê đất nông nghiệp, giữ cặp cho ra một thành phố có cỡ và độ dốc mật độ hợp lý."></div>
+</figure>
+<p><b>Kiểm bằng số.</b> Phương trình (1.2) đúng ở mọi khoảng cách với sai số tương đối lớn nhất là <span data-num="l1_mo_hinh.kiemMuth" data-fmt="sci"></span>, và các tác động ở Bảng 1.1 mang đúng dấu đã chứng minh trong tài liệu. Cả hai phép kiểm chạy trong <code>kich_ban/l1_mo_hinh.mjs</code>; chỉ cần một phép kiểm không đạt là kịch bản dừng, không sinh kết quả.</p>
+
+<h2 id="refs"><span class="sec">1.8</span>Tài liệu tham khảo</h2>
+<ul class="references">
+  <li>Alonso, W. (1964). <i>Location and land use: Toward a general theory of land rent</i>. Harvard University Press. <a href="https://doi.org/10.4159/harvard.9780674730854">doi:10.4159/harvard.9780674730854</a></li>
+  <li>Brueckner, J. K. (1987). The structure of urban equilibria: A unified treatment of the Muth–Mills model. Trong E. S. Mills (chủ biên), <i>Handbook of regional and urban economics</i> (tập 2, tr. 821–845). North-Holland. <a href="https://doi.org/10.1016/S1574-0080(87)80006-8">doi:10.1016/S1574-0080(87)80006-8</a></li>
+  <li>Brueckner, J. K. (2011). <i>Lectures on urban economics</i>. MIT Press. Chương 2, Analyzing urban spatial structure.</li>
+  <li>Liotta, C., Viguié, V., &amp; Lepetit, Q. (2022). Testing the monocentric standard urban model in a global sample of cities. <i>Regional Science and Urban Economics, 97</i>, 103832. <a href="https://doi.org/10.1016/j.regsciurbeco.2022.103832">doi:10.1016/j.regsciurbeco.2022.103832</a>. Trích từ bản chấp nhận đăng, <a href="https://arxiv.org/abs/2111.02112">arXiv:2111.02112</a>, CC BY 4.0.</li>
+  <li>Mills, E. S. (1967). An aggregative model of resource allocation in a metropolitan area. <i>American Economic Review, 57</i>(2), 197–210.</li>
+  <li>Mills, E. S., &amp; Hamilton, B. W. (1994). <i>Urban economics</i> (xuất bản lần 5). HarperCollins.</li>
+  <li>Muth, R. F. (1969). <i>Cities and housing: The spatial pattern of urban residential land use</i>. University of Chicago Press.</li>
+  <li>Wheaton, W. C. (1974). A comparative static analysis of urban spatial structure. <i>Journal of Economic Theory, 9</i>(2), 223–237. <a href="https://doi.org/10.1016/0022-0531(74)90068-4">doi:10.1016/0022-0531(74)90068-4</a></li>
+</ul>
+
+</main>
+</div></div>
+
+<footer class="site-footer"><div class="inner">Kinh tế đô thị · Thành phố đơn tâm. Tài liệu giảng dạy phi thương mại. Chữ và hình sinh từ các kịch bản trong <code>kich_ban/</code>; nguồn, giấy phép và ngày truy cập của từng bộ dữ liệu nằm trong các tệp ở <code>du_lieu/</code>.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js"></script>
+<script src="../assets/core.js"></script>
+<script src="../assets/chart.js"></script>
+<script src="../js/mo_hinh.js"></script>
+<script src="../du_lieu/l1_mo_hinh.js"></script>
+<script src="../du_lieu/trich_dan.js"></script>
+<script src="../assets/nguon.js"></script>
+<script src="../assets/mat_gia_thue.js"></script>
+<script src="../assets/lesson1.js"></script>
+</body>
+</html>

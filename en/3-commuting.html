@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 3 · When commuting becomes cheaper — Urban Economics</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%230071BC' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23111'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="course" href="index.html">Urban Economics <span>· The monocentric city</span></a>
+  <nav><a href="1-model.html">1<span class="long"> · The model</span></a><a href="2-hcmc.html">2<span class="long"> · Ho Chi Minh City</span></a><a href="3-commuting.html" aria-current="page">3<span class="long"> · Commuting cost</span></a><a href="4-neighbours.html">4<span class="long"> · Neighbours</span></a><a href="5-urbanisation.html">5<span class="long"> · Urbanisation</span></a></nav>
+  <div class="lang"><span>EN</span><a href="../vi/3-commuting.html" hreflang="vi">VI</a></div>
+</div></header>
+
+<div class="page"><div class="layout">
+<aside class="toc"><nav aria-label="On this page"></nav></aside>
+<main class="main">
+
+<header class="lesson-head">
+  <p class="lesson-no">Lesson 3</p>
+  <h1>When commuting becomes cheaper</h1>
+  <p class="standfirst">In Lesson 1 a fall in the cost of commuting spreads the city outwards and flattens its rent gradient. This lesson asks how the cost of reaching the centre of Ho Chi Minh City has changed: through the spread of the motorcycle, through new bridges, a tunnel and expressways, and through public transport. The effect of each new road link on travel times is measured with a model of the road network.</p>
+  <p class="meta">Data: the OpenStreetMap road network of September 2026; opening dates of major links checked word for word against government and press reports; figures on vehicles and public transport quoted from their sources. Travel times are produced by <code>kich_ban/l3_thoi_gian_di_lai.py</code>; the other numbers by <code>kich_ban/l3_moc_ha_tang.mjs</code> and <code>kich_ban/l3_co_gioi.mjs</code>.</p>
+</header>
+
+<section class="objectives">
+  <h2>Learning objectives</h2>
+  <p>After this lesson you should be able to:</p>
+  <ol>
+    <li>state what the commuting cost \(t\) of the model stands for in a real city, and name the changes that can lower or raise it;</li>
+    <li>explain how a network model isolates the effect of individual road links on travel times, and state what such a model leaves out;</li>
+    <li>read a travel-time map and compare the maps of different years;</li>
+    <li>explain why the same link can change travel times by car and by motorcycle by very different amounts;</li>
+    <li>relate the changes to the comparative statics of Lesson 1, and say why the relation is an interpretation rather than a test.</li>
+  </ol>
+</section>
+
+<h2 id="s1"><span class="sec">3.1</span>Commuting cost in the model and in the city</h2>
+<p>In the model of Lesson 1, commuting costs \(t\) per kilometre of distance, so a household living \(x\) kilometres from the centre spends \(tx\) on commuting. The comparative statics of the model state what happens when \(t\) changes:</p>
+<blockquote data-quote="trich_dan.liotta.wheaton" data-who="Liotta, Viguié and Lepetit (2022)"></blockquote>
+<p>Figure 1.2 lets you lower \(t\) and watch the city spread: rent falls at the centre, rises at the edge, and the edge moves outwards. In a real city the cost of a trip has two parts, money and time, and both depend on the means of transport. The cost of reaching the centre can therefore fall for three reasons: a cheaper or faster means of transport spreads, new links shorten routes, or public transport reaches more places. It can also rise, when traffic grows faster than road space. The rest of this lesson takes these in turn for Ho Chi Minh City.</p>
+
+<h2 id="s2"><span class="sec">3.2</span>The motorcycle</h2>
+<p>No official series of vehicles or trips is published for Ho Chi Minh City. Table 3.1 collects the figures that sources report for a stated year. The World Bank described the city of the early 2000s, drawing on travel surveys by the consultants ALMEC, as follows:</p>
+<blockquote data-quote="trich_dan.vur.xeMay" data-who="World Bank (2011), Vietnam Urbanization Review"></blockquote>
+<p>Commuting was short by international standards:</p>
+<blockquote data-quote="trich_dan.vur.diLam" data-who="World Bank (2011), Vietnam Urbanization Review"></blockquote>
+
+<figure class="fig" id="tab-3-1">
+  <figcaption class="fig-head"><span class="fig-label">Table 3.1</span>Motorcycles, cars and public transport in Ho Chi Minh City: figures reported by the sources</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Year</th><th>Measure</th><th class="r">Value</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td data-num="l3_co_gioi.bang.0.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.0.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.0.giaTri" data-fmt="M1"></span> million</td><td data-str="l3_co_gioi.bang.0.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.1.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.1.chiSo"></td><td class="r" data-num="l3_co_gioi.bang.1.giaTri" data-fmt="0"></td><td data-str="l3_co_gioi.bang.1.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.2.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.2.chiSo"></td><td class="r" data-num="l3_co_gioi.bang.2.giaTri" data-fmt="%0"></td><td data-str="l3_co_gioi.bang.2.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.3.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.3.chiSo"></td><td class="r" data-num="l3_co_gioi.bang.3.giaTri" data-fmt="%0"></td><td data-str="l3_co_gioi.bang.3.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.4.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.4.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.4.giaTri" data-fmt="M1"></span> million</td><td data-str="l3_co_gioi.bang.4.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.5.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.5.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.5.giaTri" data-fmt="M1"></span> million</td><td data-str="l3_co_gioi.bang.5.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.6.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.6.chiSo"></td><td class="r" data-num="l3_co_gioi.bang.6.giaTri" data-fmt="0"></td><td data-str="l3_co_gioi.bang.6.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.7.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.7.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.7.giaTri" data-fmt="M2"></span> million</td><td data-str="l3_co_gioi.bang.7.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.8.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.8.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.8.giaTri" data-fmt="M2"></span> million</td><td data-str="l3_co_gioi.bang.8.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.9.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.9.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.9.giaTri" data-fmt="M1"></span> million</td><td data-str="l3_co_gioi.bang.9.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.10.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.10.chiSo"></td><td class="r" data-num="l3_co_gioi.bang.10.giaTri" data-fmt="0"></td><td data-str="l3_co_gioi.bang.10.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.11.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.11.chiSo"></td><td class="r" data-num="l3_co_gioi.bang.11.giaTri" data-fmt="%2"></td><td data-str="l3_co_gioi.bang.11.nguon"></td></tr>
+      <tr><td data-num="l3_co_gioi.bang.12.nam" data-fmt="y"></td><td data-str="l3_co_gioi.bang.12.chiSo"></td><td class="r"><span data-num="l3_co_gioi.bang.12.giaTri" data-fmt="M2"></span> million</td><td data-str="l3_co_gioi.bang.12.nguon"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> as listed in each row; full references in Section 3.8. Figures from Vietnamese newspapers are quoted from the page, with the public body the newspaper cites.</p>
+    <p><b>Note:</b> the rows come from different sources that do not define their measures in the same way, so they should not be joined into a single series. The public transport share of 2024 refers to travel demand as reported by the City People’s Committee; the shares of 2004 refer to trips. The script stops if a value no longer matches the sentence it is taken from.</p>
+  </div>
+  <div class="about-data" data-sources="l3_co_gioi" data-script="kich_ban/l3_co_gioi.mjs, kich_ban/trich_dan.mjs" data-note="Collected the figures that each source states for a given year and checked every number against the sentence it comes from."></div>
+</figure>
+
+<p>Registered motorcycles rose from <span data-num="l3_co_gioi.bang.0.giaTri" data-fmt="M1"></span> million in 2001 to <span data-num="l3_co_gioi.bang.9.giaTri" data-fmt="M1"></span> million in 2023, a <span data-num="l3_co_gioi.thongKe.tangXeMay" data-fmt="1"></span>-fold increase. The source that reports the growth in motorcycles also reports what happened on the main roads:</p>
+<blockquote data-quote="trich_dan.easts.tocDo" data-who="Nguyen and Nguyen (2017), citing the Ho Chi Minh City Department of Transport"></blockquote>
+<div class="interp"><span class="label">Interpretation — not tested in this lesson</span>More vehicles can lower the cost of each trip for the household that buys one and raise it for everyone else on the road. Whether the average \(t\) of the city rose or fell over these years cannot be read from Table 3.1; it would require travel times measured on the same routes in different years, which are not available.</div>
+
+<h2 id="s3"><span class="sec">3.3</span>New bridges, a tunnel and expressways</h2>
+<p>Between 2008 and 2026 the city and the national government opened the links listed in Table 3.2. Before the Thu Thiem Bridge, most people crossing from District 1 to Thu Thiem used a ferry: the operator reported about <span data-num="l3_moc.so.phaTruoc" data-fmt="0"></span> passengers a day before the bridge opened and about <span data-num="l3_moc.so.phaSau" data-fmt="0"></span> a day afterwards, and the ferry closed once the tunnel had opened.</p>
+
+<figure class="fig" id="tab-3-2">
+  <figcaption class="fig-head"><span class="fig-label">Table 3.2</span>Major road links and the Thu Thiem ferry, 2008–2026</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Link</th><th>Opened</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td data-str="l3_moc.moc.0.ten"></td><td data-str="l3_moc.moc.0.ngayChu"></td><td data-str="l3_moc.moc.0.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.1.ten"></td><td data-str="l3_moc.moc.1.ngayChu"></td><td data-str="l3_moc.moc.1.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.2.ten"></td><td data-str="l3_moc.moc.2.ngayChu"></td><td data-str="l3_moc.moc.2.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.3.ten"></td><td data-str="l3_moc.moc.3.ngayChu"></td><td data-str="l3_moc.moc.3.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.4.ten"></td><td data-str="l3_moc.moc.4.ngayChu"></td><td data-str="l3_moc.moc.4.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.5.ten"></td><td data-str="l3_moc.moc.5.ngayChu"></td><td data-str="l3_moc.moc.5.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.6.ten"></td><td data-str="l3_moc.moc.6.ngayChu"></td><td data-str="l3_moc.moc.6.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.7.ten"></td><td data-str="l3_moc.moc.7.ngayChu"></td><td data-str="l3_moc.moc.7.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.8.ten"></td><td data-str="l3_moc.moc.8.ngayChu"></td><td data-str="l3_moc.moc.8.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.9.ten"></td><td data-str="l3_moc.moc.9.ngayChu"></td><td data-str="l3_moc.moc.9.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.10.ten"></td><td data-str="l3_moc.moc.10.ngayChu"></td><td data-str="l3_moc.moc.10.nguon"></td></tr>
+      <tr><td data-str="l3_moc.moc.11.ten"></td><td data-str="l3_moc.moc.11.ngayChu"></td><td data-str="l3_moc.moc.11.nguon"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> government portals and newspapers named in the table, with the date of each report; links in Section 3.7.</p>
+    <p><b>Note:</b> each date is accepted only if the report, downloaded and kept with the data, contains the sentence that states it and carries the date of publication given here; the script stops otherwise. Pham Van Dong Avenue was opened in sections over several years and is treated as opening in 2015.</p>
+  </div>
+  <div class="about-data" data-sources="l3_moc" data-script="kich_ban/l3_moc_ha_tang.mjs, kich_ban/l3_tai_trang_nguon.mjs" data-note="Downloaded each report and checked that it contains, word for word, the sentence that dates the opening, and the date of publication."></div>
+</figure>
+
+<p>To see what these links did to travel times, Map 3.1 uses a model of the road network. The network is the one mapped in OpenStreetMap in September 2026. For each earlier year, the links of Table 3.2 that had not yet opened are removed, and the Thu Thiem ferry is put back until 2012. The time from every road junction to Ben Thanh is then the shortest route over the network, at speeds assumed for each class of road. Motorcycles may not use expressways, and OpenStreetMap records some bridges, such as the Phu My Bridge, as closed to them; the model therefore finds a separate network for each mode.</p>
+
+<figure class="fig wide" id="map-3-1">
+  <figcaption class="fig-head"><span class="fig-label">Map 3.1</span>Travel time to Ben Thanh on the road network of each year</figcaption>
+  <p class="fig-sub">Modelled minutes from each 500 m cell, without congestion</p>
+  <div class="steps" role="group" aria-label="Year">
+    <button type="button" data-go="0"><span data-num="l3_thoi_gian.nam.0" data-fmt="y"></span></button>
+    <button type="button" data-go="1"><span data-num="l3_thoi_gian.nam.1" data-fmt="y"></span></button>
+    <button type="button" data-go="2"><span data-num="l3_thoi_gian.nam.2" data-fmt="y"></span></button>
+    <button type="button" data-go="3"><span data-num="l3_thoi_gian.nam.3" data-fmt="y"></span></button>
+    <span class="hint">← → keys</span>
+  </div>
+  <div class="toggles" role="group" aria-label="Mode and view">
+    <span class="lbl">Mode</span><button type="button" data-pt="xe_may">Motorcycle</button><button type="button" data-pt="o_to">Car</button>
+    <span class="lbl">Show</span><button type="button" data-xem="tg">Travel time</button><button type="button" data-xem="giam">Minutes saved since <span data-num="l3_thoi_gian.nam.0" data-fmt="y"></span></button>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-3-1"></div></div>
+  <div class="step-text">
+    <div data-step="0"><p><b>The network of <span data-num="l3_thoi_gian.nam.0" data-fmt="y"></span>.</b> From District 1, Thu Thiem is reached by the ferry or by road over the Saigon Bridge, and there is no expressway. Hover over the map to read the time from a cell in each of the four years.</p></div>
+    <div data-step="1"><p><b>The network of <span data-num="l3_thoi_gian.nam.1" data-fmt="y"></span>.</b> The Thu Thiem Bridge, the Phu My Bridge and the expressway to Trung Luong have opened. Switch between motorcycle and car: the Phu My Bridge and the expressway serve only cars.</p></div>
+    <div data-step="2"><p><b>The network of <span data-num="l3_thoi_gian.nam.2" data-fmt="y"></span>.</b> The Thu Thiem Tunnel and Mai Chi Tho Avenue replace the ferry, and the expressway to Long Thanh and Dau Giay reaches the former province of Ba Ria–Vung Tau. By car, Vung Tau ward is <span data-num="l3_thoi_gian.thongKe.vungTau.o_to.1" data-fmt="0"></span> minutes from Ben Thanh on the network of <span data-num="l3_thoi_gian.nam.1" data-fmt="y"></span> and <span data-num="l3_thoi_gian.thongKe.vungTau.o_to.2" data-fmt="0"></span> minutes on this one; by motorcycle, <span data-num="l3_thoi_gian.thongKe.vungTau.xe_may.2" data-fmt="0"></span> minutes on both.</p></div>
+    <div data-step="3"><p><b>The network of <span data-num="l3_thoi_gian.nam.3" data-fmt="y"></span>.</b> Ba Son Bridge, the expressways from Ben Luc to Long Thanh and from Bien Hoa to Vung Tau, and the open sections of Ring Road 3. Choose “Minutes saved” to see where the links of the whole period changed the time to Ben Thanh.</p></div>
+  </div>
+  <div class="fig-foot">
+    <p><b>Source:</b> road network © OpenStreetMap contributors (ODbL), extract of 16 September 2026 by Geofabrik; opening dates as Table 3.2; model by <code>kich_ban/l3_thoi_gian_di_lai.py</code>; base map OpenFreeMap.</p>
+    <p><b>Note:</b> the model removes only the links of Table 3.2; every other road is as mapped in 2026, including roads built after the year shown, so the maps of earlier years understate travel times. Speeds are assumed for each class of road and do not change over time; congestion is ignored. Cells without a mapped road are left blank. Six communes at the eastern end of the former Ba Ria–Vung Tau province, beyond the area of the model, and the island commune of Thanh An are not covered.</p>
+  </div>
+  <div class="about-data" data-sources="osm_geofabrik l3_moc nen_ban_do" data-script="kich_ban/l3_loc_mang_duong.py, kich_ban/l3_thoi_gian_di_lai.py" data-note="Built the road network from OpenStreetMap, removed the links not yet open in each year, found the fastest route from every junction to Ben Thanh for motorcycles and cars, and kept the fastest junction in each 500 m cell."></div>
+</figure>
+
+<p>How close are the modelled times to real ones? A report by VnExpress in 2026 published motorcycle travel times to Ben Thanh station for small hexagonal cells, also computed without congestion. Across the <span data-num="l3_thoi_gian.thongKe.doiChung.n" data-fmt="0"></span> cells that the two sources share, the correlation between the two sets of times is <span data-num="l3_thoi_gian.thongKe.doiChung.r" data-fmt="2"></span>, so the model ranks places in the same order; the VnExpress times are longer by a median factor of <span data-num="l3_thoi_gian.thongKe.doiChung.tySo" data-fmt="2"></span>, because the two sources assume different speeds. The minutes on Map 3.1 are therefore best read as comparisons between years and between places, not as the time a commute takes.</p>
+
+<h2 id="s4"><span class="sec">3.4</span>Who gained</h2>
+<p>For motorcycles, the links of the whole period mattered in one part of the city only. On the network of <span data-num="l3_thoi_gian.nam.2" data-fmt="y"></span>, <span data-num="l3_thoi_gian.thongKe.soGiam5.xe_may.2005_2015" data-fmt="0"></span> wards are at least five minutes closer to Ben Thanh than on the network of <span data-num="l3_thoi_gian.nam.0" data-fmt="y"></span>, all on the eastern bank of the Saigon River and reached through Thu Thiem. The largest gain is in <span data-str="l3_thoi_gian.thongKe.top.xe_may.2005_2015.0.ten"></span>, from <span data-num="l3_thoi_gian.thongKe.top.xe_may.2005_2015.0.truoc" data-fmt="0"></span> to <span data-num="l3_thoi_gian.thongKe.top.xe_may.2005_2015.0.sau" data-fmt="0"></span> minutes. After <span data-num="l3_thoi_gian.nam.2" data-fmt="y"></span>, no ward gains five minutes by motorcycle: the new links are expressways.</p>
+<p>For cars the picture is different. <span data-num="l3_thoi_gian.thongKe.soGiam5.o_to.2005_2015" data-fmt="0"></span> wards and communes gain at least five minutes between <span data-num="l3_thoi_gian.nam.0" data-fmt="y"></span> and <span data-num="l3_thoi_gian.nam.2" data-fmt="y"></span>, and <span data-num="l3_thoi_gian.thongKe.soGiam5.o_to.2015_2026" data-fmt="0"></span> more between <span data-num="l3_thoi_gian.nam.2" data-fmt="y"></span> and <span data-num="l3_thoi_gian.nam.3" data-fmt="y"></span>. The largest gains in both periods are more than 50 km from Ben Thanh, in the former province of Ba Ria–Vung Tau, which the expressways connect to the city. Figure 3.1 sums the change as the area of land that lies within 30 and 45 minutes of Ben Thanh.</p>
+
+<figure class="fig" id="fig-3-1">
+  <figcaption class="fig-head"><span class="fig-label">Figure 3.1</span>Land within 30 and 45 minutes of Ben Thanh, by mode and road network</figcaption>
+  <p class="fig-sub">Area of 500 m cells with a mapped road, km²</p>
+  <div class="fig-body"><div id="c-3-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> as Map 3.1.</p>
+    <p><b>Note:</b> dashed lines are model output. Thick lines: within 45 minutes; thin lines: within 30 minutes. The network of each year is that of 2026 without the links opened later, so the growth shown is the effect of the links of Table 3.2 alone.</p>
+  </div>
+  <div class="about-data" data-sources="osm_geofabrik l3_moc" data-script="kich_ban/l3_thoi_gian_di_lai.py" data-note="Counted, for each year and mode, the 500 m cells whose fastest junction is within 30 or 45 minutes of Ben Thanh."></div>
+</figure>
+
+<p>Within 30 minutes of Ben Thanh, the model reaches <span data-num="l3_thoi_gian.thongKe.dienTich.o_to.2005.30" data-fmt="0"></span> km² by car on the network of <span data-num="l3_thoi_gian.nam.0" data-fmt="y"></span> and <span data-num="l3_thoi_gian.thongKe.dienTich.o_to.2026.30" data-fmt="0"></span> km² on that of <span data-num="l3_thoi_gian.nam.3" data-fmt="y"></span>; by motorcycle, <span data-num="l3_thoi_gian.thongKe.dienTich.xe_may.2005.30" data-fmt="0"></span> and <span data-num="l3_thoi_gian.thongKe.dienTich.xe_may.2026.30" data-fmt="0"></span> km². In the language of Lesson 1, the links lowered \(t\) far more for drivers than for motorcycle riders, who made most trips.</p>
+<div class="interp"><span class="label">Interpretation — not tested in this lesson</span>If the model applied, a fall in \(t\) concentrated east of the river and along the expressways should raise land values and building there relative to the rest of the city. Map 2.3 of Lesson 2 shows where land was built up in each period and can be set beside Map 3.1. New links and new development were planned together, however, so a comparison of the two maps cannot tell which caused which.</div>
+
+<h2 id="s5"><span class="sec">3.5</span>Public transport</h2>
+<p>Buses carried about <span data-num="l3_co_gioi.bang.4.giaTri" data-fmt="M1"></span> million passengers a day at their peak in 2012 (Table 3.1). In 2023 they carried <span data-num="l3_co_gioi.bang.8.giaTri" data-fmt="M2"></span> million in the whole year, and public transport met <span data-num="l3_co_gioi.bang.11.giaTri" data-fmt="%2"></span> of travel demand in 2024. Metro Line 1, from Ben Thanh to Suoi Tien, opened on <span data-str="l3_moc.khac.0.ngayChu"></span>; in its first year it carried <span data-num="l3_co_gioi.bang.12.giaTri" data-fmt="M2"></span> million passengers, about <span data-num="l3_moc.so.metroNgay" data-fmt="0"></span> a day.</p>
+<p>Map 3.2 measures what the bus network and the metro offer a commuter. It uses the weekday timetables published by the Public Transport Management Centre, which include Metro Line 1: in the timetable of September 2026 a train takes <span data-num="l3_cong_cong.metro.phutToanTuyen" data-fmt="0"></span> minutes from end to end and leaves every <span data-num="l3_cong_cong.metro.phutGianCach" data-fmt="0"></span> minutes between 7 and 8 am, more often than the 8 to 12 minutes reported when the line opened. “Bus only” is the same network without the metro. For each square kilometre within 30 km of Ben Thanh with a stop nearby, it finds the fastest journey to Ben Thanh for departures at 7:00, 7:15, 7:30 and 7:45 on a weekday morning, including the walk to the stop, the wait and any change, and averages them.</p>
+
+<figure class="fig wide" id="map-3-2">
+  <figcaption class="fig-head"><span class="fig-label">Map 3.2</span>Travel time to Ben Thanh by public transport on a weekday morning</figcaption>
+  <p class="fig-sub">Modelled minutes from each 1 km cell, average of four departures between 7:00 and 7:45</p>
+  <div class="toggles" role="group" aria-label="View">
+    <span class="lbl">Show</span><button type="button" data-cc="buyt">Bus only</button><button type="button" data-cc="metro">Bus and Metro Line 1</button><button type="button" data-cc="giam">Minutes the metro saves</button>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-3-2"></div></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> bus routes, stops and trips from the public service of the Ho Chi Minh City Public Transport Management Centre, assembled for this course on 5 September 2026; metro stations and track © OpenStreetMap contributors; opening timetable as reported by VnExpress (22 December 2024); model by <code>kich_ban/l3_cong_cong.mjs</code>.</p>
+    <p><b>Note:</b> the service publishes only the start and end time of each bus trip, so the time at each stop is interpolated along the route, and traffic delays are not included. Walking is at <span data-num="l3_cong_cong.thamSo.diBo" data-fmt="1"></span> km/h, up to <span data-num="l3_cong_cong.thamSo.tiepCan" data-fmt="0"></span> m to a stop, with at most <span data-num="l3_cong_cong.thamSo.soLanChuyen" data-fmt="0"></span> changes. Cells without a stop within walking distance are blank.</p>
+  </div>
+  <div class="about-data" data-sources="gtfs_buyt osm_geofabrik l3_moc" data-script="kich_ban/l3_cong_cong.mjs, atlas/06_PHAN_TICH/kich_ban/raptor.mjs" data-note="Kept the trips that run on a weekday, removed Metro Line 1 for the bus-only view, then for each 1 km cell found the fastest journey to Ben Thanh for four departures between 7:00 and 7:45 and took the average."></div>
+</figure>
+
+<p>Within 45 minutes of Ben Thanh, public transport reaches <span data-num="l3_cong_cong.thongKe.dienTich.buyt.45" data-fmt="0"></span> km² by bus alone and <span data-num="l3_cong_cong.thongKe.dienTich.metro.45" data-fmt="0"></span> km² with the metro; within 60 minutes, <span data-num="l3_cong_cong.thongKe.dienTich.buyt.60" data-fmt="0"></span> and <span data-num="l3_cong_cong.thongKe.dienTich.metro.60" data-fmt="0"></span> km². The metro shortens the journey by ten minutes or more over <span data-num="l3_cong_cong.thongKe.oGiam10" data-fmt="0"></span> km², and by up to <span data-num="l3_cong_cong.thongKe.giamMax" data-fmt="0"></span> minutes: <span data-num="l3_cong_cong.thongKe.oGiam10Gan" data-fmt="0"></span> km² of this lies within 3 km of a station, and the rest farther out, where a bus takes riders to the line. Compared with the motorcycle times of Map 3.1, public transport remains slow: within 10 km of Ben Thanh the median journey takes <span data-num="l3_cong_cong.thongKe.tySoXeMay.0.tySo" data-fmt="1"></span> times as long, and between 10 and 20 km <span data-num="l3_cong_cong.thongKe.tySoXeMay.1.tySo" data-fmt="1"></span> times as long. For most households in the city, \(t\) is still set by the motorcycle.</p>
+<p>The same VnExpress report gives bus times to Ben Thanh station for these departures. Across the <span data-num="l3_cong_cong.thongKe.doiChung.n" data-fmt="0"></span> cells the two share, the correlation is <span data-num="l3_cong_cong.thongKe.doiChung.r" data-fmt="2"></span> and the median ratio of their times to ours is <span data-num="l3_cong_cong.thongKe.doiChung.tySo" data-fmt="2"></span>.</p>
+
+<h2 id="ex"><span class="sec">3.6</span>Exercises</h2>
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 3.1</span>Cheaper commuting in the model</p>
+  <p>Use Figure 1.2 of Lesson 1. Move the slider for commuting cost to the left and describe what happens to rent at the centre, rent at the edge and the position of the edge. Which of these changes would you expect to see first in a city where only one corridor became cheaper, and why?</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 3.2</span>Motorcycles and cars</p>
+  <p>On Map 3.1, choose “Minutes saved” and switch between motorcycle and car. Name two places where the two modes gained very differently, and explain the difference with Table 3.2 and the note under Map 3.1.</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 3.3</span>What the network model leaves out</p>
+  <p>The model keeps every road other than those in Table 3.2 as it was in 2026, assumes constant speeds and ignores congestion. For each of these three assumptions, say whether it makes the gains of Figure 3.1 larger or smaller than the true gains, and why. Which assumption matters most for motorcycles?</p>
+</div>
+
+<h2 id="data"><span class="sec">3.7</span>Data and code</h2>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Data</th><th>Licence</th><th>Accessed</th></tr></thead>
+  <tbody id="data-rows"></tbody>
+</table></div>
+<p class="licence">Scripts: <code>kich_ban/l3_loc_mang_duong.py</code> (road network from OpenStreetMap) · <code>kich_ban/l3_thoi_gian_di_lai.py</code> (travel times, areas, comparison with VnExpress) · <code>kich_ban/l3_tai_trang_nguon.mjs</code> and <code>kich_ban/l3_moc_ha_tang.mjs</code> (opening dates) · <code>kich_ban/l3_co_gioi.mjs</code> (Table 3.1) · <code>kich_ban/l3_cong_cong.mjs</code> (Map 3.2, with the RAPTOR router of the atlas) · <code>kich_ban/trich_dan.mjs</code> (quotations). Each script stops without writing its output if a check fails.</p>
+
+<h2 id="refs"><span class="sec">3.8</span>References</h2>
+<ul class="references">
+  <li>Brueckner, J. K. (2011). <i>Lectures on urban economics</i>. MIT Press. Chapter 2, The monocentric city model.</li>
+  <li>Liotta, C., Viguié, V., &amp; Lepetit, Q. (2022). Testing the monocentric standard urban model in a global sample of cities. <i>Regional Science and Urban Economics, 97</i>, 103832. <a href="https://arxiv.org/abs/2111.02112">arXiv:2111.02112</a>, CC BY 4.0.</li>
+  <li>Nguyen, L. X., &amp; Nguyen, T. M. (2017). Analysis of motorcycle ownership: A case study in Ho Chi Minh City. <i>Proceedings of the Eastern Asia Society for Transportation Studies, 11</i>. <a href="https://easts.info/on-line/proceedings/vol.11/pdf/PP1935_H1.pdf">PDF</a>.</li>
+  <li>OpenStreetMap contributors (2026). Road network of Vietnam, extract of 16 September 2026. Geofabrik. <a href="https://download.geofabrik.de/asia/vietnam.html">download.geofabrik.de</a>, ODbL 1.0.</li>
+  <li>VnExpress (2026, 4 August). Xe buýt đến metro chậm hơn xe máy bao nhiêu lần? [How much slower than a motorcycle is the bus to the metro?]. <a href="https://vnexpress.net/xe-buyt-den-metro-cham-hon-xe-may-bao-nhieu-lan-5100710.html">vnexpress.net</a>.</li>
+  <li>Wheaton, W. C. (1974). A comparative static analysis of urban spatial structure. <i>Journal of Economic Theory, 9</i>(2), 223–237. <a href="https://doi.org/10.1016/0022-0531(74)90068-4">doi:10.1016/0022-0531(74)90068-4</a></li>
+  <li>World Bank (2011). <i>Vietnam urbanization review: Technical assistance report</i>. World Bank. <a href="https://openknowledge.worldbank.org/entities/publication/a2b30aef-198f-56e3-bfec-aa88c51ef67e">Open Knowledge Repository</a>, CC BY 3.0 IGO.</li>
+  <li>Reports dating the links of Table 3.2 and the figures of Table 3.1: Báo Điện tử Chính phủ; Cổng TTĐT Chính phủ, chuyên trang TP.HCM; Cổng TTĐT tỉnh Đồng Nai; VOV; Thanh Niên; Tuổi Trẻ; Sài Gòn Giải Phóng; VnExpress; Pháp Luật TP.HCM. Each page, its date and its address are listed under Data and code.</li>
+</ul>
+
+</main>
+</div></div>
+
+<footer class="site-footer"><div class="inner">Urban Economics · The monocentric city. Teaching material for non-commercial classroom use. Text and figures are generated from the scripts in <code>kich_ban/</code>; every data source, licence and access date is listed in the data files in <code>du_lieu/</code>.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.js"></script>
+<script src="../assets/core.js"></script>
+<script src="../assets/chart.js"></script>
+<script src="../assets/map.js"></script>
+<script src="../du_lieu/trich_dan.js"></script>
+<script src="../du_lieu/l2_tphcm.js"></script>
+<script src="../du_lieu/l3_moc.js"></script>
+<script src="../du_lieu/l3_co_gioi.js"></script>
+<script src="../du_lieu/l3_thoi_gian.js"></script>
+<script src="../du_lieu/l3_cong_cong.js"></script>
+<script src="../assets/nguon.js"></script>
+<script src="../assets/lesson3.js"></script>
+</body>
+</html>

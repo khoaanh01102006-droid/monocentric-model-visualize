@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 1 · The monocentric city model — Urban Economics</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%230071BC' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23111'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="course" href="index.html">Urban Economics <span>· The monocentric city</span></a>
+  <nav><a href="1-model.html" aria-current="page">1<span class="long"> · The model</span></a><a href="2-hcmc.html">2<span class="long"> · Ho Chi Minh City</span></a><a href="3-commuting.html">3<span class="long"> · Commuting cost</span></a><a href="4-neighbours.html">4<span class="long"> · Neighbours</span></a><a href="5-urbanisation.html">5<span class="long"> · Urbanisation</span></a></nav>
+  <div class="lang"><span>EN</span><a href="../vi/1-model.html" hreflang="vi">VI</a></div>
+</div></header>
+
+<div class="page"><div class="layout">
+<aside class="toc"><nav aria-label="On this page"></nav></aside>
+<main class="main">
+
+<header class="lesson-head">
+  <p class="lesson-no">Lesson 1</p>
+  <h1>The monocentric city model</h1>
+  <p class="standfirst">Why housing costs more near the centre of a city, why dwellings there are smaller and buildings taller, and what determines how far the city extends.</p>
+  <p class="meta">The model is due to Alonso (1964), Muth (1969) and Mills (1967). Notation follows Brueckner (2011), chapter 2, “Analyzing Urban Spatial Structure”. Curves are computed in the browser from the model; numbers in the text are produced by <code>kich_ban/l1_mo_hinh.mjs</code>.</p>
+</header>
+
+<section class="objectives">
+  <h2>Learning objectives</h2>
+  <p>After this lesson you should be able to:</p>
+  <ol>
+    <li>state the assumptions of the monocentric city model;</li>
+    <li>derive the condition under which households are indifferent between locations, and explain why the price of housing falls with distance from the centre;</li>
+    <li>explain why dwelling size rises, and building height and population density fall, with distance;</li>
+    <li>determine the edge of the city, and predict how the city changes when population, income, commuting cost or agricultural rent changes.</li>
+  </ol>
+</section>
+
+<h2 id="s1"><span class="sec">1.1</span>The pattern the model explains</h2>
+<p>Land and housing are more expensive near the centre of a city than at its edge. Buildings near the centre are taller, dwellings are smaller, and more people live on each square kilometre of land. The pattern appears in cities with very different histories, incomes and planning systems. The monocentric city model explains it with a small set of assumptions, and it remains the standard starting point for the analysis of urban spatial structure.</p>
+<blockquote data-quote="trich_dan.liotta.sum" data-who="Liotta, Viguié and Lepetit (2022)"></blockquote>
+<p>The lesson builds the model in three steps. Households choose where to live (Section 1.3). Developers decide how much floor space to build on each unit of land (Section 1.4). The land market then determines where the city ends (Section 1.5). Section 1.6 uses the completed model to compare cities that differ in population, income, commuting cost or agricultural rent.</p>
+
+<h2 id="s2"><span class="sec">1.2</span>Assumptions</h2>
+<p>The version presented here has identical households and a fixed population, often called the <em class="term">closed-city</em> model.</p>
+<aside class="note"><b>Closed and open city.</b> In an open city households can move between cities at no cost, so their utility is fixed by the rest of the economy and the population adjusts. The two versions give different comparative statics (Brueckner, 1987).</aside>
+<ol class="assumptions">
+  <li>All jobs are located in a central business district (CBD), treated as a single point. A location is described by its distance \(x\), in kilometres, from the CBD.</li>
+  <li>The city contains \(N\) identical households. Each has one worker, who earns income \(y\) in the CBD.</li>
+  <li>Commuting costs \(t\) per kilometre of distance, so a household living at distance \(x\) spends \(tx\) on commuting.</li>
+  <li>Households derive utility from floor space \(q\) and from a composite good \(c\) whose price is 1. The price of a square metre of floor space at distance \(x\) is \(p(x)\).</li>
+  <li>Floor space is produced by developers, who combine land and capital. Land that is not used for housing is used in agriculture, where it earns rent \(r_A\).</li>
+  <li>The population \(N\) is fixed. The level of utility that households reach is determined within the model.</li>
+</ol>
+<aside class="note"><b>Composite good.</b> All consumption other than housing, measured in money.</aside>
+<p>To draw curves, the page uses Cobb–Douglas utility and production functions with the parameter values listed at the end of the lesson. The directions of the effects derived below do not depend on that choice.</p>
+
+<h2 id="s3"><span class="sec">1.3</span>Households and the price of housing</h2>
+<p>A household living at distance \(x\) has \(y - tx\) left after paying for its commute. It divides this between floor space and the composite good:</p>
+<div class="eq"><div>\[ c + p(x)\,q = y - t\,x \]</div><span class="eq-no">(1.1)</span></div>
+<p>Because households are identical, in equilibrium they must reach the same level of utility wherever they live. If households at one location were better off, others would move there and bid up the price of floor space until the advantage disappeared. This is the condition of <em class="term">spatial equilibrium</em>.</p>
+<aside class="note"><b>Spatial equilibrium.</b> No household can raise its utility by changing its location. With identical households, utility is the same at every occupied location.</aside>
+<p>Consider a household that moves one kilometre farther from the CBD. Its commuting cost rises by \(t\). Its utility can stay the same only if it saves the same amount on housing, which requires the price of each of its \(q\) square metres to fall by \(t/q\). For a small move this gives</p>
+<div class="eq"><div>\[ \frac{\partial p}{\partial x} = -\,\frac{t}{q} \;<\; 0 \]</div><span class="eq-no">(1.2)</span></div>
+<p>Equation (1.2) is usually called the Alonso–Muth condition. It states that the price of floor space falls with distance from the centre, and that it falls faster where dwellings are small. The function \(p(x)\) is the households’ <em class="term">bid rent</em> for floor space.</p>
+<aside class="note"><b>Bid rent.</b> The highest price per unit of floor space that a household would pay at a given location while reaching the equilibrium level of utility.</aside>
+<p>Floor space is cheaper farther out, so households there substitute towards space: \(q\) rises with \(x\). By equation (1.2), a larger \(q\) makes the price gradient flatter. The price curve is therefore steep near the centre and flatter towards the edge (Figure 1.1, step 1).</p>
+
+<h2 id="s4"><span class="sec">1.4</span>Developers, building height and density</h2>
+<p>Developers produce floor space from land and capital. Let \(S\) denote capital per unit of land and \(h(S)\) the floor space produced on a unit of land, with \(h\) increasing and concave. A developer at distance \(x\) chooses \(S\) to maximise profit per unit of land, \(p(x)\,h(S) - iS - r(x)\), where \(i\) is the price of capital and \(r(x)\) the rent paid for land. The choice of \(S\) and competition among developers give</p>
+<div class="eq"><div>\[ p(x)\,h'(S) = i, \qquad r(x) = p(x)\,h(S) - i\,S \]</div><span class="eq-no">(1.3)</span></div>
+<p>The first condition says that capital is added until the value of the extra floor space equals its cost. Where the price of floor space is high, this happens at a higher \(S\). Because \(p\) falls with distance, so do \(S\) and \(h\): the most floor space per unit of land is built at the centre. The second condition says that competition drives profit to zero, so land earns whatever is left after capital is paid.</p>
+<blockquote data-quote="trich_dan.liotta.supply" data-who="Liotta, Viguié and Lepetit (2022)"></blockquote>
+<p>Population density is floor space per unit of land divided by floor space per household:</p>
+<div class="eq"><div>\[ D(x) = \frac{h(x)}{q(x)} \]</div><span class="eq-no">(1.4)</span></div>
+<p>Both terms work in the same direction. Moving outwards, \(h\) falls and \(q\) rises, so density falls. Land rent falls faster than the price of floor space, because both the price and the amount of floor space built on each unit of land decline.</p>
+
+<figure class="fig wide" id="fig-1-1">
+  <figcaption class="fig-head"><span class="fig-label">Figure 1.1</span>Five gradients of the monocentric city</figcaption>
+  <p class="fig-sub">Model output at each distance from the CBD, as an index: value at the centre = 100</p>
+  <div class="steps" role="group" aria-label="Steps">
+    <button type="button" data-go="0">1 · Housing price</button>
+    <button type="button" data-go="1">2 · Dwelling size</button>
+    <button type="button" data-go="2">3 · Floor space per unit of land</button>
+    <button type="button" data-go="3">4 · Population density</button>
+    <button type="button" data-go="4">5 · Land rent</button>
+    <span class="hint">← → keys</span>
+  </div>
+  <div class="fig-body"><div id="chart-1-1"></div></div>
+  <div class="step-text">
+    <div data-step="0"><p><b>Housing price \(p(x)\)</b> falls with distance, most steeply near the centre, as equation (1.2) requires. The price at the centre is <span data-num="l1_mo_hinh.goc.tySo.p" data-fmt="x1"></span> the price at the edge.</p></div>
+    <div data-step="1"><p><b>Dwelling size \(q(x)\)</b> rises with distance, because floor space is cheaper. A dwelling at the edge is <span data-num="l1_mo_hinh.goc.tySo.q" data-fmt="x1"></span> the size of a dwelling at the centre.</p></div>
+    <div data-step="2"><p><b>Floor space per unit of land \(h(x)\)</b> — the height of buildings — falls with distance. A unit of land at the centre carries <span data-num="l1_mo_hinh.goc.tySo.h" data-fmt="x1"></span> the floor space of a unit of land at the edge.</p></div>
+    <div data-step="3"><p><b>Population density \(D(x) = h(x)/q(x)\)</b> combines steps 2 and 3. Density at the centre is <span data-num="l1_mo_hinh.goc.tySo.D" data-fmt="x1"></span> density at the edge; on average it falls by <span data-num="l1_mo_hinh.goc.matDoMoiKm" data-fmt="abs%1"></span> per kilometre.</p></div>
+    <div data-step="4"><p><b>Land rent \(r(x)\)</b> falls fastest of all, because the price of floor space and the amount built on each unit of land both decline. At the edge it equals agricultural rent.</p></div>
+  </div>
+  <div class="fig-foot">
+    <p><b>Source:</b> computed from the model in <code>js/mo_hinh.js</code> with the parameters in Table 1.2.</p>
+    <p><b>Note:</b> dashed lines are model output, not measurements. Parameter values are illustrative and are not estimated for any city.</p>
+  </div>
+  <div class="about-data" data-sources="mo_hinh" data-script="kich_ban/l1_mo_hinh.mjs" data-note="Solved the model at the parameters of Table 1.2 and checked equation (1.2) at every distance."></div>
+</figure>
+
+<h2 id="s5"><span class="sec">1.5</span>The edge of the city</h2>
+<p>Urban land use ends where housing can no longer outbid agriculture. At the edge of the city, \(\bar{x}\), land rent equals agricultural rent. In addition, all \(N\) households must be housed inside the edge:</p>
+<div class="eq"><div>\[ r(\bar{x}) = r_A \]</div><span class="eq-no">(1.5)</span></div>
+<div class="eq"><div>\[ \int_0^{\bar{x}} \theta\, x\, D(x)\, dx = N \]</div><span class="eq-no">(1.6)</span></div>
+<p>Here \(\theta\) is the angle of land available for housing at each distance: \(2\pi\) for a complete circle, less where part of the land is water or is used for other purposes. Equations (1.5) and (1.6) together determine the edge of the city and the level of utility that households reach. With the parameters in Table 1.2, the edge lies <span data-num="l1_mo_hinh.goc.ranh" data-fmt="1"></span> km from the CBD.</p>
+<aside class="note"><b>Land available for housing.</b> The computation assumes that <span data-num="l1_mo_hinh.thetaPhan" data-fmt="%0"></span> of the land at each distance is residential, that is \(\theta\) equals that share of \(2\pi\). The value is illustrative.</aside>
+
+<h2 id="s6"><span class="sec">1.6</span>Comparative statics</h2>
+<p>The model can be used to compare two cities that are identical except for one condition. For the size of the city, the directions of these effects were established by Wheaton (1974).</p>
+<blockquote data-quote="trich_dan.liotta.wheaton" data-who="Liotta, Viguié and Lepetit (2022)"></blockquote>
+<p>Figure 1.2 lets you change each of the four conditions. On the left, land rent is drawn as height over the plane of the model city: the city ends where the surface falls to the flat level of agricultural rent, as equation (1.5) requires. A quarter of the surface is cut away, so the profile on the right can also be seen on the cut faces. Grey lines show the city before the change.</p>
+
+<figure class="fig wide" id="fig-1-2">
+  <figcaption class="fig-head"><span class="fig-label">Figure 1.2</span>Changing population, income, commuting cost and agricultural rent</figcaption>
+  <p class="fig-sub">Land rent over the model city (left) and along a line from its centre (right)</p>
+  <div class="controls" id="controls-1-2"></div>
+  <p class="readout" id="readout-1-2"></p>
+  <div class="fig-body fig-2col fig-surface">
+    <div><div class="surface" id="surface-1-2" role="img" aria-label="Land rent in the model city, drawn as a surface"></div><p class="s-hint">Drag to turn the view.</p><div id="surface-key-1-2"></div></div>
+    <div><div id="chart-1-2"></div></div>
+  </div>
+  <div class="fig-foot">
+    <p><b>Source:</b> computed from the model in <code>js/mo_hinh.js</code>; parameters in Table 1.2.</p>
+    <p><b>Note:</b> the city is abstract: nothing in this figure is measured, and it is not drawn on a map. The surface and the chart use the same index of land rent, on a scale that stays fixed when the sliders move. Lesson 2 (Section 2.3) compares a circular city of this kind with the measured extent of Ho Chi Minh City.</p>
+  </div>
+  <div class="about-data" data-sources="mo_hinh" data-script="js/mo_hinh.js" data-note="Solves the model again in your browser each time a slider moves, and draws the solution twice: as a surface and as a profile."></div>
+</figure>
+
+<p>Table 1.1 records the result of increasing each condition by <span data-num="l1_mo_hinh.buoc" data-fmt="%0"></span> while holding the others fixed.</p>
+<figure class="fig" id="tab-1-1">
+  <figcaption class="fig-head"><span class="fig-label">Table 1.1</span>Effect of an increase of <span data-num="l1_mo_hinh.buoc" data-fmt="%0"></span> in one condition</figcaption>
+  <p class="fig-sub">Percentage change relative to the baseline city</p>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Increase in</th><th class="r">Edge of the city \(\bar{x}\)</th><th class="r">Housing price at the centre</th><th class="r">Housing price near the old edge</th></tr></thead>
+    <tbody>
+      <tr><td>Population \(N\)</td><td class="r" data-num="l1_mo_hinh.tinhSo.0.ranh" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.0.pTam" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.0.pXa" data-fmt="+%1"></td></tr>
+      <tr><td>Income \(y\)</td><td class="r" data-num="l1_mo_hinh.tinhSo.1.ranh" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.1.pTam" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.1.pXa" data-fmt="+%1"></td></tr>
+      <tr><td>Commuting cost \(t\)</td><td class="r" data-num="l1_mo_hinh.tinhSo.2.ranh" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.2.pTam" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.2.pXa" data-fmt="+%1"></td></tr>
+      <tr><td>Agricultural rent \(r_A\)</td><td class="r" data-num="l1_mo_hinh.tinhSo.3.ranh" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.3.pTam" data-fmt="+%1"></td><td class="r" data-num="l1_mo_hinh.tinhSo.3.pXa" data-fmt="+%1"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Source:</b> <code>kich_ban/l1_mo_hinh.mjs</code>. “Near the old edge” is <span data-num="l1_mo_hinh.xaTam" data-fmt="%0"></span> of the baseline distance to the edge.</p>
+    <p><b>Note:</b> the signs agree with the closed-city results of Wheaton (1974) and Brueckner (1987); the script stops without producing the table if any sign differs. The magnitudes depend on the illustrative parameters.</p>
+  </div>
+  <div class="about-data" data-sources="mo_hinh" data-script="kich_ban/l1_mo_hinh.mjs" data-note="Raised each condition in turn, solved the model again and compared it with the baseline. The script stops if a sign differs from the published results."></div>
+</figure>
+
+<h3>Reading the results</h3>
+<p><b>Population.</b> More households must be housed. The price of floor space rises at every distance, developers build more intensively, and the city extends outwards.</p>
+<p><b>Income.</b> Higher income raises the demand for floor space, so dwellings become larger. By equation (1.2), larger dwellings make the price gradient flatter. The price curve rotates: it falls near the centre, rises farther out, and the city expands.</p>
+<p><b>Commuting cost.</b> A higher \(t\) makes each kilometre more costly, so by equation (1.2) the price gradient becomes steeper. Prices rise near the centre and fall farther out, and the city contracts.</p>
+<p><b>Agricultural rent.</b> Land at the edge earns more in agriculture, so the city contracts. With a fixed population in a smaller area, the price of floor space rises at every distance.</p>
+
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 1.1</span>The Alonso–Muth condition</p>
+  <p>Suppose that commuting costs VND 30,000 per kilometre of distance per month, and that a household living 10 km from the CBD occupies 50 m² of floor space.</p>
+  <ol type="a">
+    <li>By how much must the monthly price per square metre fall between 10 km and 11 km for the household to be indifferent between the two locations?</li>
+    <li>A household living 20 km from the CBD occupies 80 m². Is the price gradient steeper or flatter there? Give the value.</li>
+  </ol>
+  <details><summary>Show answer</summary><div>(a) By equation (1.2), the price falls by t/q = 30,000 / 50 = VND 600 per m² per month. (b) Flatter: 30,000 / 80 = VND 375 per m² per month. Larger dwellings spread the extra commuting cost over more square metres.</div></details>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 1.2</span>Cheaper commuting</p>
+  <p>In Figure 1.2, reduce the commuting cost by 40 percent and leave the other conditions unchanged.</p>
+  <ol type="a">
+    <li>What happens to the edge of the city?</li>
+    <li>Does the price of housing at the centre rise or fall?</li>
+    <li>Explain both results using equations (1.2), (1.5) and (1.6).</li>
+  </ol>
+  <details><summary>Show answer</summary><div>(a) The edge moves outwards. (b) The price at the centre falls. (c) A lower t flattens the price gradient (1.2). Households can live farther out at lower cost, so the same population (1.6) spreads over a larger area; land rent now meets agricultural rent (1.5) at a greater distance, and competition for central locations weakens.</div></details>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Exercise 1.3</span>Discussion: the assumptions and Ho Chi Minh City</p>
+  <p>Choose the assumption among A1–A6 that you consider least realistic for Ho Chi Minh City. Explain how relaxing it would change the price and density gradients that the model predicts. Lesson 2 measures the gradients of the city.</p>
+</div>
+
+<h2 id="params"><span class="sec">1.7</span>Parameters and checks</h2>
+<figure class="fig" id="tab-1-2">
+  <figcaption class="fig-head"><span class="fig-label">Table 1.2</span>Parameter values used on this page</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Symbol</th><th>Meaning</th><th class="r">Value</th></tr></thead>
+    <tbody>
+      <tr><td>\(y\)</td><td>income per household</td><td class="r" data-num="l1_mo_hinh.thamSo.y" data-fmt="0"></td></tr>
+      <tr><td>\(t\)</td><td>commuting cost per km</td><td class="r" data-num="l1_mo_hinh.thamSo.t" data-fmt="2"></td></tr>
+      <tr><td>\(N\)</td><td>number of households</td><td class="r" data-num="l1_mo_hinh.thamSo.N" data-fmt="0"></td></tr>
+      <tr><td>\(r_A\)</td><td>agricultural rent per unit of land</td><td class="r" data-num="l1_mo_hinh.thamSo.rA" data-fmt="2"></td></tr>
+      <tr><td>\(\alpha\)</td><td>share of spending on housing, utility \(c^{1-\alpha}q^{\alpha}\)</td><td class="r" data-num="l1_mo_hinh.thamSo.alpha" data-fmt="2"></td></tr>
+      <tr><td>\(\beta\)</td><td>capital exponent, production \(h(S) = A\,S^{\beta}\)</td><td class="r" data-num="l1_mo_hinh.thamSo.beta" data-fmt="2"></td></tr>
+      <tr><td>\(A,\ i\)</td><td>productivity of construction; price of capital</td><td class="r"><span data-num="l1_mo_hinh.thamSo.A" data-fmt="0"></span>; <span data-num="l1_mo_hinh.thamSo.i" data-fmt="0"></span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Note:</b> income, prices and rents are in arbitrary units; distance is in kilometres. The values were chosen so that the model city is about as large as a real metropolitan area and its density gradient is of the same order as those measured by Liotta, Viguié and Lepetit (2022). They are not estimates.</p>
+  </div>
+  <div class="about-data" data-sources="mo_hinh" data-script="js/mo_hinh.js" data-note="Tried a grid of values for commuting cost and agricultural rent and kept a pair that gives a city of realistic size and density gradient."></div>
+</figure>
+<p><b>Numerical check.</b> Equation (1.2) holds at every distance with a largest relative error of <span data-num="l1_mo_hinh.kiemMuth" data-fmt="sci"></span>, and the comparative statics in Table 1.1 have the signs derived in the literature. Both checks run in <code>kich_ban/l1_mo_hinh.mjs</code>; a failed check stops the script.</p>
+
+<h2 id="refs"><span class="sec">1.8</span>References</h2>
+<ul class="references">
+  <li>Alonso, W. (1964). <i>Location and land use: Toward a general theory of land rent</i>. Harvard University Press. <a href="https://doi.org/10.4159/harvard.9780674730854">doi:10.4159/harvard.9780674730854</a></li>
+  <li>Brueckner, J. K. (1987). The structure of urban equilibria: A unified treatment of the Muth–Mills model. In E. S. Mills (Ed.), <i>Handbook of regional and urban economics</i> (Vol. 2, pp. 821–845). North-Holland. <a href="https://doi.org/10.1016/S1574-0080(87)80006-8">doi:10.1016/S1574-0080(87)80006-8</a></li>
+  <li>Brueckner, J. K. (2011). <i>Lectures on urban economics</i>. MIT Press. Chapter 2, Analyzing urban spatial structure.</li>
+  <li>Liotta, C., Viguié, V., &amp; Lepetit, Q. (2022). Testing the monocentric standard urban model in a global sample of cities. <i>Regional Science and Urban Economics, 97</i>, 103832. <a href="https://doi.org/10.1016/j.regsciurbeco.2022.103832">doi:10.1016/j.regsciurbeco.2022.103832</a>. Quoted from the accepted manuscript, <a href="https://arxiv.org/abs/2111.02112">arXiv:2111.02112</a>, CC BY 4.0.</li>
+  <li>Mills, E. S. (1967). An aggregative model of resource allocation in a metropolitan area. <i>American Economic Review, 57</i>(2), 197–210.</li>
+  <li>Mills, E. S., &amp; Hamilton, B. W. (1994). <i>Urban economics</i> (5th ed.). HarperCollins.</li>
+  <li>Muth, R. F. (1969). <i>Cities and housing: The spatial pattern of urban residential land use</i>. University of Chicago Press.</li>
+  <li>Wheaton, W. C. (1974). A comparative static analysis of urban spatial structure. <i>Journal of Economic Theory, 9</i>(2), 223–237. <a href="https://doi.org/10.1016/0022-0531(74)90068-4">doi:10.1016/0022-0531(74)90068-4</a></li>
+</ul>
+
+</main>
+</div></div>
+
+<footer class="site-footer"><div class="inner">Urban Economics · The monocentric city. Teaching material for non-commercial classroom use. Text and figures are generated from the scripts in <code>kich_ban/</code>; every data source, licence and access date is listed in the data files in <code>du_lieu/</code>.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js"></script>
+<script src="../assets/core.js"></script>
+<script src="../assets/chart.js"></script>
+<script src="../js/mo_hinh.js"></script>
+<script src="../du_lieu/l1_mo_hinh.js"></script>
+<script src="../du_lieu/trich_dan.js"></script>
+<script src="../assets/nguon.js"></script>
+<script src="../assets/mat_gia_thue.js"></script>
+<script src="../assets/lesson1.js"></script>
+</body>
+</html>

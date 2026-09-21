@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bài 4 · TP.HCM giữa các đô thị láng giềng — Kinh tế đô thị</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%230071BC' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23111'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.css">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="course" href="index.html">Kinh tế đô thị <span>· Thành phố đơn tâm</span></a>
+  <nav><a href="1-model.html">1<span class="long"> · Mô hình</span></a><a href="2-hcmc.html">2<span class="long"> · TP.HCM</span></a><a href="3-commuting.html">3<span class="long"> · Chi phí đi lại</span></a><a href="4-neighbours.html" aria-current="page">4<span class="long"> · Láng giềng</span></a><a href="5-urbanisation.html">5<span class="long"> · Đô thị hoá</span></a></nav>
+  <div class="lang"><a href="../en/4-neighbours.html" hreflang="en">EN</a><span>VI</span></div>
+</div></header>
+
+<div class="page"><div class="layout">
+<aside class="toc"><nav aria-label="Trong bài"></nav></aside>
+<main class="main">
+
+<header class="lesson-head">
+  <p class="lesson-no">Bài 4</p>
+  <h1>TP.HCM giữa các đô thị láng giềng</h1>
+  <p class="standfirst">Bài 2 và Bài 3 chỉ nhìn một thành phố. Bài này đặt TP.HCM cạnh năm đô thị lớn khác ở Đông Nam Á, vẽ theo cùng một định nghĩa về đô thị và cùng một tỷ lệ, để những khác biệt về quy mô, mật độ và tốc độ mở rộng hiện ra ngay trên bản đồ. Sau đó bài so sánh kỹ hơn TP.HCM với Hà Nội.</p>
+  <p class="meta">Dữ liệu: Cơ sở dữ liệu Trung tâm đô thị GHSL R2024A, lưới dân số GHS-POP năm 2020 và lưới đất liền GHS-LAND do Trung tâm Nghiên cứu Chung của Uỷ ban châu Âu công bố, cùng dữ liệu World Settlement Footprint Evolution của Trung tâm Hàng không Vũ trụ Đức (DLR). Con số trong lời giảng do <code>kich_ban/l4_do_thi_chau_a.py</code> và <code>kich_ban/l4_ha_noi.py</code> sinh ra. Bản gốc của bài này viết bằng tiếng Anh; đây là bản dịch của học phần.</p>
+</header>
+
+<section class="objectives">
+  <h2>Mục tiêu học tập</h2>
+  <p>Học xong bài này, bạn có thể:</p>
+  <ol>
+    <li>giải thích vì sao chỉ so sánh được các đô thị khi chúng được đo theo cùng một định nghĩa, và nêu định nghĩa dùng ở đây;</li>
+    <li>đọc bản đồ mật độ dân được vẽ cùng tỷ lệ cho nhiều đô thị, và so sánh quy mô, mật độ và hình dạng của chúng;</li>
+    <li>liên hệ khác biệt giữa các đô thị với phần tĩnh học so sánh của Bài 1, và nói được một phép so sánh như vậy không thể cho thấy điều gì;</li>
+    <li>so sánh Hà Nội với TP.HCM bằng đất xây dựng quan sát từ vệ tinh và bằng độ dốc mật độ, và giải thích vì sao độ dốc mật độ phụ thuộc vào cách đo mật độ.</li>
+  </ol>
+</section>
+
+<h2 id="s1"><span class="sec">4.1</span>Một định nghĩa cho mọi đô thị</h2>
+<p>Ranh giới hành chính của một thành phố được vạch ra để quản lý, không phải để so sánh: có nơi ôm cả ruộng đồng và rừng, có nơi dừng lại trước khi hết vùng đã xây dựng. Vì vậy, Bài 2 đo TP.HCM bằng trung tâm đô thị của Lớp Định cư Toàn cầu (GHSL), một khái niệm chỉ dựa vào mật độ dân:</p>
+<blockquote data-quote="trich_dan.ucdb.dinhNghia" data-who="Uỷ ban châu Âu, Trung tâm Nghiên cứu Chung (2024), Stats in the City – the GHSL Urban Centre Database 2025"><p class="tr">Theo phương pháp này, một trung tâm đô thị (UC) được xác định trên lưới ô vuông 1 km² như một vùng liền khối có mật độ dân trên 1.500 người/km² và tổng dân số trên 50.000 người.</p></blockquote>
+<p>Vì cùng một quy tắc được áp lên cùng một lưới dân số ở khắp nơi, trung tâm đô thị của TP.HCM có thể đặt cạnh trung tâm đô thị của bất kỳ đô thị nào khác. Bài này chọn năm nơi: Hà Nội, và bốn thủ đô trong khu vực lớn hơn hoặc tương đương TP.HCM.</p>
+
+<h2 id="s2"><span class="sec">4.2</span>Sáu đô thị trên cùng một tỷ lệ</h2>
+<p>Bản đồ 4.1 cho xem từng đô thị một, luôn cùng một tỷ lệ; Hình 4.1 đặt cả sáu cạnh nhau. Mỗi đô thị được vẽ trong một ô vuông 90 × 90 km quanh tâm theo dân số của trung tâm đô thị năm 2020, với mật độ dân từ lưới GHS-POP và đường ranh trung tâm đô thị năm 1990 và 2020.</p>
+
+<figure class="fig wide" id="map-4-1">
+  <figcaption class="fig-head"><span class="fig-label">Bản đồ 4.1</span>Mật độ dân và trung tâm đô thị, sáu đô thị Đông Nam Á</figcaption>
+  <p class="fig-sub">Người/km², năm 2020, trên lưới 30 giây cung (khoảng 1 km); mọi đô thị cùng một tỷ lệ</p>
+  <div class="steps" role="group" aria-label="Đô thị">
+    <button type="button" data-go="0"><span data-str="l4_do_thi.thanhPho.0.ten"></span></button>
+    <button type="button" data-go="1"><span data-str="l4_do_thi.thanhPho.1.ten"></span></button>
+    <button type="button" data-go="2"><span data-str="l4_do_thi.thanhPho.2.ten"></span></button>
+    <button type="button" data-go="3"><span data-str="l4_do_thi.thanhPho.3.ten"></span></button>
+    <button type="button" data-go="4"><span data-str="l4_do_thi.thanhPho.4.ten"></span></button>
+    <button type="button" data-go="5"><span data-str="l4_do_thi.thanhPho.5.ten"></span></button>
+    <span class="hint">phím ← →</span>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-4-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> Uỷ ban châu Âu, Trung tâm Nghiên cứu Chung: GHS-POP R2023A (lưới dân số, 2020) và Cơ sở dữ liệu Trung tâm đô thị GHS-UCDB R2024A (trung tâm đô thị, 1990 và 2020); nền bản đồ OpenFreeMap, © những người đóng góp OpenStreetMap.</p>
+    <p><b>Ghi chú:</b> mức phóng của từng đô thị được hiệu chỉnh theo vĩ độ, để một xăng-ti-mét trên màn hình ứng với cùng một quãng đường ở mọi đô thị. Các vòng nét đứt cách tâm khung 10, 20 và 40 km. Dân số năm 2020 do GHSL ước tính từ số liệu điều tra dân số và diện tích xây dựng đo từ ảnh vệ tinh.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop ghs_ucdb nen_ban_do" data-script="kich_ban/l4_do_thi_chau_a.py" data-note="Đọc trung tâm đô thị của mỗi thành phố năm 1990 và 2020, tìm tâm theo dân số của trung tâm đô thị năm 2020, rồi cắt quanh tâm ấy một ô vuông 90 × 90 km từ lưới dân số năm 2020."></div>
+</figure>
+
+<figure class="fig wide" id="fig-4-1">
+  <figcaption class="fig-head"><span class="fig-label">Hình 4.1</span>Sáu đô thị đặt cạnh nhau</figcaption>
+  <p class="fig-sub">Mỗi ô vuông 90 × 90 km; người/km², năm 2020; đỏ: trung tâm đô thị 2020; nét đứt đen: trung tâm đô thị 1990</p>
+  <div class="fig-body"><div class="small-multiples" id="f-4-1"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> như Bản đồ 4.1.</p>
+    <p><b>Ghi chú:</b> dân số và diện tích ghi dưới mỗi ô là của trung tâm đô thị năm 2020, theo Cơ sở dữ liệu Trung tâm đô thị. Trung tâm đô thị của Jakarta và Manila vượt ra ngoài ô vuông của chúng.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop ghs_ucdb" data-script="kich_ban/l4_do_thi_chau_a.py" data-note="Vẽ ô vuông 90 × 90 km của lưới dân số năm 2020 cho từng đô thị cùng một kích thước, kèm đường ranh trung tâm đô thị."></div>
+</figure>
+
+<figure class="fig" id="tab-4-1">
+  <figcaption class="fig-head"><span class="fig-label">Bảng 4.1</span>Dân số và diện tích trung tâm đô thị, 1990 và 2020</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Đô thị</th><th class="r">Dân số 1990 (triệu)</th><th class="r">Dân số 2020 (triệu)</th><th class="r">Diện tích 1990 (km²)</th><th class="r">Diện tích 2020 (km²)</th><th class="r">Diện tích 2020 ÷ 1990</th><th class="r">Người/km², 2020</th></tr></thead>
+    <tbody>
+      <tr><td data-str="l4_do_thi.thanhPho.0.ten"></td><td class="r" data-num="l4_do_thi.thanhPho.0.thongKe.1990.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.0.thongKe.2020.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.0.thongKe.1990.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.0.thongKe.2020.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.0.tyLeDienTich" data-fmt="x2"></td><td class="r" data-num="l4_do_thi.thanhPho.0.thongKe.2020.matDo" data-fmt="0"></td></tr>
+      <tr><td data-str="l4_do_thi.thanhPho.1.ten"></td><td class="r" data-num="l4_do_thi.thanhPho.1.thongKe.1990.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.1.thongKe.2020.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.1.thongKe.1990.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.1.thongKe.2020.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.1.tyLeDienTich" data-fmt="x2"></td><td class="r" data-num="l4_do_thi.thanhPho.1.thongKe.2020.matDo" data-fmt="0"></td></tr>
+      <tr><td data-str="l4_do_thi.thanhPho.2.ten"></td><td class="r" data-num="l4_do_thi.thanhPho.2.thongKe.1990.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.2.thongKe.2020.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.2.thongKe.1990.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.2.thongKe.2020.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.2.tyLeDienTich" data-fmt="x2"></td><td class="r" data-num="l4_do_thi.thanhPho.2.thongKe.2020.matDo" data-fmt="0"></td></tr>
+      <tr><td data-str="l4_do_thi.thanhPho.3.ten"></td><td class="r" data-num="l4_do_thi.thanhPho.3.thongKe.1990.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.3.thongKe.2020.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.3.thongKe.1990.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.3.thongKe.2020.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.3.tyLeDienTich" data-fmt="x2"></td><td class="r" data-num="l4_do_thi.thanhPho.3.thongKe.2020.matDo" data-fmt="0"></td></tr>
+      <tr><td data-str="l4_do_thi.thanhPho.4.ten"></td><td class="r" data-num="l4_do_thi.thanhPho.4.thongKe.1990.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.4.thongKe.2020.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.4.thongKe.1990.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.4.thongKe.2020.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.4.tyLeDienTich" data-fmt="x2"></td><td class="r" data-num="l4_do_thi.thanhPho.4.thongKe.2020.matDo" data-fmt="0"></td></tr>
+      <tr><td data-str="l4_do_thi.thanhPho.5.ten"></td><td class="r" data-num="l4_do_thi.thanhPho.5.thongKe.1990.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.5.thongKe.2020.dan" data-fmt="M1"></td><td class="r" data-num="l4_do_thi.thanhPho.5.thongKe.1990.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.5.thongKe.2020.dienTich" data-fmt="0"></td><td class="r" data-num="l4_do_thi.thanhPho.5.tyLeDienTich" data-fmt="x2"></td><td class="r" data-num="l4_do_thi.thanhPho.5.thongKe.2020.matDo" data-fmt="0"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> Uỷ ban châu Âu, Trung tâm Nghiên cứu Chung, Cơ sở dữ liệu Trung tâm đô thị GHS-UCDB R2024A.</p>
+    <p><b>Ghi chú:</b> dân số và diện tích của trung tâm đô thị theo ranh của từng năm. Kịch bản kiểm rằng diện tích của mỗi đường ranh khớp với cơ sở dữ liệu.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_ucdb" data-script="kich_ban/l4_do_thi_chau_a.py" data-note="Đọc dân số và diện tích của từng trung tâm đô thị năm 1990 và 2020 từ cơ sở dữ liệu."></div>
+</figure>
+
+<p>Có ba khác biệt nổi bật. Về dân số, TP.HCM đứng thứ tư trong sáu đô thị, sau Jakarta, Manila và Bangkok; Hà Nội đứng thứ sáu. Về mật độ, trung tâm đô thị của TP.HCM cao thứ hai, chỉ sau Manila, với <span data-num="l4_do_thi.thanhPho.0.thongKe.2020.matDo" data-fmt="0"></span> người/km². Còn về tốc độ mở rộng, trung tâm đô thị của Hà Nội lan rộng nhanh nhất trong giai đoạn 1990–2020, tới mức gấp <span data-num="l4_do_thi.thanhPho.1.tyLeDienTich" data-fmt="x2"></span> diện tích cũ, trong khi Jakarta và Manila — vốn lớn nhất từ năm 1990 — mở rộng chậm nhất.</p>
+<div class="interp"><span class="label">Diễn giải — bài này chưa kiểm</span>Theo phần tĩnh học so sánh của Bài 1, một đô thị đông dân hơn, thu nhập cao hơn hoặc đi lại rẻ hơn sẽ chiếm nhiều đất hơn. Trong sáu đô thị này, trung tâm đô thị nào đông dân hơn thì cũng rộng hơn, nhưng các đô thị khác nhau cùng lúc về thu nhập, giao thông, địa lý và quy hoạch, nên so sánh sáu trường hợp không thể tách các nguyên nhân ấy ra khỏi nhau.</div>
+
+<h2 id="s3"><span class="sec">4.3</span>Hà Nội và TP.HCM</h2>
+<p>Trong sáu đô thị có hai đô thị cùng một nước. Hà Nội và TP.HCM lớn lên dưới cùng một luật đất đai, cùng những chính sách quốc gia, và ở cả hai nơi xe máy là phương tiện đi lại chính. Báo cáo đánh giá đô thị hóa của Ngân hàng Thế giới coi tăng trưởng của cả nước là do hai đô thị này dẫn dắt:</p>
+<blockquote data-quote="trich_dan.vur.haiHeThong" data-who="Ngân hàng Thế giới (2011), Đánh giá Đô thị hóa ở Việt Nam"><p class="tr">Đánh giá Đô thị hóa cho thấy sự tăng trưởng kinh tế và phần lớn sự tăng trưởng dân số đô thị ở Việt Nam có nguồn gốc từ hai hệ thống đô thị độc lập gồm đô thị lõi chi phối – ngoại vi là thành phố Hồ Chí Minh và thành phố Hà Nội.</p></blockquote>
+<p>Mục này so sánh hình dạng của hai thành phố. Cả hai được đo từ trung tâm thương mại lâu đời của mình — hồ Hoàn Kiếm ở Hà Nội và Bến Thành ở TP.HCM — chứ không từ tâm theo dân số như ở Mục 4.2, vì mô hình đơn tâm tính mọi khoảng cách từ trung tâm thương mại.</p>
+
+<figure class="fig wide" id="map-4-2">
+  <figcaption class="fig-head"><span class="fig-label">Bản đồ 4.2</span>Đất xây dựng theo thời kỳ hình thành, Hà Nội và TP.HCM, 1985–2015</figcaption>
+  <p class="fig-sub">Ô khoảng 90 m, tô màu theo thời kỳ mà vệ tinh Landsat lần đầu ghi nhận ô đó đã được xây dựng; hai thành phố cùng một tỷ lệ</p>
+  <div class="steps" role="group" aria-label="Thành phố">
+    <button type="button" data-go="0"><span data-str="l4_ha_noi.thanhPho.0.ten"></span></button>
+    <button type="button" data-go="1"><span data-str="l4_ha_noi.thanhPho.1.ten"></span></button>
+    <span class="hint">phím ← →</span>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-4-2"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> World Settlement Footprint Evolution, © 2024 DLR; trung tâm đô thị từ Cơ sở dữ liệu Trung tâm đô thị GHS R2024A (Trung tâm Nghiên cứu Chung, Uỷ ban châu Âu); vị trí hai trung tâm từ OpenStreetMap; nền bản đồ OpenFreeMap, © những người đóng góp OpenStreetMap.</p>
+    <p><b>Ghi chú:</b> các vòng nét đứt cách hồ Hoàn Kiếm và Bến Thành 5, 10, 20 và 30 km. Một ô được tính là đã xây dựng khi ít nhất năm trong chín điểm ảnh Landsat của nó đã xây dựng; đất xây dựng trước năm 1985 được tô cùng màu với năm 1985. Đường đỏ là trung tâm đô thị năm 2020, như ở Bản đồ 4.1.</p>
+  </div>
+  <div class="about-data" data-sources="wsf_evolution ghs_ucdb tam_lich_su nen_ban_do" data-script="kich_ban/l4_ha_noi.py" data-note="Ghép hai ô ảnh Landsat quanh mỗi thành phố, gộp điểm ảnh thành ô khoảng 90 m, ghi thời kỳ mỗi ô bắt đầu được xây dựng, rồi cắt một khung chữ nhật 100 × 80 km quanh mỗi trung tâm lâu đời."></div>
+</figure>
+
+<p>Hai bản đồ trông khác nhau, nhưng năm 2015 diện tích đất xây dựng trong bán kính 30 km của hai thành phố gần như bằng nhau: <span data-num="l4_ha_noi.thongKe.xay2015.hn" data-fmt="0"></span> km² quanh hồ Hoàn Kiếm và <span data-num="l4_ha_noi.thongKe.xay2015.hcm" data-fmt="0"></span> km² quanh Bến Thành. Trong khi đó, số người sống trong bán kính 30 km quanh Bến Thành nhiều gấp khoảng <span data-num="l4_ha_noi.thongKe.tySoDan" data-fmt="1"></span> lần, nên mỗi người dân vùng Hà Nội có khoảng <span data-num="l4_ha_noi.thongKe.m2MoiNguoi.hn" data-fmt="0"></span> m² đất xây dựng, còn ở TP.HCM chỉ khoảng <span data-num="l4_ha_noi.thongKe.m2MoiNguoi.hcm" data-fmt="0"></span> m² (đất xây dựng năm 2015 chia cho dân số năm 2020).</p>
+
+<figure class="fig wide" id="fig-4-2">
+  <figcaption class="fig-head"><span class="fig-label">Hình 4.2</span>Tỷ lệ đất đã xây dựng theo khoảng cách tới trung tâm, 1990, 2000 và 2015</figcaption>
+  <p class="fig-sub">Đất xây dựng chia cho toàn bộ đất liền của từng vành rộng 1 km; không tính mặt nước</p>
+  <div class="fig-body"><div class="pair-charts"><div id="c-4-2a"></div><div id="c-4-2b"></div></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> World Settlement Footprint Evolution, © 2024 DLR; diện tích đất liền từ GHS-LAND R2022A (Trung tâm Nghiên cứu Chung, Uỷ ban châu Âu).</p>
+    <p><b>Ghi chú:</b> khoảng cách tính từ hồ Hoàn Kiếm và từ Bến Thành. Đường chấm đánh dấu mức một nửa: khoảng cách mà đường cong lần đầu rơi xuống dưới mức này là mép của vùng lõi xây dựng liền mạch nói trong bài.</p>
+  </div>
+  <div class="about-data" data-sources="wsf_evolution ghs_land tam_lich_su" data-script="kich_ban/l4_ha_noi.py" data-note="Với mỗi vành rộng 1 km, đo diện tích các điểm ảnh Landsat đã xây dựng tới từng năm và diện tích đất liền (không phải mặt nước) của vành, rồi lấy số trước chia số sau."></div>
+</figure>
+
+<p>Hình 4.2 cho thấy đất ấy được sắp xếp thế nào. Sát trung tâm, ở cả hai nơi gần như mọi mảnh đất đều đã xây dựng; khác biệt nằm ở khoảng giữa. Năm 2015, quanh Bến Thành hơn một nửa diện tích đất đã được xây dựng ở mọi vành cho tới <span data-num="l4_ha_noi.thongKe.r50.hcm.2015" data-fmt="0"></span> km, còn quanh hồ Hoàn Kiếm chỉ tới <span data-num="l4_ha_noi.thongKe.r50.hn.2015" data-fmt="0"></span> km. Vùng lõi xây dựng liền mạch của cả hai thành phố đều nới rộng đều đặn, từ <span data-num="l4_ha_noi.thongKe.r50.hcm.1990" data-fmt="0"></span> và <span data-num="l4_ha_noi.thongKe.r50.hn.1990" data-fmt="0"></span> km năm 1990.</p>
+<p>Tính trên cả bán kính 30 km, đất xây dựng quanh Hà Nội tăng nhanh hơn: năm 2015 gấp <span data-num="l4_ha_noi.thongKe.tang.9015.hn" data-fmt="1"></span> lần năm 1990, so với <span data-num="l4_ha_noi.thongKe.tang.9015.hcm" data-fmt="1"></span> lần quanh TP.HCM. Ngân hàng Thế giới đã thấy khác biệt này trong giai đoạn 1999–2009 và nêu một nguyên nhân:</p>
+<blockquote data-quote="trich_dan.vur.chuyenDoi" data-who="Ngân hàng Thế giới (2011), Đánh giá Đô thị hóa ở Việt Nam"><p class="tr">Sự khác biệt chính bắt nguồn từ mật độ chuyển đổi sử dụng đất nông thôn thành đất đô thị (8,4% tại đồng bằng sông Hồng so với 0,9% tại Đông Nam Bộ). Sự khác biệt này có thể được giải thích bằng nhiều yếu tố. Việc mở rộng ranh giới thủ đô Hà Nội trong thời gian gần đây có thể là một nguyên nhân.</p></blockquote>
+<p>Ảnh vệ tinh thì không phụ thuộc ranh giới. Đo bằng ảnh vệ tinh, trong cùng thập kỷ ấy đất xây dựng trong bán kính 30 km tăng <span data-num="l4_ha_noi.thongKe.moiNam9909.hn" data-fmt="%1"></span> mỗi năm quanh Hà Nội và <span data-num="l4_ha_noi.thongKe.moiNam9909.hcm" data-fmt="%1"></span> quanh TP.HCM: Hà Nội nhanh hơn thật, nhưng cách biệt nhỏ hơn nhiều so với số liệu của Ngân hàng Thế giới — mà chính báo cáo đã gắn một phần với việc đổi ranh giới.</p>
+
+<figure class="fig" id="fig-4-3">
+  <figcaption class="fig-head"><span class="fig-label">Hình 4.3</span>Mật độ dân theo khoảng cách tới trung tâm, Hà Nội và TP.HCM, 2020</figcaption>
+  <p class="fig-sub">Người/km² trong từng vành rộng 1 km (thang logarit), kèm đường hàm mũ ước lượng</p>
+  <div class="toggles" role="group" aria-label="Loại đất dùng làm mẫu số">
+    <span class="lbl">Chia cho</span><button type="button" data-md="dat">toàn bộ đất liền</button><button type="button" data-md="xay">chỉ đất đã xây dựng</button>
+  </div>
+  <div class="fig-body"><div id="c-4-3"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> GHS-POP R2023A, lưới dân số năm 2020, và GHS-LAND R2022A (Trung tâm Nghiên cứu Chung, Uỷ ban châu Âu); đất xây dựng từ World Settlement Footprint Evolution, © 2024 DLR.</p>
+    <p><b>Ghi chú:</b> khoảng cách tính từ hồ Hoàn Kiếm và từ Bến Thành. Mỗi đường nét đứt là đường thẳng ước lượng cho logarit mật độ trên các vành từ 0 đến 30 km (Bài 2). “Chỉ đất đã xây dựng” lấy dân số năm 2020 chia cho đất đã xây dựng tới năm 2015.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop ghs_land wsf_evolution" data-script="kich_ban/l4_ha_noi.py" data-note="Rải dân của mỗi ô lưới khoảng 1 km đều lên phần đất liền trong ô, cộng theo vành rộng 1 km, rồi chia cho đất liền của vành, hoặc cho đất đã xây dựng của vành; sau đó ước lượng đường thẳng cho logarit mật độ."></div>
+</figure>
+
+<p>Hình 4.3 chuyển từ đất sang người. Mật độ quanh Bến Thành cao hơn quanh hồ Hoàn Kiếm ở <span data-num="l4_ha_noi.thongKe.soVanhHcmCaoHon" data-fmt="0"></span> trong <span data-num="l4_ha_noi.banKinh" data-fmt="0"></span> khoảng cách, và vẫn trên <span data-num="l4_ha_noi.thongKe.nguongMatDo" data-fmt="0"></span> người/km² cho tới <span data-num="l4_ha_noi.thanhPho.1.duoi10000" data-fmt="0"></span> km, trong khi ở Hà Nội chỉ tới <span data-num="l4_ha_noi.thanhPho.0.duoi10000" data-fmt="0"></span> km.</p>
+<div class="interp"><span class="label">Diễn giải — khớp với mô hình, nhưng chưa phải phép kiểm mô hình</span>Trong mô hình thành phố đóng, dân số đông hơn đẩy giá nhà lên ở mọi khoảng cách và đẩy ranh thành phố ra xa (Bảng 1.1); nhà đắt hơn thì mỗi hộ dùng ít diện tích hơn, nên mật độ tăng. TP.HCM đông dân hơn và đúng là như vậy. Nhưng hai thành phố còn khác nhau về thu nhập, về cơ cấu việc làm và về địa lý — Hà Nội nằm giữa đồng bằng sông Hồng vốn đông dân — nên phép so sánh này khớp với mô hình mà chưa kiểm được mô hình.</div>
+
+<p>Độ dốc mật độ tóm cả đường mật độ ấy vào một con số: hệ số góc <i>b</i> của đường thẳng ln <i>D</i>(<i>x</i>) = <i>a</i> − <i>b</i><i>x</i> ước lượng trên các vành (Bài 2). Năm 2011, dựa trên nghiên cứu của Alain Bertaud, Ngân hàng Thế giới so sánh độ dốc mật độ của Hà Nội với các đô thị châu Á khác:</p>
+<blockquote data-quote="trich_dan.vur.doDoc" data-who="Ngân hàng Thế giới (2011), Đánh giá Đô thị hóa ở Việt Nam"><p class="tr">Nhìn vào Hình 3.14, ta có thể thấy rõ rằng Hà Nội có đường đồ thị về mật độ bằng phẳng hơn so với Bắc Kinh, Ja-cac-ta, Băng Cốc và Bácxêlôna.</p></blockquote>
+<p>Mật độ trong báo cáo ấy là mật độ ròng — dân số chỉ chia cho phần đất đã xây dựng:</p>
+<blockquote data-quote="trich_dan.vur.matDoRong" data-who="Ngân hàng Thế giới (2011), Đánh giá Đô thị hóa ở Việt Nam"><p class="tr">Cần tính toán một con số thống kê có ý nghĩa hơn bằng cách trừ đi diện tích mặt nước và diện tích đất chưa khai thác ra khỏi tổng diện tích để có diện tích thực. Mật độ dân số thực tế sau đó được tính bằng cách lấy dân số chia cho diện tích thực.</p></blockquote>
+<p>Bảng 4.2 làm lại phép so sánh ấy cho năm 2020, với cùng dữ liệu và cùng cách làm cho cả sáu đô thị, và tính độ dốc theo cả hai cách: trên toàn bộ đất liền, như Hình 4.3, và chỉ trên đất đã xây dựng.</p>
+
+<figure class="fig" id="tab-4-2">
+  <figcaption class="fig-head"><span class="fig-label">Bảng 4.2</span>Độ dốc mật độ của sáu đô thị, 2020</figcaption>
+  <p class="fig-sub">Hệ số góc <i>b</i> của logarit mật độ theo khoảng cách (km); giá trị càng lớn thì mật độ giảm càng nhanh</p>
+  <div class="table-wrap"><table class="data">
+    <thead>
+      <tr><th rowspan="2">Đô thị</th><th class="r" rowspan="2">Dân trong bán kính 30 km (triệu người)</th><th class="c" colspan="2">Mật độ trên toàn bộ đất liền</th><th class="c" colspan="2">Mật độ trên đất đã xây dựng</th></tr>
+      <tr><th class="r">0–10 km</th><th class="r">0–30 km</th><th class="r">0–10 km</th><th class="r">0–30 km</th></tr>
+    </thead>
+    <tbody id="tab-4-2-rows"></tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> như Hình 4.3; sáu dòng đầu đo từ tâm theo dân số như ở Bản đồ 4.1.</p>
+    <p><b>Ghi chú:</b> hai dòng cuối đo lại Hà Nội và TP.HCM từ trung tâm lâu đời của mỗi nơi. Mỗi độ dốc được ước lượng bằng bình phương nhỏ nhất, mỗi vành rộng 1 km là một điểm. Đất xây dựng là của năm 2015, dân số là của năm 2020.</p>
+  </div>
+  <div class="about-data" data-sources="ghs_pop ghs_land wsf_evolution" data-script="kich_ban/l4_ha_noi.py" data-note="Lặp lại phép đo của Hình 4.3 cho từng đô thị trong sáu đô thị, từ tâm dùng ở Bản đồ 4.1."></div>
+</figure>
+
+<p>Câu trả lời tùy vào cách đo và khoảng cách. Trong bán kính 10 km, Hà Nội có độ dốc lớn nhất trong sáu đô thị theo cả hai cách đo: tính trên toàn bộ đất liền, cứ ra xa thêm 1 km thì mật độ giảm khoảng <span data-num="l4_ha_noi.sauDoThi.1.hoiQuy10.giamMoiKm" data-fmt="%0"></span>. Trên cả 30 km, độ dốc tính trên toàn bộ đất liền của Hà Nội chỉ đứng sau TP.HCM, còn tính trên đất đã xây dựng thì xấp xỉ Bangkok. Jakarta có độ dốc thoải nhất khi tính trên toàn bộ đất liền, ở cả hai khoảng cách, và khi tính trên đất đã xây dựng trong 30 km. Không cột nào cho thấy Hà Nội thoải hơn hẳn Bangkok và Jakarta. Nhận định năm 2011 có thể đúng với Hà Nội năm 2009, với vùng đã xây dựng thời đó, hoặc với một khoảng cách khác; dữ liệu của bài này không cho biết là trường hợp nào.</p>
+<p>Bảng cũng cho thấy hai điểm chung. Chia cho đất đã xây dựng luôn cho độ dốc thoải hơn, ở mọi đô thị, vì chính tỷ lệ đất đã xây dựng cũng giảm dần khi ra xa trung tâm (Hình 4.2). Và một đường hàm mũ duy nhất mô tả Hà Nội kém hơn TP.HCM (r² bằng <span data-num="l4_ha_noi.thanhPho.0.hoiQuy.r2" data-fmt="2"></span> so với <span data-num="l4_ha_noi.thanhPho.1.hoiQuy.r2" data-fmt="2"></span>, tính trên toàn bộ đất liền): quanh hồ Hoàn Kiếm, mật độ giảm rất nhanh trong vùng lõi đã xây dựng rồi giảm chậm hẳn khi ra ngoài — một hình dạng mà một con số không thể diễn tả hết.</p>
+
+
+<h2 id="s4"><span class="sec">4.4</span>Mạng lưới đường</h2>
+<p>Chi phí đi lại <i>t</i> trong Bài 1 phụ thuộc vào mạng lưới mà người ta đi trên đó, và Bài 3 đã đo từng công trình mới làm đổi thời gian đi lại của một thành phố ra sao. Các đô thị còn so được với nhau bằng chính mạng lưới ấy. Trong báo cáo năm 2020 về đô thị hoá Việt Nam, Ngân hàng Thế giới làm đúng phép so đó:</p>
+<blockquote data-quote="trich_dan.wb20.duongBanKinh" data-who="Ngân hàng Thế giới (2020), Đô thị hóa Việt Nam trước ngã rẽ"><p class="tr">Bản đồ 1.6 so sánh mật độ mạng lưới đường bộ trong bán kính 50 km từ trung tâm TP HCM và Hà Nội so với mật độ đường bộ của ba vùng đô thị lớn ở châu Á, bao gồm Bangkok, Thượng Hải và Seoul.</p></blockquote>
+<p>Hai nhận định của họ kiểm lại được bằng dữ liệu mở. Nhận định thứ nhất về Bangkok:</p>
+<blockquote data-quote="trich_dan.wb20.duongBangkok" data-who="Ngân hàng Thế giới (2020), Đô thị hóa Việt Nam trước ngã rẽ"><p class="tr">Mặc dù Bangkok và TP HCM có dân số tương đương, Bangkok có mật độ đường bộ cao hơn nhiều, không chỉ trong thành phố mà còn trên toàn bộ vùng đô thị lớn.</p></blockquote>
+<p>Nhận định thứ hai đưa ra con số cho những ô dày đường nhất:</p>
+<blockquote data-quote="trich_dan.wb20.duongMax" data-who="Ngân hàng Thế giới (2020), Đô thị hóa Việt Nam trước ngã rẽ"><p class="tr">Mật độ đường bộ tối đa là khoảng 41 km/km2, gần gấp đôi so với mật độ 23-25 km/km2 ở vùng đô thị Hà Nội và TP HCM.</p></blockquote>
+<p>Bản đồ 4.3 làm lại phép so ấy bằng OpenStreetMap, đo hệt nhau ở mọi thành phố: chiều dài đường trong từng ô một ki-lô-mét vuông, chia cho phần đất liền của ô đó. Thiếu Thượng Hải, vì bản trích OpenStreetMap của Trung Quốc lớn hơn nhiều so với khả năng xử lý của học phần; Seoul và Bangkok vẫn còn, và thêm bốn đô thị khác của Mục 4.2.</p>
+
+<figure class="fig wide" id="map-4-3">
+  <figcaption class="fig-head"><span class="fig-label">Bản đồ 4.3</span>Mật độ mạng lưới đường trong bán kính 50 km quanh bảy trung tâm</figcaption>
+  <p class="fig-sub">Ki-lô-mét đường trên mỗi km² đất liền, ô 1 km; đường chính, từ cao tốc tới đường khu dân cư; mọi đô thị cùng một tỷ lệ</p>
+  <div class="steps" role="group" aria-label="Thành phố">
+    <button type="button" data-go="0"><span data-str="l4_duong.thanhPho.0.ten"></span></button>
+    <button type="button" data-go="1"><span data-str="l4_duong.thanhPho.1.ten"></span></button>
+    <button type="button" data-go="2"><span data-str="l4_duong.thanhPho.2.ten"></span></button>
+    <button type="button" data-go="3"><span data-str="l4_duong.thanhPho.3.ten"></span></button>
+    <button type="button" data-go="4"><span data-str="l4_duong.thanhPho.4.ten"></span></button>
+    <button type="button" data-go="5"><span data-str="l4_duong.thanhPho.5.ten"></span></button>
+    <button type="button" data-go="6"><span data-str="l4_duong.thanhPho.6.ten"></span></button>
+    <span class="hint">phím ← →</span>
+  </div>
+  <div class="fig-body"><div class="map tall" id="m-4-3"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> © những người đóng góp OpenStreetMap (ODbL), bản trích từng nước do Geofabrik chuẩn bị; diện tích đất liền từ GHS-LAND R2022A (Trung tâm Nghiên cứu Chung, Uỷ ban châu Âu); tâm như Bản đồ 4.1, Seoul thêm vào theo cùng quy tắc; nền bản đồ OpenFreeMap.</p>
+    <p><b>Ghi chú:</b> mỗi ô rộng 1 km; giá trị của ô là chiều dài những đoạn đường có trung điểm rơi vào ô, chia cho phần đất liền của ô. Vòng nét đứt là 10, 25 và 50 km tính từ tâm. Đường nội bộ, đường mòn và phố đi bộ không tính ở đây mà được cộng thêm trong Bảng 4.3. OpenStreetMap do tình nguyện viên vẽ, mức độ đầy đủ không giống nhau ở mọi nơi.</p>
+  </div>
+  <div class="about-data" data-sources="osm_geofabrik ghs_land ghs_ucdb nen_ban_do" data-script="kich_ban/l4_mang_duong.py" data-note="Đọc một lượt mọi con đường trong bản trích của từng nước, giữ các đoạn nằm trong bán kính 50 km quanh mỗi tâm, cộng chiều dài vào ô 1 km rồi chia cho phần đất liền của ô."></div>
+</figure>
+
+<figure class="fig" id="fig-4-4">
+  <figcaption class="fig-head"><span class="fig-label">Hình 4.4</span>Mật độ mạng lưới đường theo khoảng cách tới trung tâm</figcaption>
+  <p class="fig-sub">Ki-lô-mét đường chính trên mỗi km² đất liền, theo từng vành rộng 1 km</p>
+  <div class="fig-body"><div id="c-4-4"></div></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> như Bản đồ 4.3.</p>
+    <p><b>Ghi chú:</b> mỗi điểm là một vành rộng 1 km quanh tâm; giá trị là chiều dài đường của vành chia cho phần đất liền của vành.</p>
+  </div>
+  <div class="about-data" data-sources="osm_geofabrik ghs_land" data-script="kich_ban/l4_mang_duong.py" data-note="Cộng chiều dài đường và diện tích đất liền của từng vành rộng 1 km rồi lấy số trước chia số sau."></div>
+</figure>
+
+<figure class="fig" id="tab-4-3">
+  <figcaption class="fig-head"><span class="fig-label">Bảng 4.3</span>Mạng lưới đường trong bán kính 50 km quanh mỗi trung tâm</figcaption>
+  <div class="table-wrap"><table class="data">
+    <thead>
+      <tr><th rowspan="2">Đô thị</th><th class="r" rowspan="2">Đường chính (km)</th><th class="c" colspan="2">Km trên mỗi km² đất liền</th><th class="c" colspan="2">Ô một km² dày nhất</th></tr>
+      <tr><th class="r">đường chính</th><th class="r">mọi đường</th><th class="r">đường chính</th><th class="r">mọi đường</th></tr>
+    </thead>
+    <tbody id="tab-4-3-rows"></tbody>
+  </table></div>
+  <div class="fig-foot">
+    <p><b>Nguồn:</b> như Bản đồ 4.3.</p>
+    <p><b>Ghi chú:</b> "đường chính" gồm các cấp từ cao tốc tới đường khu dân cư, kể cả đường chưa phân cấp; "mọi đường" cộng thêm đường nội bộ, đường mòn và phố đi bộ, nhưng không tính lối vào nhà và lối trong bãi đỗ xe. Ô dày nhất là ô có giá trị cao nhất trong số những ô có ít nhất nửa km² đất liền.</p>
+  </div>
+  <div class="about-data" data-sources="osm_geofabrik ghs_land" data-script="kich_ban/l4_mang_duong.py" data-note="Cộng chiều dài đường trong bán kính 50 km quanh mỗi tâm theo hai nhóm cấp đường, và tìm ô dày nhất của từng đô thị."></div>
+</figure>
+
+<p>Trong bán kính 50 km quanh Bến Thành, mạng lưới đường chính dài <span data-num="l4_duong.thanhPho.0.kmChinh" data-fmt="0"></span> km, tức <span data-num="l4_duong.thanhPho.0.matDoChinh" data-fmt="1"></span> km trên mỗi km² đất liền; quanh hồ Hoàn Kiếm là <span data-num="l4_duong.thanhPho.1.matDoChinh" data-fmt="1"></span>. Bangkok đạt <span data-num="l4_duong.thanhPho.2.matDoChinh" data-fmt="1"></span> km/km², gấp <span data-num="l4_duong.thongKe.tySoBkkHcm" data-fmt="1"></span> lần TP.HCM, còn Seoul <span data-num="l4_duong.thanhPho.6.matDoChinh" data-fmt="1"></span>, gấp <span data-num="l4_duong.thongKe.tySoSelHcm" data-fmt="1"></span> lần. Thứ tự mà Ngân hàng Thế giới nêu được xác nhận, và Hình 4.4 cho thấy nó không chỉ đến từ khu trung tâm: ngoài 25 km, mỗi km² đất ở Bangkok vẫn có nhiều đường hơn TP.HCM.</p>
+<p>Nhận định thứ hai thì không vượt qua được phép kiểm ấy. Tính bình quân cả vòng tròn 50 km, Seoul không dày đường hơn hai thành phố Việt Nam: <span data-num="l4_duong.thanhPho.6.matDoChinh" data-fmt="1"></span> km trên mỗi km² đất liền, so với <span data-num="l4_duong.thanhPho.0.matDoChinh" data-fmt="1"></span> ở TP.HCM và <span data-num="l4_duong.thanhPho.1.matDoChinh" data-fmt="1"></span> ở Hà Nội. Ô một ki-lô-mét vuông dày nhất lại là chuyện khác: <span data-num="l4_duong.thanhPho.6.oCaoNhatChinh" data-fmt="0"></span> km đường chính, gần với con số <span data-num="l4_duong.thongKe.wb.toiDa" data-fmt="0"></span> mà báo cáo nêu, trong khi TP.HCM là <span data-num="l4_duong.thanhPho.0.oCaoNhatChinh" data-fmt="0"></span> và Hà Nội <span data-num="l4_duong.thanhPho.1.oCaoNhatChinh" data-fmt="0"></span> — đều cao hơn khoảng <span data-num="l4_duong.thongKe.wb.hnHcmDuoi" data-fmt="0"></span>–<span data-num="l4_duong.thongKe.wb.hnHcmTren" data-fmt="0"></span> của báo cáo. Trong bảy đô thị, bình quân cao nhất thuộc về Jakarta, thấp nhất là Kuala Lumpur, còn ô một km² dày nhất nằm ở Manila.</p>
+<p>Bình quân trên một vòng tròn 50 km còn phụ thuộc vào những gì nằm trong vòng ấy. Trong vòng quanh Manila, <span data-num="l4_duong.thongKe.tyDatVong.mnl" data-fmt="%0"></span> là đất liền; quanh Seoul <span data-num="l4_duong.thongKe.tyDatVong.sel" data-fmt="%0"></span>, còn quanh TP.HCM <span data-num="l4_duong.thongKe.tyDatVong.hcm" data-fmt="%0"></span>. Mẫu số của hình này là đất liền, nhưng đất núi, đất rừng hay đất lúa thì ở đâu cũng ít đường.</p>
+<div class="interp"><span class="label">Diễn giải — mạng lưới không phải là khả năng tiếp cận</span>Số ki-lô-mét đường không nói gì về bề rộng, năng lực thông hành hay tốc độ. Ở TP.HCM, một phần lớn mạng lưới là hẻm nhỏ — xe máy đi thoải mái còn ô tô thì gần như không — nên một ki-lô-mét đường ở đó không phải cùng một thứ với một ki-lô-mét đường trục ở Seoul. Bài 3 đã đo thứ mà những khác biệt ấy tạo ra — thời gian đi lại — cho một thành phố; làm điều đó cho bảy thành phố thì cần dựng mô hình mạng lưới cho từng nơi.</div>
+
+<h2 id="ex"><span class="sec">4.5</span>Bài tập</h2>
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 4.1</span>Dày hơn hay giãn ra?</p>
+  <p>Dùng Bảng 4.1 để tính mật độ của từng trung tâm đô thị năm 1990 rồi so với mật độ năm 2020. Đô thị nào dày đặc hơn, đô thị nào lan rộng nhanh hơn tốc độ tăng dân số? Điều kiện nào trong Bài 1 có thể giải thích từng xu hướng?</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 4.2</span>Hình dạng</p>
+  <p>Trên Bản đồ 4.1, dùng các vòng tròn để so xem trung tâm đô thị năm 2020 của mỗi nơi vươn xa khỏi tâm khung đến đâu. Đô thị nào gọn nhất, đô thị nào kéo dài nhất? Hãy nêu một đặc điểm địa lý hoặc giao thông có thể giải thích hình dạng của TP.HCM.</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 4.3</span>Hai kiểu lớn lên</p>
+  <p>Trên Hình 4.2, đọc mép vùng lõi xây dựng liền mạch của mỗi thành phố vào các năm 1990, 2000 và 2015: vành đầu tiên mà dưới một nửa diện tích đất đã được xây dựng. Vùng lõi nào nới rộng nhanh hơn? Mục 4.3 cũng cho thấy đất xây dựng trong bán kính 30 km quanh Hà Nội tăng nhanh hơn. Làm sao cả hai điều đều đúng? Dùng Bản đồ 4.2 để mô tả đất xây dựng mới của Hà Nội xuất hiện ở đâu.</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 4.4</span>Mật độ gộp và mật độ ròng</p>
+  <p>Mật độ tính trên toàn bộ đất liền bằng mật độ tính trên đất đã xây dựng nhân với tỷ lệ đất đã xây dựng. Lấy logarit hai vế, hãy chứng minh rằng độ dốc tính trên toàn bộ đất liền bằng độ dốc tính trên đất đã xây dựng cộng với tốc độ giảm của tỷ lệ đất đã xây dựng theo khoảng cách. Sau đó so sánh hai độ dốc trên 30 km của từng đô thị trong Bảng 4.2: chênh lệch lớn nhất ở đâu, và điều đó cho biết gì về tỷ lệ đất đã xây dựng ở đô thị ấy?</p>
+</div>
+
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 4.5</span>Đường và chuyến đi</p>
+  <p>Hình 4.4 so sánh mạng lưới, không so sánh chuyến đi. Dựa vào Bài 3, hãy nêu hai yếu tố quyết định một chuyến đi mất bao lâu nhưng không xuất hiện trong hình này, và cho biết yếu tố nào đo được bằng dữ liệu của học phần.</p>
+</div>
+<div class="exercise">
+  <p class="ex-head"><span>Bài tập 4.6</span>Điều bản đồ không thấy</p>
+  <p>OpenStreetMap do tình nguyện viên vẽ. Hãy nêu hai lý do khiến mức độ đầy đủ của đường sá có thể tốt hơn ở đô thị này so với đô thị kia, và đề xuất một phép kiểm để lộ ra khác biệt ấy.</p>
+</div>
+
+<h2 id="data"><span class="sec">4.6</span>Dữ liệu và mã</h2>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Dữ liệu</th><th>Giấy phép</th><th>Truy cập</th></tr></thead>
+  <tbody id="data-rows"></tbody>
+</table></div>
+<p class="licence">Kịch bản: <code>kich_ban/l4_do_thi_chau_a.py</code> (trung tâm đô thị, lưới dân số, Bảng 4.1), <code>kich_ban/l4_ha_noi.py</code> (Mục 4.3: đất xây dựng, diện tích đất liền, độ dốc mật độ, Bảng 4.2) và <code>kich_ban/l4_mang_duong.py</code> (Mục 4.4: mạng lưới đường). Mỗi kịch bản dừng mà không ghi kết quả nếu một phép kiểm không đạt, kể cả phép kiểm cho từng phép so sánh nêu trong bài.</p>
+
+<h2 id="refs"><span class="sec">4.7</span>Tài liệu tham khảo</h2>
+<ul class="references">
+  <li>Clark, C. (1951). Urban population densities. <i>Journal of the Royal Statistical Society, Series A, 114</i>(4), 490–496. <a href="https://doi.org/10.2307/2981088">doi:10.2307/2981088</a></li>
+  <li>European Commission, Joint Research Centre, Melchiorri, M., Mari Rivero, I., Florio, P., Schiavina, M., et al. (2024). <i>Stats in the City – the GHSL Urban Centre Database 2025</i>. Publications Office of the European Union. <a href="https://data.europa.eu/doi/10.2760/3046391">doi:10.2760/3046391</a>, CC BY 4.0.</li>
+  <li>Marconcini, M., Metz-Marconcini, A., Üreyen, S., et al. (2020). Outlining where humans live, the World Settlement Footprint 2015. <i>Scientific Data, 7</i>, 242. World Settlement Footprint Evolution v1, © 2024 DLR, CC BY 4.0.</li>
+  <li>Pesaresi, M., &amp; Politis, P. (2022). <i>GHS-LAND R2022A — Land fraction as derived from Sentinel-2 image composite (2018) and OSM data</i>. European Commission, Joint Research Centre. <a href="https://doi.org/10.2905/AB7AD451-5ED5-44A6-A4D0-9F7A4E848CEE">doi:10.2905/AB7AD451-5ED5-44A6-A4D0-9F7A4E848CEE</a>, CC BY 4.0.</li>
+  <li>Schiavina, M., Freire, S., Carioli, A., &amp; MacManus, K. (2023). <i>GHS-POP R2023A — GHS population grid multitemporal (1975–2030)</i>. European Commission, Joint Research Centre. <a href="https://doi.org/10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE">doi:10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE</a>, CC BY 4.0.</li>
+  <li>World Bank (2011). <i>Vietnam urbanization review: Technical assistance report</i>. World Bank. <a href="https://openknowledge.worldbank.org/entities/publication/a2b30aef-198f-56e3-bfec-aa88c51ef67e">Open Knowledge Repository</a>, CC BY 3.0 IGO. Bản tiếng Việt: Ngân hàng Thế giới (2011), <i>Đánh giá Đô thị hóa ở Việt Nam</i>. Mục 3.3.2 dựa trên Bertaud (2011).</li>
+  <li>Wheaton, W. C. (1974). A comparative static analysis of urban spatial structure. <i>Journal of Economic Theory, 9</i>(2), 223–237. <a href="https://doi.org/10.1016/0022-0531(74)90068-4">doi:10.1016/0022-0531(74)90068-4</a></li>
+</ul>
+
+</main>
+</div></div>
+
+<footer class="site-footer"><div class="inner">Kinh tế đô thị · Thành phố đơn tâm. Tài liệu giảng dạy phi thương mại. Chữ và hình sinh từ các kịch bản trong <code>kich_ban/</code>; nguồn, giấy phép và ngày truy cập của từng bộ dữ liệu nằm trong các tệp ở <code>du_lieu/</code>.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.js"></script>
+<script src="../assets/core.js"></script>
+<script src="../assets/chart.js"></script>
+<script src="../assets/map.js"></script>
+<script src="../du_lieu/trich_dan.js"></script>
+<script src="../du_lieu/l4_do_thi.js"></script>
+<script src="../du_lieu/l4_ha_noi.js"></script>
+<script src="../du_lieu/l4_duong.js"></script>
+<script src="../assets/nguon.js"></script>
+<script src="../assets/lesson4.js"></script>
+</body>
+</html>
