@@ -1,13 +1,11 @@
-# Sources and licences · Nguồn và giấy phép
+# Sources and licences
 
-This course page is built from public datasets. Every figure on the page carries its own
-"About this data" panel; this file is the complete list, generated from the page's own source
-register (`assets/nguon.js`) by `kich_ban/dung_giay_phep.mjs`.
+The 22 datasets behind the figures, with the citation and licence of each. Every figure
+on the page also carries its own "About this data" panel; this file is the complete list, and it
+is generated from the page's own source register rather than kept by hand, so it cannot fall
+out of step with what the figures actually load.
 
-Trang học phần này dựng từ các bộ dữ liệu công khai. Mỗi hình trên trang đều có ô "Về dữ liệu này"
-của riêng nó; tệp này là danh sách đầy đủ, sinh từ chính sổ nguồn của trang.
-
-Datasets · Bộ dữ liệu: **22**
+*Danh sách đầy đủ các bộ dữ liệu, kèm trích dẫn và giấy phép của từng bộ.*
 
 ## CC BY 4.0
 
@@ -93,16 +91,14 @@ Datasets · Bộ dữ liệu: **22**
   Ho Chi Minh City Public Transport Management Centre, bus information service (apicms.ebms.vn), accessed 5 September 2026.
   http://apicms.ebms.vn/businfo
 
-## What this page adds · Phần do học phần làm ra
+## What the course itself adds
 
-The text, the figures and every number measured by the course are the work of this course and are
-offered under **CC BY 4.0**. Data files under `du_lieu/` are results computed from the datasets above;
-those computed from OpenStreetMap remain subject to **ODbL 1.0**, and anyone redistributing them as
-data must keep that licence and the attribution above.
+The text, the figures and every number the course measured are its own work, offered under
+**CC BY 4.0**. The files under `du_lieu/` are results computed from the datasets above; those
+computed from OpenStreetMap remain subject to **ODbL 1.0**, so anyone redistributing them as data
+must keep that licence and the attribution above.
 
-Chữ, hình và mọi con số do học phần đo được là sản phẩm của học phần, chia sẻ theo **CC BY 4.0**.
-Các tệp trong `du_lieu/` là kết quả tính từ những bộ dữ liệu trên; phần tính từ OpenStreetMap vẫn
-chịu **ODbL 1.0**, ai phát hành lại dưới dạng dữ liệu thì phải giữ nguyên giấy phép và phần ghi nguồn.
-
-Third-party libraries (KaTeX, MapLibre GL, three.js) and the fonts are loaded from public CDNs and are
-not redistributed here. Map tiles come from `tiles.openfreemap.org` at view time.
+The libraries in `vendor/` — KaTeX, MapLibre GL, three.js, and the Source Serif 4 and Source Sans 3
+typefaces — are redistributed under their own licences, which sit beside them in that folder. The
+grey base map is fetched from `tiles.openfreemap.org` when a reader opens a page; nothing else on
+these pages touches the network.
